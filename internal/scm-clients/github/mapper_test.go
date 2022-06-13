@@ -4,8 +4,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/argonsecurity/chain-bench/internal/models"
-	"github.com/argonsecurity/chain-bench/internal/utils"
+	"github.com/aquasecurity/chain-bench/internal/models"
+	"github.com/aquasecurity/chain-bench/internal/utils"
 	pipelineParserModels "github.com/argonsecurity/pipeline-parser/pkg/models"
 	"github.com/google/go-github/v41/github"
 	"github.com/stretchr/testify/assert"

@@ -1,11 +1,11 @@
 package checks
 
 import (
-	"github.com/argonsecurity/chain-bench/internal/checks/artifacts"
-	buildpipelines "github.com/argonsecurity/chain-bench/internal/checks/build-pipelines"
-	"github.com/argonsecurity/chain-bench/internal/checks/dependencies"
-	sourcecode "github.com/argonsecurity/chain-bench/internal/checks/source-code"
-	"github.com/argonsecurity/chain-bench/internal/models/checkmodels"
+	"github.com/aquasecurity/chain-bench/internal/checks/artifacts"
+	buildpipelines "github.com/aquasecurity/chain-bench/internal/checks/build-pipelines"
+	"github.com/aquasecurity/chain-bench/internal/checks/dependencies"
+	sourcecode "github.com/aquasecurity/chain-bench/internal/checks/source-code"
+	"github.com/aquasecurity/chain-bench/internal/models/checkmodels"
 )
 
 func GetChecks(ad *checkmodels.AssetsData) []*checkmodels.Check {

@@ -3,7 +3,7 @@ package adapter
 import (
 	"net/http"
 
-	"github.com/argonsecurity/chain-bench/internal/models"
+	"github.com/aquasecurity/chain-bench/internal/models"
 	pipelineModels "github.com/argonsecurity/pipeline-parser/pkg/models"
 )
 

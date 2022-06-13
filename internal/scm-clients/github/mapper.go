@@ -1,9 +1,9 @@
 package github
 
 import (
-	"github.com/argonsecurity/chain-bench/internal/logger"
-	"github.com/argonsecurity/chain-bench/internal/models"
-	"github.com/argonsecurity/chain-bench/internal/utils"
+	"github.com/aquasecurity/chain-bench/internal/logger"
+	"github.com/aquasecurity/chain-bench/internal/models"
+	"github.com/aquasecurity/chain-bench/internal/utils"
 	pipelineConsts "github.com/argonsecurity/pipeline-parser/pkg/consts"
 	pipelineHandler "github.com/argonsecurity/pipeline-parser/pkg/handler"
 	pipelineModels "github.com/argonsecurity/pipeline-parser/pkg/models"

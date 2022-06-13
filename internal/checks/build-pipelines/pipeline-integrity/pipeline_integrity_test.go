@@ -3,11 +3,11 @@ package pipelineintegrity
 import (
 	"testing"
 
-	"github.com/argonsecurity/chain-bench/internal/checks/common"
-	"github.com/argonsecurity/chain-bench/internal/checks/consts"
-	"github.com/argonsecurity/chain-bench/internal/models/checkmodels"
-	"github.com/argonsecurity/chain-bench/internal/testutils"
-	"github.com/argonsecurity/chain-bench/internal/testutils/builders"
+	"github.com/aquasecurity/chain-bench/internal/checks/common"
+	"github.com/aquasecurity/chain-bench/internal/checks/consts"
+	"github.com/aquasecurity/chain-bench/internal/models/checkmodels"
+	"github.com/aquasecurity/chain-bench/internal/testutils"
+	"github.com/aquasecurity/chain-bench/internal/testutils/builders"
 )
 
 const (

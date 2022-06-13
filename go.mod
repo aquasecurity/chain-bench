@@ -1,4 +1,4 @@
-module github.com/argonsecurity/chain-bench
+module github.com/aquasecurity/chain-bench
 
 go 1.18
 

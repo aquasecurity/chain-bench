@@ -9,12 +9,12 @@ chain-bench is a tool that checks whether your software supply chain stack is de
 
 [![GitHub Release][release-img]][release]
 [![Downloads][download]][release]
-[![Build Status](https://github.com/argonsecurity/chain-bench/workflows/Build/badge.svg?branch=main)](https://github.com/argonsecurity/chain-bench/actions)
-[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://github.com/argonsecurity/chain-bench/blob/main/LICENSE)
+[![Build Status](https://github.com/aquasecurity/chain-bench/workflows/Build/badge.svg?branch=main)](https://github.com/aquasecurity/chain-bench/actions)
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://github.com/aquasecurity/chain-bench/blob/main/LICENSE)
 
-[download]: https://img.shields.io/github/downloads/argonsecurity/chain-bench/total?logo=github
-[release-img]: https://img.shields.io/github/release/argonsecurity/chain-bench.svg?logo=github
-[release]: https://github.com/argonsecurity/chain-bench/releases
+[download]: https://img.shields.io/github/downloads/aquasecurity/chain-bench/total?logo=github
+[release-img]: https://img.shields.io/github/release/aquasecurity/chain-bench.svg?logo=github
+[release]: https://github.com/aquasecurity/chain-bench/releases
 
 
 <figure style="text-aligh: center">

@@ -3,10 +3,10 @@ package codechanges
 import (
 	"encoding/json"
 
-	"github.com/argonsecurity/chain-bench/internal/checks/common"
-	"github.com/argonsecurity/chain-bench/internal/checks/consts"
-	"github.com/argonsecurity/chain-bench/internal/models/checkmodels"
-	"github.com/argonsecurity/chain-bench/internal/utils"
+	"github.com/aquasecurity/chain-bench/internal/checks/common"
+	"github.com/aquasecurity/chain-bench/internal/checks/consts"
+	"github.com/aquasecurity/chain-bench/internal/models/checkmodels"
+	"github.com/aquasecurity/chain-bench/internal/utils"
 )
 
 var (

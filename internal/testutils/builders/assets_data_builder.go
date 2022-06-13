@@ -1,10 +1,10 @@
 package builders
 
 import (
-	"github.com/argonsecurity/chain-bench/internal/models"
-	"github.com/argonsecurity/chain-bench/internal/models/checkmodels"
-	"github.com/argonsecurity/chain-bench/internal/testutils"
-	"github.com/argonsecurity/chain-bench/internal/utils"
+	"github.com/aquasecurity/chain-bench/internal/models"
+	"github.com/aquasecurity/chain-bench/internal/models/checkmodels"
+	"github.com/aquasecurity/chain-bench/internal/testutils"
+	"github.com/aquasecurity/chain-bench/internal/utils"
 	pipelineParserModels "github.com/argonsecurity/pipeline-parser/pkg/models"
 )
 

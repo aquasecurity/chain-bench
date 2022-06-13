@@ -1,8 +1,8 @@
 package builders
 
 import (
-	"github.com/argonsecurity/chain-bench/internal/models"
-	"github.com/argonsecurity/chain-bench/internal/utils"
+	"github.com/aquasecurity/chain-bench/internal/models"
+	"github.com/aquasecurity/chain-bench/internal/utils"
 )
 
 type PackageRegistryBuilder struct {

@@ -5,7 +5,7 @@ import (
 	"sort"
 
 	"github.com/alexeyco/simpletable"
-	"github.com/argonsecurity/chain-bench/internal/models/checkmodels"
+	"github.com/aquasecurity/chain-bench/internal/models/checkmodels"
 	"github.com/hashicorp/go-version"
 )
 

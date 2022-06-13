@@ -6,8 +6,8 @@ import (
 
 	_ "embed"
 
-	"github.com/argonsecurity/chain-bench/internal/consts"
-	"github.com/argonsecurity/chain-bench/internal/models/checkmodels"
+	"github.com/aquasecurity/chain-bench/internal/consts"
+	"github.com/aquasecurity/chain-bench/internal/models/checkmodels"
 	"github.com/mitchellh/mapstructure"
 	"github.com/open-policy-agent/opa/rego"
 )
