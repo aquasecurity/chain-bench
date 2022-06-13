@@ -3,8 +3,8 @@ package commands
 import (
 	"fmt"
 
-	"github.com/argonsecurity/chain-bench/internal/config"
-	"github.com/argonsecurity/chain-bench/internal/logger"
+	"github.com/aquasecurity/chain-bench/internal/config"
+	"github.com/aquasecurity/chain-bench/internal/logger"
 	"github.com/imdario/mergo"
 	"github.com/spf13/cobra"
 )

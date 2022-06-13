@@ -6,10 +6,10 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/argonsecurity/chain-bench/internal/logger"
-	"github.com/argonsecurity/chain-bench/internal/models"
-	"github.com/argonsecurity/chain-bench/internal/scm-clients/adapter"
-	"github.com/argonsecurity/chain-bench/internal/utils"
+	"github.com/aquasecurity/chain-bench/internal/logger"
+	"github.com/aquasecurity/chain-bench/internal/models"
+	"github.com/aquasecurity/chain-bench/internal/scm-clients/adapter"
+	"github.com/aquasecurity/chain-bench/internal/utils"
 	pipelineModels "github.com/argonsecurity/pipeline-parser/pkg/models"
 	"github.com/google/go-github/v41/github"
 )
@@ -129,7 +129,7 @@ func (ca *ClientAdapterImpl) GetBranchProtection(owner string, repo string, bran
 		return nil, err
 	}
 
-	sc, _ , err := ca.client.GetSignaturesOfProtectedBranch(owner, repo, branch)
+	sc, _, err := ca.client.GetSignaturesOfProtectedBranch(owner, repo, branch)
 	if err != nil {
 		logger.Error(err, "error in fetching commit signature protection")
 	}

@@ -1,9 +1,9 @@
 package dependencies
 
 import (
-	thirdpartypackages "github.com/argonsecurity/chain-bench/internal/checks/dependencies/third-party-packages"
-	validatepackages "github.com/argonsecurity/chain-bench/internal/checks/dependencies/validate_packages"
-	"github.com/argonsecurity/chain-bench/internal/models/checkmodels"
+	thirdpartypackages "github.com/aquasecurity/chain-bench/internal/checks/dependencies/third-party-packages"
+	validatepackages "github.com/aquasecurity/chain-bench/internal/checks/dependencies/validate_packages"
+	"github.com/aquasecurity/chain-bench/internal/models/checkmodels"
 )
 
 func GetChecks() []*checkmodels.Check {

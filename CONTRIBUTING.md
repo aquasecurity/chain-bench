@@ -15,7 +15,7 @@ Thank you for taking an interest in contributing to chain-bench !
 
 If you think you have found a bug please follow the instructions below.
 
-- Open a [new bug](https://github.com/argonsecurity/chain-bench/issues/new?assignees=&labels=&template=bug_report.md) if a duplicate doesn't already exist.
+- Open a [new bug](https://github.com/aquasecurity/chain-bench/issues/new?assignees=&labels=&template=bug_report.md) if a duplicate doesn't already exist.
 - Make sure to give as much information as possible in the following questions
   - Overview
   - How did you run chain-bench?
@@ -31,7 +31,7 @@ If you think you have found a bug please follow the instructions below.
 
 We also use the GitHub discussions to track feature requests. If you have an idea to make chain-bench even more awesome follow the steps below.
 
-- Open a [new discussion](https://github.com/argonsecurity/chain-bench/discussions/new?category_id=19113743) if a duplicate doesn't already exist.
+- Open a [new discussion](https://github.com/aquasecurity/chain-bench/discussions/new?category_id=19113743) if a duplicate doesn't already exist.
 - Remember users might be searching for your discussion in the future, so please give it a meaningful title to helps others.
 - Clearly define the use case, using concrete examples. For example, I type `this` and chain-bench does `that`.
 - If you would like to include a technical design for your feature please feel free to do so.
@@ -40,7 +40,7 @@ We also use the GitHub discussions to track feature requests. If you have an ide
 
 We also use the GitHub discussions to Q&A.
 
-- Open a [new discussion](https://github.com/argonsecurity/chain-bench/discussions/new) if a duplicate doesn't already exist.
+- Open a [new discussion](https://github.com/aquasecurity/chain-bench/discussions/new) if a duplicate doesn't already exist.
 - Remember users might be searching for your discussion in the future, so please give it a meaningful title to helps others.
 
 

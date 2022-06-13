@@ -1,7 +1,7 @@
 package config
 
 import (
-	"github.com/argonsecurity/chain-bench/internal/logger"
+	"github.com/aquasecurity/chain-bench/internal/logger"
 )
 
 func loadDefaultConfiguration() *Configuration {

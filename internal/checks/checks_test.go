@@ -3,9 +3,9 @@ package checks
 import (
 	"testing"
 
-	"github.com/argonsecurity/chain-bench/internal/models"
-	"github.com/argonsecurity/chain-bench/internal/models/checkmodels"
-	"github.com/argonsecurity/chain-bench/internal/utils"
+	"github.com/aquasecurity/chain-bench/internal/models"
+	"github.com/aquasecurity/chain-bench/internal/models/checkmodels"
+	"github.com/aquasecurity/chain-bench/internal/utils"
 	"github.com/stretchr/testify/assert"
 )
 

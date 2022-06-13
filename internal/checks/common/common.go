@@ -3,10 +3,10 @@ package common
 import (
 	_ "embed"
 
-	"github.com/argonsecurity/chain-bench/internal/checks/common/opa"
-	"github.com/argonsecurity/chain-bench/internal/consts"
-	"github.com/argonsecurity/chain-bench/internal/logger"
-	"github.com/argonsecurity/chain-bench/internal/models/checkmodels"
+	"github.com/aquasecurity/chain-bench/internal/checks/common/opa"
+	"github.com/aquasecurity/chain-bench/internal/consts"
+	"github.com/aquasecurity/chain-bench/internal/logger"
+	"github.com/aquasecurity/chain-bench/internal/models/checkmodels"
 )
 
 //go:embed assets/utils.rego

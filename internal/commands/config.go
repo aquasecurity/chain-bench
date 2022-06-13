@@ -1,6 +1,6 @@
 package commands
 
-import "github.com/argonsecurity/chain-bench/internal/config"
+import "github.com/aquasecurity/chain-bench/internal/config"
 
 func generateCliConfig() *config.Configuration {
 	return &config.Configuration{

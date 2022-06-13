@@ -3,8 +3,8 @@ package checker
 import (
 	"sync"
 
-	"github.com/argonsecurity/chain-bench/internal/config"
-	"github.com/argonsecurity/chain-bench/internal/models/checkmodels"
+	"github.com/aquasecurity/chain-bench/internal/config"
+	"github.com/aquasecurity/chain-bench/internal/models/checkmodels"
 )
 
 func RunChecks(ad *checkmodels.AssetsData, c *config.Configuration, checks []*checkmodels.Check) ([]checkmodels.CheckRunResult, []error) {

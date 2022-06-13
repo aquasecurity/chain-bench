@@ -1,9 +1,9 @@
 package buildpipelines
 
 import (
-	pipelineinstructions "github.com/argonsecurity/chain-bench/internal/checks/build-pipelines/pipeline-instructions"
-	pipelineintegrity "github.com/argonsecurity/chain-bench/internal/checks/build-pipelines/pipeline-integrity"
-	"github.com/argonsecurity/chain-bench/internal/models/checkmodels"
+	pipelineinstructions "github.com/aquasecurity/chain-bench/internal/checks/build-pipelines/pipeline-instructions"
+	pipelineintegrity "github.com/aquasecurity/chain-bench/internal/checks/build-pipelines/pipeline-integrity"
+	"github.com/aquasecurity/chain-bench/internal/models/checkmodels"
 )
 
 func GetChecks() []*checkmodels.Check {

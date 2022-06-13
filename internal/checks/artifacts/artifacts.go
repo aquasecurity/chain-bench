@@ -1,8 +1,8 @@
 package artifacts
 
 import (
-	packageregistries "github.com/argonsecurity/chain-bench/internal/checks/artifacts/package-registries"
-	"github.com/argonsecurity/chain-bench/internal/models/checkmodels"
+	packageregistries "github.com/aquasecurity/chain-bench/internal/checks/artifacts/package-registries"
+	"github.com/aquasecurity/chain-bench/internal/models/checkmodels"
 )
 
 func GetChecks() []*checkmodels.Check {

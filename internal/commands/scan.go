@@ -3,11 +3,11 @@ package commands
 import (
 	"time"
 
-	"github.com/argonsecurity/chain-bench/internal/checker"
-	"github.com/argonsecurity/chain-bench/internal/checks"
-	"github.com/argonsecurity/chain-bench/internal/logger"
-	"github.com/argonsecurity/chain-bench/internal/printer"
-	"github.com/argonsecurity/chain-bench/internal/scm-clients/clients"
+	"github.com/aquasecurity/chain-bench/internal/checker"
+	"github.com/aquasecurity/chain-bench/internal/checks"
+	"github.com/aquasecurity/chain-bench/internal/logger"
+	"github.com/aquasecurity/chain-bench/internal/printer"
+	"github.com/aquasecurity/chain-bench/internal/scm-clients/clients"
 	"github.com/enescakir/emoji"
 	"github.com/spf13/cobra"
 )

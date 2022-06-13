@@ -3,7 +3,7 @@ package main
 import (
 	"os"
 
-	"github.com/argonsecurity/chain-bench/internal/commands"
+	"github.com/aquasecurity/chain-bench/internal/commands"
 )
 
 var version = "dev"

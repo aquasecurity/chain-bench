@@ -1,6 +1,6 @@
 package models
 
-import "github.com/argonsecurity/chain-bench/internal/utils"
+import "github.com/aquasecurity/chain-bench/internal/utils"
 
 type Repository struct {
 	ID               *int64           `json:"id,omitempty"`

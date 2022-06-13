@@ -6,11 +6,11 @@ import (
 
 	"net/url"
 
-	"github.com/argonsecurity/chain-bench/internal/logger"
-	"github.com/argonsecurity/chain-bench/internal/models/checkmodels"
-	"github.com/argonsecurity/chain-bench/internal/scm-clients/adapter"
-	"github.com/argonsecurity/chain-bench/internal/scm-clients/github"
-	"github.com/argonsecurity/chain-bench/internal/utils"
+	"github.com/aquasecurity/chain-bench/internal/logger"
+	"github.com/aquasecurity/chain-bench/internal/models/checkmodels"
+	"github.com/aquasecurity/chain-bench/internal/scm-clients/adapter"
+	"github.com/aquasecurity/chain-bench/internal/scm-clients/github"
+	"github.com/aquasecurity/chain-bench/internal/utils"
 	"github.com/enescakir/emoji"
 )
 

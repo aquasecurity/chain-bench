@@ -1,6 +1,6 @@
 package models
 
-import "github.com/argonsecurity/chain-bench/internal/utils"
+import "github.com/aquasecurity/chain-bench/internal/utils"
 
 // App represents a GitHub App.
 type App struct {

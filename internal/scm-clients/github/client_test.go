@@ -4,7 +4,7 @@ import (
 	"context"
 	"testing"
 
-	"github.com/argonsecurity/chain-bench/internal/utils"
+	"github.com/aquasecurity/chain-bench/internal/utils"
 	"github.com/google/go-github/v41/github"
 	"github.com/stretchr/testify/assert"
 )

@@ -3,7 +3,7 @@ package testutils
 import (
 	"testing"
 
-	"github.com/argonsecurity/chain-bench/internal/models/checkmodels"
+	"github.com/aquasecurity/chain-bench/internal/models/checkmodels"
 	"github.com/stretchr/testify/assert"
 )
 
