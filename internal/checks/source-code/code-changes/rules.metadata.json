@@ -1,0 +1,119 @@
+{
+  "id": "1.1",
+  "name": "Code Changes",
+  "url": "https://avd.aquasec.com/compliance/softwaresupplychain/cis-1.0/cis-1.0-sourcecode/1.1",
+  "checks": {
+    "1.1.3": {
+      "title": "Ensure any change to code receives approval of two strongly authenticated users",
+      "type": "SCM",
+      "entity": "Branch",
+      "description": "Ensure that every code change is reviewed and approved by two authorized contributors who are strongly authenticated.",
+      "remediation": "An organization can protect specific code branches — for example, the \"main\" branch which often is the version deployed to production — by setting protection rules. These rules secure your code repository from unwanted or unauthorized changes. You may set requirements for any code change to that branch, and thus specify a minimum number of reviewers required to approve a change.",
+      "scannerType": "Rego"
+    },
+    "1.1.4": {
+      "title": "Ensure previous approvals are dismissed when updates are introduced to a code change proposal",
+      "type": "SCM",
+      "entity": "Branch",
+      "description": "Ensure updates to a proposed code change require re-approval of reviewers",
+      "remediation": "For each code repository in use, enforce an organization-wide policy to dismiss given approvals to code change suggestions if those suggestions were updated.",
+      "scannerType": "Rego"
+    },
+    "1.1.5": {
+      "title": "Ensure that there are restrictions on who can dismiss code change reviews",
+      "type": "SCM",
+      "entity": "Branch",
+      "description": "Only trusted users should be allowed to dismiss code change reviews",
+      "remediation": "For each code repository in use, carefully select the individual collaborators or groups whom you trust with the ability to dismiss code change reviews.",
+      "scannerType": "Rego"
+    },
+    "1.1.6": {
+      "title": "Ensure code owners are set for extra sensitive code or configuration",
+      "type": "SCM",
+      "entity": "Branch",
+      "description": "Code owners are trusted users that are responsible for reviewing and managing an important piece of code or configuration. Set code owners for every extremely sensitive code or configuration.",
+      "remediation": "For every code repository in use, identify particularly sensitive parts of code and configurations and set trusted users to be their code owners.",
+      "scannerType": "Rego"
+    },
+    "1.1.8": {
+      "title": "Ensure inactive branches are reviewed and removed periodically",
+      "type": "SCM",
+      "entity": "Repository",
+      "description": "Keep track of code branches that are inactive for a period of time and remove them periodically.",
+      "remediation": "For each code repository in use, review existing Git branches and remove those which have not been active for a prescribed period of time.",
+      "scannerType": "Rego"
+    },
+    "1.1.9": {
+      "title": "Ensure all checks have passed before the merge of new code",
+      "type": "SCM",
+      "entity": "Branch",
+      "description": "Before a code change request can be merged to the codebase, all pre-defined checks must successfully pass.",
+      "remediation": "Configure each code repository to require all status checks to pass before permitting a merge of new code.",
+      "scannerType": "Rego"
+    },
+    "1.1.10": {
+      "title": "Ensure open git branches are up to date before they can be merged into codebase",
+      "type": "SCM",
+      "entity": "Branch",
+      "description": "Organizations should make sure each suggested code change is in full sync with the existing state of its origin code repository, before allowing to merge it in.",
+      "remediation": "For each code repository in use, enforce a policy to only allow merging open branches if they are current with the latest change from their origin repository.",
+      "scannerType": "Rego"
+    },
+    "1.1.11": {
+      "title": "Ensure all open comments are resolved before allowing to merge code changes",
+      "type": "SCM",
+      "entity": "Branch",
+      "description": "Organizations should enforce a \"no open comments\" policy before allowing to merge code changes.",
+      "remediation": "For each code repository in use, require open comments to be resolved before the relevant code change can be merged.",
+      "scannerType": "Rego"
+    },
+    "1.1.12": {
+      "title": "Ensure verifying signed commits of new changes before merging",
+      "type": "SCM",
+      "entity": "Branch",
+      "description": "Ensure every commit in pull request is signed and verified before merge",
+      "remediation": "For each repository in use, enforce the branch protection rule of requiring signed commits, and make sure only signed commits are capable of merging.",
+      "scannerType": "Rego"
+    },
+    "1.1.13": {
+      "title": "Ensure linear history is required",
+      "type": "SCM",
+      "entity": "Repository",
+      "description": "Linear history is the name for Git history where all of the commits come one after another. Such history exists if a pull request is merged either by rebase merge (re-order the commits history) or squash merge (squashes all commits to one). Ensure that linear history is required by enforcing the use of rebase or squash merge when merging a pull request.",
+      "remediation": "For each repository in use, require linear history and/or allow only rebase merge and squash merge.",
+      "scannerType": "Custom"
+    },
+    "1.1.14": {
+      "title": "Ensure branch protection rules are enforced on administrators",
+      "type": "SCM",
+      "entity": "Repository",
+      "description": "Ensure administrators are subject to branch protection rules.",
+      "remediation": "For each repository in use, enforce branch protection rules on administrators, as well.",
+      "scannerType": "Rego"
+    },
+    "1.1.15": {
+      "title": "Ensure pushing of new code is restricted to specific individuals or teams",
+      "type": "SCM",
+      "entity": "Repository",
+      "description": "Enforce that only trusted users can push to protected branches.",
+      "remediation": "For each repository in use, allow only trusted and responsible users to push or merge new code.",
+      "scannerType": "Rego"
+    },
+    "1.1.16": {
+      "title": "Ensure force pushes code to branches is denied",
+      "type": "SCM",
+      "entity": "Repository",
+      "description": "The 'force push' option allows users with 'push' permissions to force their changes directly to the branch without PR and it should be disabled.",
+      "remediation": "For each repository in use, block the option to \"Force Push\" code.",
+      "scannerType": "Rego"
+    },
+    "1.1.17": {
+      "title": "Ensure branch deletions are denied",
+      "type": "SCM",
+      "entity": "Repository",
+      "description": "Ensure that users with push access only can't delete a protected branch.",
+      "remediation": "For each repository that is being used, block the option to delete protected branches via branch protection rules.",
+      "scannerType": "Rego"
+    }
+  }
+}

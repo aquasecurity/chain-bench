@@ -1,0 +1,39 @@
+{
+  "id": "2.3",
+  "name": "Build Instructions",
+  "url": "https://avd.aquasec.com/compliance/softwaresupplychain/cis-1.0/cis-1.0-buildpipelines/2.3",
+  "checks": {
+    "2.3.1": {
+      "title": "Ensure all build steps are defined as code",
+      "type": "BUILD",
+      "entity": "Pipeline",
+      "description": "Use Pipeline as Code for build pipelines and their defined steps.",
+      "remediation": "Convert pipeline instructions into code-based syntax, and upload them to the organization's version control platform.",
+      "scannerType": "Rego"
+    },
+    "2.3.5": {
+      "title": "Ensure access to the build process's triggering is minimized",
+      "type": "BUILD",
+      "entity": "Pipeline",
+      "description": "Restrict access to the pipelines' triggers.",
+      "remediation": "For every pipeline in use, grant only the necessary members permission to trigger it.",
+      "scannerType": "Rego"
+    },
+    "2.3.7": {
+      "title": "Ensure pipelines are automatically scanned for vulnerabilities",
+      "type": "BUILD",
+      "entity": "Pipeline",
+      "description": "Scan pipelines for vulnerabilities. It is recommended to do that automatically.",
+      "remediation": "For each pipeline, set automated vulnerabilities scanning.",
+      "scannerType": "Rego"
+    },
+    "2.3.8": {
+      "title": "Ensure scanners are in place to identify and prevent sensitive data in pipeline files",
+      "type": "BUILD",
+      "entity": "Pipeline",
+      "description": "Detect and prevent sensitive data, such as confidential ID numbers, passwords, etc. in pipelines.",
+      "remediation": "For every pipeline that is in use, set scanners that will identify and prevent sensitive data in it.",
+      "scannerType": "Rego"
+    }
+  }
+}
