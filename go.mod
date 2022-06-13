@@ -35,7 +35,7 @@ require (
 
 require (
 	github.com/enescakir/emoji v1.0.0
-	github.com/fsnotify/fsnotify v1.5.3 // indirect
+	github.com/fsnotify/fsnotify v1.5.4 // indirect
 	github.com/golang/protobuf v1.5.2 // indirect
 	github.com/google/go-querystring v1.1.0 // indirect
 	github.com/gorilla/mux v1.8.0 // indirect
@@ -44,7 +44,7 @@ require (
 	github.com/inconshreveable/mousetrap v1.0.0 // indirect
 	github.com/magiconair/properties v1.8.6 // indirect
 	github.com/mitchellh/mapstructure v1.5.0
-	github.com/open-policy-agent/opa v0.39.0
+	github.com/open-policy-agent/opa v0.40.0
 	github.com/pelletier/go-toml v1.9.5 // indirect
 	github.com/spf13/afero v1.8.2 // indirect
 	github.com/spf13/cast v1.4.1 // indirect
