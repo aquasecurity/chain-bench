@@ -1,5 +1,6 @@
 package main
 
+import data.common.consts as constsLib
 import data.generic.utils as utilsLib
 import future.keywords.in
 
@@ -42,14 +43,14 @@ is_task_version_pinned(step) {
 # In case pipelines weren't fetched
 CbPolicy[msg] {
 	not utilsLib.ensure_pipelines_fetched
-	msg = {"ids": ruleIds, "status": "Unknown"}
+	msg = {"ids": ruleIds, "status": constsLib.status.Unknown}
 }
 
 # In case there are no pipelines
 CbPolicy[msg] {
 	utilsLib.ensure_pipelines_fetched
 	not utilsLib.ensure_pipelines_exists
-	msg = {"ids": ruleIds, "status": "Unknown", "details": "No pipelines were found"}
+	msg = {"ids": ruleIds, "status": constsLib.status.Unknown, "details": "No pipelines were found"}
 }
 
 # Looking for tasks that are not pinned
@@ -61,7 +62,7 @@ CbPolicy[msg] {
 	})
 
 	unpinnedtaskCount > 0
-	msg := {"ids": ["2.4.2"], "status": "Failed", "details": sprintf("%v task(s) are not pinned", [unpinnedtaskCount])}
+	msg := {"ids": ["2.4.2"], "status": constsLib.status.Failed, "details": sprintf("%v task(s) are not pinned", [unpinnedtaskCount])}
 }
 
 # Looking for build jobs with an SBOM
@@ -75,5 +76,5 @@ CbPolicy[msg] {
 	})
 
 	pipelinesWithoutSBOM > 0
-	msg = {"ids": ["2.4.6"], "status": "Failed", "details": sprintf("%v pipeline(s) contain a build job without SBOM generation", [pipelinesWithoutSBOM])}
+	msg = {"ids": ["2.4.6"], "status": constsLib.status.Failed, "details": sprintf("%v pipeline(s) contain a build job without SBOM generation", [pipelinesWithoutSBOM])}
 }

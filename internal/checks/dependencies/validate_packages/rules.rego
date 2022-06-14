@@ -1,5 +1,6 @@
 package main
 
+import data.common.consts as constsLib
 import data.generic.utils as utilsLib
 import future.keywords.in
 
@@ -12,14 +13,14 @@ does_job_contain_one_of_tasks(job, regexes) {
 
 CbPolicy[msg] {
 	not utilsLib.ensure_pipelines_fetched
-	msg = {"ids": ["3.2.2", "3.2.3"], "status": "Unknown"}
+	msg = {"ids": ["3.2.2", "3.2.3"], "status": constsLib.status.Unknown}
 }
 
 # In case there are no pipelines
 CbPolicy[msg] {
 	utilsLib.ensure_pipelines_fetched
 	not utilsLib.ensure_pipelines_exists
-	msg = {"ids": ["3.2.2", "3.2.3"], "status": "Unknown", "details": "No pipelines were found"}
+	msg = {"ids": ["3.2.2", "3.2.3"], "status": constsLib.status.Unknown, "details": "No pipelines were found"}
 }
 
 # Looking for a pipeline that scans for vulnerabilities
@@ -27,7 +28,7 @@ CbPolicy[msg] {
 	utilsLib.ensure_pipelines_fetched
 	utilsLib.ensure_pipelines_exists
 	count({job | job := input.Pipelines[_].jobs[_]; does_job_contain_one_of_tasks(job, pipeline_vulnerability_scan_tasks)}) == 0
-	msg = {"ids": ["3.2.2"], "status": "Failed", "details": "Pipeline dependencies are not scanned for vulnerabilities"}
+	msg = {"ids": ["3.2.2"], "status": constsLib.status.Failed, "details": "Pipeline dependencies are not scanned for vulnerabilities"}
 }
 
 # Looking for a pipeline that scans for licenses
@@ -35,5 +36,5 @@ CbPolicy[msg] {
 	utilsLib.ensure_pipelines_fetched
 	utilsLib.ensure_pipelines_exists
 	count({job | job := input.Pipelines[_].jobs[_]; does_job_contain_one_of_tasks(job, pipeline_vulnerability_scan_tasks)}) == 0
-	msg = {"ids": ["3.2.3"], "status": "Failed", "details": "Pipeline dependencies are not scanned for licenses"}
+	msg = {"ids": ["3.2.3"], "status": constsLib.status.Failed, "details": "Pipeline dependencies are not scanned for licenses"}
 }

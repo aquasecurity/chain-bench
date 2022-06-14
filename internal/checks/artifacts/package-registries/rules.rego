@@ -39,32 +39,32 @@ is_registry_packages_allows_anonymous_access[details] {
 
 CbPolicy[msg] {
 	permissionslib.is_missing_org_settings_permission
-	msg := {"ids": ["4.2.3"], "status": "Unknown", "details": constsLib.details_organization_missingMinimalPermissions}
+	msg := {"ids": ["4.2.3"], "status": constsLib.status.Unknown, "details": constsLib.details_organization_missingMinimalPermissions}
 }
 
 CbPolicy[msg] {
 	permissionslib.is_missing_org_packages_permission
-	msg := {"ids": ["4.2.5"], "status": "Unknown", "details": constsLib.details_organization_packages_missingMinimalPermissions}
+	msg := {"ids": ["4.2.5"], "status": constsLib.status.Unknown, "details": constsLib.details_organization_packages_missingMinimalPermissions}
 }
 
 CbPolicy[msg] {
 	permissionslib.is_missing_org_hooks_permission
-	msg := {"ids": ["4.3.4"], "status": "Unknown", "details": constsLib.details_hooks_missingMinimalPermissions}
+	msg := {"ids": ["4.3.4"], "status": constsLib.status.Unknown, "details": constsLib.details_hooks_missingMinimalPermissions}
 }
 
 CbPolicy[msg] {
 	not permissionslib.is_missing_org_settings_permission
 	not is_registry_enforce_two_factor_authentication
-	msg := {"ids": ["4.2.3"], "status": "Failed"}
+	msg := {"ids": ["4.2.3"], "status": constsLib.status.Failed}
 }
 
 CbPolicy[msg] {
 	details := is_registry_packages_allows_anonymous_access[i]
-	msg := {"ids": ["4.2.5"], "status": "Failed", "details": details}
+	msg := {"ids": ["4.2.5"], "status": constsLib.status.Failed, "details": details}
 }
 
 #Looking for organization 2mfa enforcements that is disabled
 CbPolicy[msg] {
 	details := is_org_have_unsucured_hooks[i]
-	msg := {"ids": ["4.3.4"], "status": "Failed", "details": details}
+	msg := {"ids": ["4.3.4"], "status": constsLib.status.Failed, "details": details}
 }

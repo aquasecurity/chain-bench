@@ -1,5 +1,6 @@
 package main
 
+import data.common.consts as constsLib
 import future.keywords.in
 
 #checks if the repository is public one
@@ -28,20 +29,20 @@ is_issue_deletion_not_limited_to_trusted_memebers {
 CbPolicy[msg] {
 	is_public_repository
 	is_missing_security_md_file
-	msg := {"ids": ["1.2.1"], "status": "Failed"}
+	msg := {"ids": ["1.2.1"], "status": constsLib.status.Failed}
 }
 
 CbPolicy[msg] {
 	is_repository_creation_not_limited_to_trusted_memebers
-	msg := {"ids": ["1.2.2"], "status": "Failed"}
+	msg := {"ids": ["1.2.2"], "status": constsLib.status.Failed}
 }
 
 CbPolicy[msg] {
 	is_repository_deletion_not_limited_to_trusted_memebers
-	msg := {"ids": ["1.2.3"], "status": "Failed"}
+	msg := {"ids": ["1.2.3"], "status": constsLib.status.Failed}
 }
 
 CbPolicy[msg] {
 	is_issue_deletion_not_limited_to_trusted_memebers
-	msg := {"ids": ["1.2.4"], "status": "Failed"}
+	msg := {"ids": ["1.2.4"], "status": constsLib.status.Failed}
 }
