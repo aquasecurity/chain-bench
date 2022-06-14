@@ -1,5 +1,6 @@
 package main
 
+import data.common.consts as constsLib
 import data.generic.utils as utilsLib
 import future.keywords.in
 
@@ -10,14 +11,14 @@ is_task_version_pinned(step) {
 
 CbPolicy[msg] {
 	not utilsLib.ensure_pipelines_fetched
-	msg = {"ids": ["3.1.7"], "status": "Unknown"}
+	msg = {"ids": ["3.1.7"], "status": constsLib.status.Unknown}
 }
 
 # In case there are no pipelines
 CbPolicy[msg] {
 	utilsLib.ensure_pipelines_fetched
 	not utilsLib.ensure_pipelines_exists
-	msg = {"ids": ["3.1.7"], "status": "Unknown", "details": "No pipelines were found"}
+	msg = {"ids": ["3.1.7"], "status": constsLib.status.Unknown, "details": "No pipelines were found"}
 }
 
 # Looking for tasks that are not pinned
@@ -29,5 +30,5 @@ CbPolicy[msg] {
 	})
 
 	unpinnedDepsCount > 0
-	msg := {"ids": ["3.1.7"], "status": "Failed", "details": sprintf("%v dependenc(ies) are not pinned", [unpinnedDepsCount])}
+	msg := {"ids": ["3.1.7"], "status": constsLib.status.Failed, "details": sprintf("%v dependenc(ies) are not pinned", [unpinnedDepsCount])}
 }

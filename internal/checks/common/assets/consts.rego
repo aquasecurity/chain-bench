@@ -15,3 +15,11 @@ details_organization_packages_missingMinimalPermissions := msg {
 details_hooks_missingMinimalPermissions := msg {
 	msg := "Organization & Repository Hooks is missing minimal permissions"
 }
+
+status := stat {
+	stat := {
+		"Unknown": "Unknown",
+		"Failed": "Failed",
+		"Success": "Success",
+	}
+}
