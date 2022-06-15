@@ -53,6 +53,46 @@ The auditing focuses on the entire SDLC process, where it can reveal risks from 
 
 There is a primarily way to run chain-bench as a stand alone cli, that requires the personal access token of your account and the repository url in order to access your SCM.
 
+## Installation
+
+### Binary
+
+Download the archive file for your operating system/architecture from [here][release]. Unpack the archive, and put the binary somewhere in your `$PATH` (on UNIX-y systems, `/usr/local/bin` or the like). Make sure it has execution bit is turned on.
+
+### Go
+
+With a sufficient version of `go` you can install and build with `go install github.com/aquasecurity/chain-bench/cmd/chain-bench@latest`
+
+### Nix/NixOS (Community)
+
+Direct issues installing `chain-bench` via `nix` through the channels mentioned [here](https://nixos.wiki/wiki/Support)
+
+You can use `nix` on Linux or macOS and on other platforms unofficially.
+
+`nix-env --install -A nixpkgs.chain-bench`
+
+Or through your configuration as usual
+
+NixOS:
+
+```nix
+  # your other config ...
+  environment.systemPackages = with pkgs; [
+    # your other packages ...
+    chain-bench
+  ];
+```
+
+home-manager:
+
+```nix
+  # your other config ...
+  home.packages = with pkgs; [
+    # your other packages ...
+    chain-bench
+  ];
+```
+
 ## Usage
 
 ```
