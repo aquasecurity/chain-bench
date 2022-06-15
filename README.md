@@ -1,5 +1,10 @@
 <p align="center">
-  <img src="docs/imgs/banner.png">
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/imgs/banner_dm.png">
+  <source media="(prefers-color-scheme: light)" srcset="docs/imgs/banner_lm.png">
+  <img alt="chain-bench logo" src="docs/imgs/banner_lm.png">
+</picture>
+
 </p>
 
 <p align="center">
