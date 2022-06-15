@@ -22,6 +22,7 @@ sbom_generation_commands = [
 	`syft .*`,
 	`spdx-sbom-generator`,
 	`cyclonedx-\w+`,
+        `jake sbom`,
 ]
 
 does_job_contain_one_of_tasks(job, regexes) {
