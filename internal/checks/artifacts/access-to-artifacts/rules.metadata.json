@@ -1,0 +1,23 @@
+{
+    "id": "4.2",
+    "name": "Package Registries",
+    "url": "https://avd.aquasec.com/compliance/softwaresupplychain/cis-1.0/cis-1.0-artifacts/4.2",
+    "checks": {
+        "4.2.3": {
+            "title": "Ensure user's access to the package registry utilizes MFA",
+            "type": "ARTIFACT",
+            "entity": "PackageRegistry",
+            "description": "Enforce Multi Factor Authentication for user access to the package registry.",
+            "remediation": "For each package registry in use, enforce Multi-Factor Authentication as the only way to authenticate.",
+            "scannerType": "Rego"
+        },
+        "4.2.5": {
+            "title": "Ensure anonymous access to artifacts is revoked",
+            "type": "ARTIFACT",
+            "entity": "PackageRegistry",
+            "description": "Disable anonymous access to artifacts.",
+            "remediation": "Disable the anonymous access option on every artifact or package manager in use.",
+            "scannerType": "Rego"
+        }
+    }
+}
