@@ -1,9 +1,9 @@
 package generic.utils
 
-ensure_pipelines_fetched {
-	input.Pipelines != null
+is_pipelines_data_missing {
+	input.Pipelines == null
 }
 
-ensure_pipelines_exists {
-	count(input.Pipelines) > 0
+is_pipelines_list_empty {
+	count(input.Pipelines) == 0
 }

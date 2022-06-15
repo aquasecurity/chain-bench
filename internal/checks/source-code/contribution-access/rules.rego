@@ -13,17 +13,17 @@ is_2mfa_enforcement_disabled {
 	input.Organization.TwoFactorRequirementEnabled == false
 }
 
-is_verified {
+is_not_verified {
 	input.Organization.IsVerified == false
 }
 
-is_min_two_admins {
+is_less_then_two_admins {
 	input.Organization.Members != null
 	adminCount := count({i |
 		input.Organization.Members[i].Role == "admin"
 	})
 
-	adminCount >= 2
+	adminCount < 2
 }
 
 is_repository_dont_have_2_admins {
@@ -40,7 +40,7 @@ is_organization_admin {
 	count(input.Organization.Members) != 0
 }
 
-is_repository_has_inactive_users[details] {
+is_repository_has_inactive_users[inactiveCount] {
 	filtered := [m |
 		m := input.Organization.Members[_]
 		count({i | input.Repository.Commits[i].Author.username == m.login}) == 0
@@ -48,7 +48,6 @@ is_repository_has_inactive_users[details] {
 
 	inactiveCount := count(filtered)
 	inactiveCount > 0
-	details := sprintf("%v %v", [format_int(inactiveCount, 10), "inactive users"])
 }
 
 #Looking for organization missing permissions
@@ -70,13 +69,14 @@ CbPolicy[msg] {
 # Check if organization inactive users
 CbPolicy[msg] {
 	not is_repo_has_no_commits
-	details := is_repository_has_inactive_users[i]
+	inactiveCount := is_repository_has_inactive_users[i]
+	details := sprintf("%v %v", [format_int(inactiveCount, 10), "inactive users"])
 	msg := {"ids": ["1.3.1"], "status": constsLib.status.Failed, "details": details}
 }
 
 # Check if organization has min 2 admins
 CbPolicy[msg] {
-	not is_min_two_admins
+	is_less_then_two_admins
 	msg := {"ids": ["1.3.3"], "status": constsLib.status.Failed}
 }
 
@@ -103,6 +103,6 @@ CbPolicy[msg] {
 
 #Looking for organization that is not verified
 CbPolicy[msg] {
-	is_verified
+	is_not_verified
 	msg := {"ids": ["1.3.9"], "status": constsLib.status.Failed}
 }

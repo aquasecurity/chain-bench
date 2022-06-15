@@ -76,7 +76,9 @@ func (b *BranchProtectionBuilder) WithEnforceAdmin(enforceAdmin bool) *BranchPro
 }
 
 func (b *BranchProtectionBuilder) WithPushRestrictions(pushRestriction bool) *BranchProtectionBuilder {
-	b.br_protection.Restrictions = &models.BranchRestrictions{Users: []*models.User{{Name: utils.GetPtr("default")}}, Teams: []*models.Team{}, Apps: []*models.App{}}
+	if pushRestriction {
+		b.br_protection.Restrictions = &models.BranchRestrictions{Users: []*models.User{{Name: utils.GetPtr("default")}}, Teams: []*models.Team{}, Apps: []*models.App{}}
+	}
 	return b
 }
 
