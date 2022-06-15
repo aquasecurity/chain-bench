@@ -84,6 +84,12 @@ chain-bench scan --repository-url <REPOSITORY_URL> --access-token <TOKEN> -o <OU
 ```
 </details>
 
+# Requirements
+It is required to provide an access token with permission to these scopes: `repo`(all), `read:repo_hook`, `admin:org_hook`, `read:org`
+
+# Supported Providers
+ We currently support Github as the first SCM, with PAT authentication.
+
 ## Please Note
 Chain-bench implements the CIS Software Supply Chain Benchmark as closely as possible.
 You can find the current implemented checks under [AVD - Software Supply Chain CIS - 1.0](https://avd.aquasec.com/compliance/softwaresupplychain/cis-1.0/) that update every night based chain-bench metadata.json files
