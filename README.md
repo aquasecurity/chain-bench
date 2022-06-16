@@ -14,8 +14,8 @@ The auditing focuses on the entire SDLC process, where it can reveal risks from 
 
 [![GitHub Release][release-img]][release]
 [![Downloads][download]][release]
-[![Build Status](https://github.com/aquasecurity/chain-bench/workflows/Build/badge.svg?branch=main)](https://github.com/aquasecurity/chain-bench/actions)
-[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://github.com/aquasecurity/chain-bench/blob/main/LICENSE)
+[![Build Status](https://github.com/aquasecurity/chain-bench/workflows/Build/badge.svg?branch=main&style=flat-square)](https://github.com/aquasecurity/chain-bench/actions)
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg?style=flat-square)](https://github.com/aquasecurity/chain-bench/blob/main/LICENSE)
 [![go-report-card][go-report-card]](https://goreportcard.com/report/github.com/aquasecurity/chain-bench)
 
 [download]: https://img.shields.io/github/downloads/aquasecurity/chain-bench/total?logo=github&style=flat-square
