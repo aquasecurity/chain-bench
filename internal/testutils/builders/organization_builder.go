@@ -12,7 +12,27 @@ type OrganizationBuilder struct {
 }
 
 func NewOrganizationBuilder() *OrganizationBuilder {
-	return &OrganizationBuilder{org: &models.Organization{}}
+	return &OrganizationBuilder{org: &models.Organization{
+		TwoFactorRequirementEnabled: utils.GetPtr(true),
+		IsVerified:                  utils.GetPtr(true),
+		DefaultRepoPermission:       utils.GetPtr("read"),
+		MembersCanCreateRepos:       utils.GetPtr(false),
+		IsRepositoryDeletionLimited: utils.GetPtr(true),
+		IsIssueDeletionLimited:      utils.GetPtr(true),
+		Hooks: []*models.Hook{{
+			URL: utils.GetPtr("https://endpoint.com"),
+			Config: &models.HookConfig{
+				URL:          utils.GetPtr("https://endpoint.com"),
+				Insecure_SSL: utils.GetPtr("0"),
+				Secret:       utils.GetPtr("**"),
+			},
+			Events: []string{"package"},
+		}},
+		Members: []*models.User{{Role: "admin", Login: utils.GetPtr("user0")},
+			{Role: "admin", Login: utils.GetPtr("user1")},
+			{Role: "member", Login: utils.GetPtr("user2")},
+			{Role: "member", Login: utils.GetPtr("user3")}}},
+	}
 }
 
 func (b *OrganizationBuilder) WithMFAEnabled(enable bool) *OrganizationBuilder {
@@ -26,7 +46,11 @@ func (b *OrganizationBuilder) WithVerifiedBadge(enable bool) *OrganizationBuilde
 }
 
 func (b *OrganizationBuilder) WithReposDefaultPermissions(defaultPermissions string) *OrganizationBuilder {
-	b.org.DefaultRepoPermission = utils.GetPtr(defaultPermissions)
+	if defaultPermissions == "" {
+		b.org.DefaultRepoPermission = nil
+	} else {
+		b.org.DefaultRepoPermission = utils.GetPtr(defaultPermissions)
+	}
 	return b
 }
 
@@ -51,7 +75,7 @@ func (b *OrganizationBuilder) WithMembers(role string, num int) *OrganizationBui
 		login := fmt.Sprintf("user%d", i)
 		newMembers = append(newMembers, &models.User{Role: role, Login: &login})
 	}
-	b.org.Members = append(b.org.Members, newMembers...)
+	b.org.Members = newMembers
 	return b
 }
 
@@ -65,6 +89,11 @@ func (b *OrganizationBuilder) WithPackageWebHooks(url string, is_ssl string, sec
 		},
 		Events: []string{"package"},
 	}}
+	return b
+}
+
+func (b *OrganizationBuilder) WithNoPackageWebHooks() *OrganizationBuilder {
+	b.org.Hooks = nil
 	return b
 }
 

@@ -11,7 +11,34 @@ type RepositoryBuilder struct {
 }
 
 func NewRepositoryBuilder() *RepositoryBuilder {
-	return &RepositoryBuilder{repository: &models.Repository{}}
+	return &RepositoryBuilder{repository: &models.Repository{
+		AllowRebaseMerge: utils.GetPtr(true),
+		AllowSquashMerge: utils.GetPtr(true),
+		AllowMergeCommit: utils.GetPtr(false),
+		Collaborators: []*models.User{{
+			ID: utils.GetPtr(testutils.AuthorizedUserMockId),
+			Permissions: utils.GetPtr(map[string]bool{
+				"admin": true,
+			}),
+		},{
+			ID: utils.GetPtr(int64(1)),
+			Permissions: utils.GetPtr(map[string]bool{
+				"admin": true,
+			}),
+		}},
+		IsPrivate: utils.GetPtr(true),
+		IsContainsSecurityMd: true,
+		Hooks : []*models.Hook{{
+			URL: &url,
+			Config: &models.HookConfig{
+				URL:          utils.GetPtr(url),
+				Insecure_SSL: utils.GetPtr(is_ssl),
+				Secret:       secret,
+			},
+			Events: []string{"package"},
+		}}
+
+	}}
 }
 
 func (b *RepositoryBuilder) WithAllowRebaseMerge(enable bool) *RepositoryBuilder {
