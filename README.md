@@ -20,6 +20,7 @@ The auditing focuses on the entire SDLC process, where it can reveal risks from 
 [![go-report-card][go-report-card]](https://goreportcard.com/report/github.com/aquasecurity/chain-bench)
 <!-- ![coverage report](https://img.shields.io/codecov/c/github/aquasecurity/chain-bench?style=flat-square) -->
 
+
 [download]: https://img.shields.io/github/downloads/aquasecurity/chain-bench/total?logo=github&style=flat-square
 [release-img]: https://img.shields.io/github/release/aquasecurity/chain-bench.svg?logo=github&style=flat-square
 [release]: https://github.com/aquasecurity/chain-bench/releases
