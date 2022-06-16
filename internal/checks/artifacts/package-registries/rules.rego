@@ -18,46 +18,9 @@ is_org_have_unsucured_hooks[unsecuredHooks] {
 	unsecuredHooks > 0
 }
 
-is_two_factor_authentication_disabled_in_registry {
-	input.Registry.TwoFactorRequirementEnabled == false
-}
-
-is_registry_packages_allows_anonymous_access[unauth_packages] {
-	unauth_packages := count([p |
-		p := input.Registry.Packages[_]
-		p.Visibility == "public"
-		p.Repository.IsPrivate == true
-	])
-
-	unauth_packages > 0
-}
-
-CbPolicy[msg] {
-	permissionslib.is_missing_org_settings_permission
-	msg := {"ids": ["4.2.3"], "status": "Unknown", "details": constsLib.details_organization_missingMinimalPermissions}
-}
-
-CbPolicy[msg] {
-	permissionslib.is_missing_org_packages_permission
-	msg := {"ids": ["4.2.5"], "status": "Unknown", "details": constsLib.details_organization_packages_missingMinimalPermissions}
-}
-
 CbPolicy[msg] {
 	permissionslib.is_missing_org_or_repo_hooks_permission
 	msg := {"ids": ["4.3.4"], "status": "Unknown", "details": constsLib.details_hooks_missingMinimalPermissions}
-}
-
-CbPolicy[msg] {
-	not permissionslib.is_missing_org_settings_permission
-	is_two_factor_authentication_disabled_in_registry
-	msg := {"ids": ["4.2.3"], "status": "Failed"}
-}
-
-CbPolicy[msg] {
-	not permissionslib.is_missing_org_packages_permission
-	unauth_packages := is_registry_packages_allows_anonymous_access[i]
-	details := sprintf("%v %v", [format_int(unauth_packages, 10), "anonymous accessed packages"])
-	msg := {"ids": ["4.2.5"], "status": "Failed", "details": details}
 }
 
 #Looking for organization 2mfa enforcements that is disabled
