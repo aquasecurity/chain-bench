@@ -15,7 +15,11 @@ require (
 	golang.org/x/oauth2 v0.0.0-20220411215720-9780585627b5
 )
 
-require github.com/pelletier/go-toml/v2 v2.0.0-beta.8 // indirect
+require (
+	github.com/agnivade/levenshtein v1.0.1 // indirect
+	github.com/pelletier/go-toml/v2 v2.0.0-beta.8 // indirect
+	github.com/vektah/gqlparser/v2 v2.4.4 // indirect
+)
 
 require (
 	github.com/OneOfOne/xxhash v1.2.8 // indirect
@@ -44,7 +48,7 @@ require (
 	github.com/inconshreveable/mousetrap v1.0.0 // indirect
 	github.com/magiconair/properties v1.8.6 // indirect
 	github.com/mitchellh/mapstructure v1.5.0
-	github.com/open-policy-agent/opa v0.40.0
+	github.com/open-policy-agent/opa v0.41.0
 	github.com/pelletier/go-toml v1.9.5 // indirect
 	github.com/spf13/afero v1.8.2 // indirect
 	github.com/spf13/cast v1.4.1 // indirect
