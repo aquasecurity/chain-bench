@@ -20,24 +20,40 @@ func NewRepositoryBuilder() *RepositoryBuilder {
 			Permissions: utils.GetPtr(map[string]bool{
 				"admin": true,
 			}),
-		},{
+		}, {
 			ID: utils.GetPtr(int64(1)),
 			Permissions: utils.GetPtr(map[string]bool{
 				"admin": true,
 			}),
 		}},
-		IsPrivate: utils.GetPtr(true),
+		IsPrivate:            utils.GetPtr(true),
 		IsContainsSecurityMd: true,
-		Hooks : []*models.Hook{{
-			URL: &url,
+		Hooks: []*models.Hook{{
+			URL: utils.GetPtr("https://endpoint.com"),
 			Config: &models.HookConfig{
-				URL:          utils.GetPtr(url),
-				Insecure_SSL: utils.GetPtr(is_ssl),
-				Secret:       secret,
+				URL:          utils.GetPtr("https://endpoint.com"),
+				Insecure_SSL: utils.GetPtr("0"),
+				Secret:       utils.GetPtr("**"),
 			},
 			Events: []string{"package"},
-		}}
-
+		}},
+		Commits: []*models.RepositoryCommit{{
+			Author: &models.CommitAuthor{
+				Login: utils.GetPtr("user0"),
+			},
+		}, {
+			Author: &models.CommitAuthor{
+				Login: utils.GetPtr("user1"),
+			},
+		}, {
+			Author: &models.CommitAuthor{
+				Login: utils.GetPtr("user2"),
+			},
+		}, {
+			Author: &models.CommitAuthor{
+				Login: utils.GetPtr("user3"),
+			},
+		}},
 	}}
 }
 
