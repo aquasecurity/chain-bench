@@ -8,7 +8,7 @@ COPY . .
 
 RUN make build
 
-FROM alpine as product
+FROM alpine:3.16 as product
 
 WORKDIR /home/chain-bench
 
