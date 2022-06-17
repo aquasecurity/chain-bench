@@ -26,15 +26,32 @@ The auditing focuses on the entire SDLC process, where it can reveal risks from 
 [release]: https://github.com/aquasecurity/chain-bench/releases
 [go-report-card]: https://goreportcard.com/badge/github.com/aquasecurity/chain-bench?style=flat-square
 
-<figure style="text-aligh: center">
+<figure style="text-align: center">
   <img src="docs/imgs/demo.gif" width="1000" alt="Vulnerability Detection">
 </figure>
+
+# Contents
+
+- [Contents](#contents)
+- [Introduction](#introduction)
+- [Quick start](#quick-start)
+  - [For example](#for-example)
+- [Requirements](#requirements)
+- [Supported Providers](#supported-providers)
+  - [Please Note](#please-note)
+  - [Contributing](#contributing)
+  - [Roadmap](#roadmap)
+
+# Introduction
+
+Chain-bench is an open-source tool for auditing your software supply chain stack for security compliance based on a new CIS Software Supply Chain benchmark.
+The auditing focuses on the entire SDLC process, where it can reveal risks from code time into deploy time. To
 
 # Quick start
 
 There is a primarily way to run chain-bench as a stand alone cli, that requires the personal access token of your account and the repository url in order to access your SCM.
 
-### For example
+## For example
 
 ```
 chain-bench scan --repository-url <REPOSITORY_URL> --access-token <TOKEN> -o <OUTPUT_PATH>
@@ -99,7 +116,7 @@ chain-bench scan --repository-url <REPOSITORY_URL> --access-token <TOKEN> -o <OU
 or you can use docker to run the scan:
 
 ```bash
-docker run aquasecurity/chain-bench scan --repository-url <REPOSITORY_URL> --access-token <TOKEN> -o <OUTPUT_PATH>
+docker run aquasecurity/chain-bench scan --repository-url <REPOSITORY_URL> --access-token <TOKEN>
 ```
 
 # Requirements
