@@ -36,6 +36,7 @@ The auditing focuses on the entire SDLC process, where it can reveal risks from 
 - [Introduction](#introduction)
 - [Quick start](#quick-start)
   - [For example](#for-example)
+  - [Using docker](#using-docker)
 - [Requirements](#requirements)
 - [Supported Providers](#supported-providers)
   - [Please Note](#please-note)
@@ -113,7 +114,7 @@ chain-bench scan --repository-url <REPOSITORY_URL> --access-token <TOKEN> -o <OU
 
 </details>
 
-or you can use docker to run the scan:
+## Using docker
 
 ```bash
 docker run aquasecurity/chain-bench scan --repository-url <REPOSITORY_URL> --access-token <TOKEN>
