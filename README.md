@@ -18,23 +18,24 @@ The auditing focuses on the entire SDLC process, where it can reveal risks from 
 [![Build Status](https://github.com/aquasecurity/chain-bench/workflows/Build/badge.svg?branch=main&style=flat-square)](https://github.com/aquasecurity/chain-bench/actions)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg?style=flat-square)](https://github.com/aquasecurity/chain-bench/blob/main/LICENSE)
 [![go-report-card][go-report-card]](https://goreportcard.com/report/github.com/aquasecurity/chain-bench)
-<!-- ![coverage report](https://img.shields.io/codecov/c/github/aquasecurity/chain-bench?style=flat-square) -->
 
+<!-- ![coverage report](https://img.shields.io/codecov/c/github/aquasecurity/chain-bench?style=flat-square) -->
 
 [download]: https://img.shields.io/github/downloads/aquasecurity/chain-bench/total?logo=github&style=flat-square
 [release-img]: https://img.shields.io/github/release/aquasecurity/chain-bench.svg?logo=github&style=flat-square
 [release]: https://github.com/aquasecurity/chain-bench/releases
 [go-report-card]: https://goreportcard.com/badge/github.com/aquasecurity/chain-bench?style=flat-square
 
-
 <figure style="text-aligh: center">
   <img src="docs/imgs/demo.gif" width="1000" alt="Vulnerability Detection">
 </figure>
 
 # Quick start
+
 There is a primarily way to run chain-bench as a stand alone cli, that requires the personal access token of your account and the repository url in order to access your SCM.
 
 ### For example
+
 ```
 chain-bench scan --repository-url <REPOSITORY_URL> --access-token <TOKEN> -o <OUTPUT_PATH>
 ```
@@ -92,23 +93,35 @@ chain-bench scan --repository-url <REPOSITORY_URL> --access-token <TOKEN> -o <OU
  Total Passed Rules: 19 out of 36
 2022-06-13 15:22:31 INF Scan completed: 13.108s
 ```
+
 </details>
 
+or you can use docker to run the scan:
+
+```bash
+docker run aquasecurity/chain-bench scan --repository-url <REPOSITORY_URL> --access-token <TOKEN> -o <OUTPUT_PATH>
+```
+
 # Requirements
+
 It is required to provide an access token with permission to these scopes: `repo`(all), `read:repo_hook`, `admin:org_hook`, `read:org`
 
 # Supported Providers
- We currently support Github as the first SCM, with PAT authentication.
+
+We currently support Github as the first SCM, with PAT authentication.
 
 ## Please Note
+
 Chain-bench implements the CIS Software Supply Chain Benchmark as closely as possible.
 You can find the current implemented checks under [AVD - Software Supply Chain CIS - 1.0](https://avd.aquasec.com/compliance/softwaresupplychain/cis-1.0/) that update every night based chain-bench metadata.json files
 Please raise issues here if chain-bench is not correctly implementing the test as described in the Benchmark. To report issues in the Benchmark itself (for example, tests that you believe are inappropriate), please join the CIS community.
 
 ## Contributing
+
 Kindly read [Contributing](CONTRIBUTING.md) before contributing.
 We welcome PRs and issue reports.
 
 ## Roadmap
+
 Going forward we plan to release updates to chain-bench to increase the benchmark coverage with more checks and support more platforms.
 chain-bench is an Aqua Security open source project part of Trivy Family.
