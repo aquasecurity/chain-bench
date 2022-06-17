@@ -24,3 +24,7 @@ test:
 .PHONY: test-coverage
 test-coverage:
 	go test -coverprofile=coverage.out -covermode=atomic -v ./...
+
+.PHONY: build-wasm
+build-wasm:
+	GOOS=js GOARCH=wasm go build -o chain-bench.wasm ./wasm/main.go
