@@ -3,7 +3,6 @@ package main
 import (
 	"encoding/json"
 	"syscall/js"
-	"time"
 
 	"github.com/aquasecurity/chain-bench/internal/checker"
 	"github.com/aquasecurity/chain-bench/internal/checks"
@@ -12,14 +11,6 @@ import (
 	"github.com/aquasecurity/chain-bench/internal/models/checkmodels"
 	"github.com/aquasecurity/chain-bench/internal/scm-clients/clients"
 )
-
-type WasmScanOutput struct {
-	results    []checkmodels.CheckRunResult
-	errors     []error
-	statistics struct {
-		runtime time.Duration
-	}
-}
 
 func Scan(accessToken string, repositoryUrl string) ([]checkmodels.CheckRunResult, []error) {
 	logger.Info("[WASM] Starting supply chain scan (Powered by https://github.com/aquasecurity/chain-bench)")
@@ -53,10 +44,8 @@ func WasmScanWrapper(this js.Value, args []js.Value) interface{} {
 		if err != nil {
 			panic(err)
 		}
-		println(string(jsonOutput))
 
 		parsedErrors := make([]interface{}, 0)
-
 		for _, error := range errors {
 			parsedErrors = append(parsedErrors, error.Error())
 		}
