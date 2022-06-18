@@ -19,11 +19,11 @@ run:
 
 .PHONY: test
 test:
-	go test -v ./...
+	go test -v ./cmd/... ./internal/...
 
 .PHONY: test-coverage
 test-coverage:
-	go test -coverprofile=coverage.out -covermode=atomic -v ./...
+	go test -coverprofile=coverage.out -covermode=atomic -v ./cmd/... ./internal/...
 
 .PHONY: build-wasm
 build-wasm:
