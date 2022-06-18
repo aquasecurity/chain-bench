@@ -9,6 +9,7 @@ before:
     - go generate ./...
 builds:
   - main: cmd/chain-bench/main.go
+    id: "standard-binaries"
     env:
       - CGO_ENABLED=0
     goos:
@@ -18,6 +19,13 @@ builds:
       - amd64
       - arm64
     binary: chain-bench
+  - main: wasm/main.go
+    id: "wasm"
+    goos:
+      - js
+    goarch:
+      - wasm
+    binary: chain-bench.wasm
 release:
   discussion_category_name: Announcements
 
