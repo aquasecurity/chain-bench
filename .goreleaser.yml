@@ -25,7 +25,7 @@ builds:
       - js
     goarch:
       - wasm
-    binary: chain-bench.wasm
+    binary: chain-bench
 release:
   discussion_category_name: Announcements
 
