@@ -55,5 +55,5 @@ jobs:
           workdir: ${{ env.git_repo_name }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GHCR_PATH: ghcr.io/itaywol
-          DOCKERHUB_PATH: docker.io/itaywol
+          GHCR_PATH: ghcr.io/aquasecurity
+          DOCKERHUB_PATH: docker.io/aquasec
