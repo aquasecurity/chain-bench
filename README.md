@@ -37,6 +37,8 @@ The auditing focuses on the entire SDLC process, where it can reveal risks from 
 - [Quick start](#quick-start)
   - [Usage](#usage)
     - [Using docker](#using-docker)
+  - [Examples](#examples)
+    - [Wasm](#wasm)
 - [Requirements](#requirements)
 - [Supported Providers](#supported-providers)
 - [Please Note](#please-note)
@@ -119,6 +121,15 @@ docker run aquasec/chain-bench scan --repository-url <REPOSITORY_URL> --access-t
 ```
 
 </details>
+
+## Examples
+
+### Wasm
+
+```bash
+make start-wasm-example-web # start web server
+make stop-wasm-example-web # tear down after you have done inspecting
+```
 
 # Requirements
 
