@@ -1,5 +1,6 @@
 VERSION := $(shell git describe --tags --always)
 LDFLAGS=-ldflags "-s -w -X=main.version=$(VERSION)"
+GOROOT:=$(shell go env GOROOT)
 
 # If the first argument is "run"...
 ifeq (run,$(firstword $(MAKECMDGOALS)))
@@ -28,3 +29,23 @@ test-coverage:
 .PHONY: build-wasm
 build-wasm:
 	GOOS=js GOARCH=wasm go build -o chain-bench.wasm ./wasm/main.go
+
+.PHONY: run-wasm-example-web
+start-wasm-example-web: build-wasm
+	cp ./chain-bench.wasm ./docs/examples/wasm/web && \
+	cp $(GOROOT)/misc/wasm/wasm_exec.js ./docs/examples/wasm/web && \
+	cd ./docs/examples/wasm/web && \
+	docker build -t chain-bench-wasm-example-web . && \
+	docker run -d -p 3000:80 --name wasm-example chain-bench-wasm-example-web && \
+	rm -rf ./docs/examples/wasm/web/chain-bench.wasm && \
+	rm -rf ./docs/examples/wasm/web/wasm_exec.js && \
+	echo "Chain bench WASM minimal example is running at - http://localhost:3000/"
+
+.PHONY: stop-wasm-example-web
+stop-wasm-example-web:
+	docker rm -f wasm-example && \
+	docker rmi -f chain-bench-wasm-example-web && \
+	echo "Chain bench WASM minimal example stopped"
+
+	
+

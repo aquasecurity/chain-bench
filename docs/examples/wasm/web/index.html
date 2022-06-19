@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chain Bench WASM example</title>
+    <script src="wasm_exec.js"></script>
+    <script>
+        globalThis.scanCallback = function(result,errors) {
+            var span = document.getElementById("result");
+            span.innerHTML = result;
+            var span = document.getElementById("errors");
+            span.innerHTML = errors;
+        };
+        async function init() {
+            const go = new Go();
+            const result = await WebAssembly.instantiateStreaming(fetch('chain-bench.wasm',{headers:{Accept:"application/wasm","Content-Type":"application/wasm"}}), go.importObject);
+            go.run(result.instance);
+        }
+        init()
+
+        function scan() {
+            const form = document.getElementById('form');
+            const inputs = form.getElementsByTagName('input');
+            const values = [];
+            for (let i = 0; i < inputs.length; i++) {
+                values.push(inputs[i].value);
+            }
+            globalThis.chainBenchScan(...values,"scanCallback");
+
+
+        }
+    </script>
+</head>
+<body>
+    <h1>Chain Bench WASM minimal example</h1>
+    <p>
+        This is a simple WASM example that runs the Chain Bench benchmark with WASM.
+    </p>
+    <form id="form">
+        <label for="access_token">Access Token</label>
+        <input type="text" id="access_token" name="access_token" value="">
+        <label for="repository_url">Repository URL</label>
+        <input type="text" id="repository_url" name="repository_url" value="">
+        <button type="button" onclick="scan()">Scan</button>
+        <div>
+            <span id="result"></span>
+            <span id="errors"></span>
+        </div>
+    </form>
+</body>
+</html>
