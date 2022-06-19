@@ -9,7 +9,7 @@ before:
     - go generate ./...
 builds:
   - main: cmd/chain-bench/main.go
-    id: "standard-binaries"
+    id: "chain-bench"
     env:
       - CGO_ENABLED=0
     goos:
