@@ -14,24 +14,9 @@ builds:
     goos:
       - darwin
       - linux
-      - freebsd
     goarch:
       - amd64
-      - "386"
-      - arm
       - arm64
-      - s390x
-      - ppc64le
-    goarm:
-      - "7"
-    ignore:
-      - goos: darwin
-        goarch: "386"
-      # modernc.org/sqlite doesn't support the following pairs
-      - goos: freebsd
-        goarch: arm
-      - goos: freebsd
-        goarch: arm64
     binary: chain-bench
 release:
   discussion_category_name: Announcements
@@ -42,29 +27,9 @@ archives:
       linux: Linux
       amd64: 64bit
       arm64: ARM64
-      386: 32bit
-      arm: ARM
-      ppc64le: PPC64LE
-      openbsd: OpenBSD
-      netbsd: NetBSD
-      freebsd: FreeBSD
-      dragonfly: DragonFlyBSD
-
     files:
       - README.md
       - LICENSE
-
-# docker_image_default_labels: &docker_image_default_labels |-
-#     "--label=org.opencontainers.image.title={{ .ProjectName }}"
-#     "--label=org.opencontainers.image.description=Chain-bench is an open-source tool for auditing your software supply chain stack for security compliance based on a new CIS Software Supply Chain benchmark"
-#     "--label=org.opencontainers.image.vendor=Aqua Security"
-#     "--label=org.opencontainers.image.version={{ .Version }}"
-#     "--label=org.opencontainers.image.created={{ .Date }}"
-#     "--label=org.opencontainers.image.source=https://github.com/aquasecurity/chain-bench"
-#     "--label=org.opencontainers.image.revision={{ .FullCommit }}"
-#     "--label=org.opencontainers.image.url=https://github.com/aquasecurity/chain-bench"
-#     "--label=org.opencontainers.image.documentation=https://github.com/aquasecurity/chain-bench"
-
 
 dockers:
   - image_templates:
@@ -111,64 +76,16 @@ dockers:
       - "--label=org.opencontainers.image.url=https://github.com/aquasecurity/chain-bench"
       - "--label=org.opencontainers.image.documentation=https://github.com/aquasecurity/chain-bench"
       - "--platform=linux/arm64"
-  - image_templates:
-      - "{{ .Env.DOCKERHUB_PATH }}/chain-bench:{{ .Version }}-s390x"
-      - "{{ .Env.DOCKERHUB_PATH }}/chain-bench:latest-s390x"
-      - "{{ .Env.GHCR_PATH }}/chain-bench:{{ .Version }}-s390x"
-      - "{{ .Env.GHCR_PATH }}/chain-bench:latest-s390x"
-    use: buildx
-    goos: linux
-    goarch: s390x
-    dockerfile: Dockerfile.goreleaser
-    ids:
-      - chain-bench
-    build_flag_templates:
-      - "--label=org.opencontainers.image.title={{ .ProjectName }}"
-      - "--label=org.opencontainers.image.description=Chain-bench is an open-source tool for auditing your software supply chain stack for security compliance based on a new CIS Software Supply Chain benchmark"
-      - "--label=org.opencontainers.image.vendor=Aqua Security"
-      - "--label=org.opencontainers.image.version={{ .Version }}"
-      - "--label=org.opencontainers.image.created={{ .Date }}"
-      - "--label=org.opencontainers.image.source=https://github.com/aquasecurity/chain-bench"
-      - "--label=org.opencontainers.image.revision={{ .FullCommit }}"
-      - "--label=org.opencontainers.image.url=https://github.com/aquasecurity/chain-bench"
-      - "--label=org.opencontainers.image.documentation=https://github.com/aquasecurity/chain-bench"
-      - "--platform=linux/s390x"
-  - image_templates:
-      - "{{ .Env.DOCKERHUB_PATH }}/chain-bench:{{ .Version }}-ppc64le"
-      - "{{ .Env.DOCKERHUB_PATH }}/chain-bench:latest-ppc64le"
-      - "{{ .Env.GHCR_PATH }}/chain-bench:{{ .Version }}-ppc64le"
-      - "{{ .Env.GHCR_PATH }}/chain-bench:latest-ppc64le"
-    use: buildx
-    goos: linux
-    goarch: ppc64le
-    dockerfile: Dockerfile.goreleaser
-    ids:
-      - chain-bench
-    build_flag_templates:
-      - "--label=org.opencontainers.image.title={{ .ProjectName }}"
-      - "--label=org.opencontainers.image.description=Chain-bench is an open-source tool for auditing your software supply chain stack for security compliance based on a new CIS Software Supply Chain benchmark"
-      - "--label=org.opencontainers.image.vendor=Aqua Security"
-      - "--label=org.opencontainers.image.version={{ .Version }}"
-      - "--label=org.opencontainers.image.created={{ .Date }}"
-      - "--label=org.opencontainers.image.source=https://github.com/aquasecurity/chain-bench"
-      - "--label=org.opencontainers.image.revision={{ .FullCommit }}"
-      - "--label=org.opencontainers.image.url=https://github.com/aquasecurity/chain-bench"
-      - "--label=org.opencontainers.image.documentation=https://github.com/aquasecurity/chain-bench"
-      - "--platform=linux/ppc64le"
 
 docker_manifests:
   - name_template: '{{ .Env.DOCKERHUB_PATH }}/chain-bench:{{ .Version }}'
     image_templates: &dockerhub_image_templates
       - '{{ .Env.DOCKERHUB_PATH }}/chain-bench:{{ .Version }}-amd64'
       - '{{ .Env.DOCKERHUB_PATH }}/chain-bench:{{ .Version }}-arm64'
-      - '{{ .Env.DOCKERHUB_PATH }}/chain-bench:{{ .Version }}-s390x'
-      - '{{ .Env.DOCKERHUB_PATH }}/chain-bench:{{ .Version }}-ppc64le'
   - name_template: '{{ .Env.GHCR_PATH }}/chain-bench:{{ .Version }}'
     image_templates: &ghcr_image_templates
       - '{{ .Env.GHCR_PATH }}/chain-bench:{{ .Version }}-amd64'
       - '{{ .Env.GHCR_PATH }}/chain-bench:{{ .Version }}-arm64'
-      - '{{ .Env.GHCR_PATH }}/chain-bench:{{ .Version }}-s390x'
-      - '{{ .Env.GHCR_PATH }}/chain-bench:{{ .Version }}-ppc64le'
   - name_template: '{{ .Env.DOCKERHUB_PATH }}/chain-bench:latest'
     image_templates: *dockerhub_image_templates
   - name_template: '{{ .Env.GHCR_PATH }}/chain-bench:latest'
