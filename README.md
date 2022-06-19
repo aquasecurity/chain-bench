@@ -35,13 +35,13 @@ The auditing focuses on the entire SDLC process, where it can reveal risks from 
 - [Contents](#contents)
 - [Introduction](#introduction)
 - [Quick start](#quick-start)
-  - [For example](#for-example)
-  - [Using docker](#using-docker)
+  - [Usage](#usage)
+    - [Using docker](#using-docker)
 - [Requirements](#requirements)
 - [Supported Providers](#supported-providers)
-  - [Please Note](#please-note)
-  - [Contributing](#contributing)
-  - [Roadmap](#roadmap)
+- [Please Note](#please-note)
+- [Contributing](#contributing)
+- [Roadmap](#roadmap)
 
 # Introduction
 
@@ -52,14 +52,20 @@ The auditing focuses on the entire SDLC process, where it can reveal risks from 
 
 There is a primarily way to run chain-bench as a stand alone cli, that requires the personal access token of your account and the repository url in order to access your SCM.
 
-## For example
+## Usage
 
 ```
 chain-bench scan --repository-url <REPOSITORY_URL> --access-token <TOKEN> -o <OUTPUT_PATH>
 ```
 
+### Using docker
+
+```bash
+docker run aquasec/chain-bench scan --repository-url <REPOSITORY_URL> --access-token <TOKEN>
+```
+
 <details>
-<summary>Result</summary>
+<summary>Example output</summary>
 
 ```
 2022-06-13 15:22:18 INF 🚩	Fetch Starting
@@ -114,12 +120,6 @@ chain-bench scan --repository-url <REPOSITORY_URL> --access-token <TOKEN> -o <OU
 
 </details>
 
-## Using docker
-
-```bash
-docker run aquasecurity/chain-bench scan --repository-url <REPOSITORY_URL> --access-token <TOKEN>
-```
-
 # Requirements
 
 It is required to provide an access token with permission to these scopes: `repo`(all), `read:repo_hook`, `admin:org_hook`, `read:org`
@@ -128,18 +128,18 @@ It is required to provide an access token with permission to these scopes: `repo
 
 We currently support Github as the first SCM, with PAT authentication.
 
-## Please Note
+# Please Note
 
 Chain-bench implements the CIS Software Supply Chain Benchmark as closely as possible.
 You can find the current implemented checks under [AVD - Software Supply Chain CIS - 1.0](https://avd.aquasec.com/compliance/softwaresupplychain/cis-1.0/) that update every night based chain-bench metadata.json files
 Please raise issues here if chain-bench is not correctly implementing the test as described in the Benchmark. To report issues in the Benchmark itself (for example, tests that you believe are inappropriate), please join the CIS community.
 
-## Contributing
+# Contributing
 
 Kindly read [Contributing](CONTRIBUTING.md) before contributing.
 We welcome PRs and issue reports.
 
-## Roadmap
+# Roadmap
 
 Going forward we plan to release updates to chain-bench to increase the benchmark coverage with more checks and support more platforms.
 chain-bench is an Aqua Security open source project part of Trivy Family.

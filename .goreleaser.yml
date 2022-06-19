@@ -75,6 +75,7 @@ dockers:
     use: buildx
     goos: linux
     goarch: amd64
+    dockerfile: Dockerfile.goreleaser
     ids:
       - chain-bench
     build_flag_templates: 
@@ -96,6 +97,7 @@ dockers:
     use: buildx
     goos: linux
     goarch: arm64
+    dockerfile: Dockerfile.goreleaser
     ids:
       - chain-bench
     build_flag_templates: 
@@ -117,6 +119,7 @@ dockers:
     use: buildx
     goos: linux
     goarch: s390x
+    dockerfile: Dockerfile.goreleaser
     ids:
       - chain-bench
     build_flag_templates:
@@ -138,6 +141,7 @@ dockers:
     use: buildx
     goos: linux
     goarch: ppc64le
+    dockerfile: Dockerfile.goreleaser
     ids:
       - chain-bench
     build_flag_templates:
