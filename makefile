@@ -30,7 +30,7 @@ test-coverage:
 build-wasm:
 	GOOS=js GOARCH=wasm go build -o chain-bench.wasm ./wasm/main.go
 
-.PHONY: run-wasm-example-web
+.PHONY: start-wasm-example-web
 start-wasm-example-web: build-wasm
 	cp ./chain-bench.wasm ./docs/examples/wasm/web && \
 	cp $(GOROOT)/misc/wasm/wasm_exec.js ./docs/examples/wasm/web && \
