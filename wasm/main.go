@@ -59,6 +59,6 @@ func WasmScanWrapper(this js.Value, args []js.Value) interface{} {
 
 func main() {
 	c := make(chan int)
-	js.Global().Set("scan", js.FuncOf(WasmScanWrapper))
+	js.Global().Set("chainBenchScan", js.FuncOf(WasmScanWrapper))
 	<-c
 }
