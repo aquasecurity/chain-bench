@@ -19,6 +19,7 @@ require (
 	github.com/agnivade/levenshtein v1.0.1 // indirect
 	github.com/pelletier/go-toml/v2 v2.0.0-beta.8 // indirect
 	github.com/vektah/gqlparser/v2 v2.4.4 // indirect
+	golang.org/x/exp v0.0.0-20220613132600-b0d781184e0d // indirect
 )
 
 require (

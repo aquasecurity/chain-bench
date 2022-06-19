@@ -35,6 +35,10 @@ is_repo_has_no_commits {
 	not input.Repository.Commits
 }
 
+is_repo_has_no_commits {
+	input.Repository.Commits == null
+}
+
 is_organization_admin {
 	input.Organization.Members != null
 	count(input.Organization.Members) != 0

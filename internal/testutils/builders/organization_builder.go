@@ -97,6 +97,11 @@ func (b *OrganizationBuilder) WithNoPackageWebHooks() *OrganizationBuilder {
 	return b
 }
 
+func (b *OrganizationBuilder) WithNoMembers() *OrganizationBuilder {
+	b.org.Members = nil
+	return b
+}
+
 func (b *OrganizationBuilder) Build() *models.Organization {
 	return b.org
 }

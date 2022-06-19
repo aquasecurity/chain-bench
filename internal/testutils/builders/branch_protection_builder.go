@@ -10,7 +10,23 @@ type BranchProtectionBuilder struct {
 }
 
 func NewBranchProtectionBuilder() *BranchProtectionBuilder {
-	return &BranchProtectionBuilder{br_protection: &models.Protection{EnforceAdmins: &models.AdminEnforcement{}, RequiredPullRequestReviews: &models.PullRequestReviewsEnforcement{}}}
+	return &BranchProtectionBuilder{br_protection: &models.Protection{
+		EnforceAdmins: &models.AdminEnforcement{
+			Enabled: true,
+		},
+		RequiredStatusChecks: &models.RequiredStatusChecks{Strict: true},
+		RequiredPullRequestReviews: &models.PullRequestReviewsEnforcement{
+			RequiredApprovingReviewCount: 2,
+			RequireCodeOwnerReviews:      true,
+			DismissStaleReviews:          true,
+			DismissalRestrictions:        &models.DismissalRestrictions{Users: []*models.User{}},
+		},
+		Restrictions:                   &models.BranchRestrictions{Users: []*models.User{{Name: utils.GetPtr("default")}}, Teams: []*models.Team{}, Apps: []*models.App{}},
+		RequiredSignedCommit:           true,
+		RequiredConversationResolution: true,
+		AllowForcePushes:               true,
+		AllowDeletions:                 true,
+	}}
 }
 
 func (b *BranchProtectionBuilder) WithStatusCheckEnabled() *BranchProtectionBuilder {

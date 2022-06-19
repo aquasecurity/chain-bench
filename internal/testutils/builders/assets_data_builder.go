@@ -13,7 +13,11 @@ type AssetsDataBuilder struct {
 }
 
 func NewAssetsDataBuilder() *AssetsDataBuilder {
-	return &AssetsDataBuilder{assetsData: &checkmodels.AssetsData{}}
+	return &AssetsDataBuilder{assetsData: &checkmodels.AssetsData{
+		Organization:      NewOrganizationBuilder().Build(),
+		Repository:        NewRepositoryBuilder().Build(),
+		BranchProtections: NewBranchProtectionBuilder().Build(),
+	}}
 }
 
 func (b *AssetsDataBuilder) WithRepository(repo *models.Repository) *AssetsDataBuilder {

@@ -100,6 +100,11 @@ func (b *RepositoryBuilder) WithCommit(login string) *RepositoryBuilder {
 	return b
 }
 
+func (b *RepositoryBuilder) WithNoCommits() *RepositoryBuilder {
+	b.repository.Commits = nil
+	return b
+}
+
 func (b *RepositoryBuilder) WithPackageWebHooks(url string, is_ssl string, secret *string) *RepositoryBuilder {
 	b.repository.Hooks = []*models.Hook{{
 		URL: &url,
