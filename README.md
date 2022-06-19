@@ -127,7 +127,7 @@ docker run aquasec/chain-bench scan --repository-url <REPOSITORY_URL> --access-t
 ### Wasm
 
 ```bash
-make start-wasm-example-web # start web server
+make start-wasm-example-web # start web server (Requirements: docker, go v1.18)
 make stop-wasm-example-web # tear down after you have done inspecting
 ```
 
