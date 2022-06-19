@@ -1,0 +1,5 @@
+.vscode
+.github
+.goreleaser.yml
+.gitignore
+*.md
