@@ -37,10 +37,10 @@ func TestBuildChecker(t *testing.T) {
 		{
 			Name: "Pipeline with one job without vulnerability scanner task",
 			Data: &checkmodels.CheckData{
-				AssetsMetadata: builders.NewAssetsDataBuilder().WithPipeline(
-					builders.NewPipelineBuilder().
+				AssetsMetadata: builders.NewAssetsDataBuilder().WithZeroPipelines().WithPipeline(
+					builders.NewPipelineBuilder().WithNoJobs().
 						WithJob(builders.
-							NewJobBuilder().
+							NewJobBuilder().WithNoTasks().
 							WithTask("NORMAL_TASK_NAME", "commit").WithNoVulnerabilityScannerTask().
 							Build()).
 						Build(),
