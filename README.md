@@ -12,32 +12,60 @@ Chain-bench is an open-source tool for auditing your software supply chain stack
 The auditing focuses on the entire SDLC process, where it can reveal risks from code time into deploy time. To win the race against hackers and protect your sensitive data and customer trust, you need to ensure your code is compliant with your organization’s policies.
 </p>
 
+[![Go Reference](https://pkg.go.dev/badge/github.com/aquasecurity/chain-bench.svg?style=flat-square)](https://pkg.go.dev/github.com/aquasecurity/chain-bench)
 [![GitHub Release][release-img]][release]
 [![Downloads][download]][release]
 [![Build Status](https://github.com/aquasecurity/chain-bench/workflows/Build/badge.svg?branch=main&style=flat-square)](https://github.com/aquasecurity/chain-bench/actions)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg?style=flat-square)](https://github.com/aquasecurity/chain-bench/blob/main/LICENSE)
 [![go-report-card][go-report-card]](https://goreportcard.com/report/github.com/aquasecurity/chain-bench)
 
+<!-- ![coverage report](https://img.shields.io/codecov/c/github/aquasecurity/chain-bench?style=flat-square) -->
+
 [download]: https://img.shields.io/github/downloads/aquasecurity/chain-bench/total?logo=github&style=flat-square
 [release-img]: https://img.shields.io/github/release/aquasecurity/chain-bench.svg?logo=github&style=flat-square
 [release]: https://github.com/aquasecurity/chain-bench/releases
 [go-report-card]: https://goreportcard.com/badge/github.com/aquasecurity/chain-bench?style=flat-square
 
-
-<figure style="text-aligh: center">
+<figure style="text-align: center">
   <img src="docs/imgs/demo.gif" width="1000" alt="Vulnerability Detection">
 </figure>
 
+# Contents
+
+- [Contents](#contents)
+- [Introduction](#introduction)
+- [Quick start](#quick-start)
+  - [Usage](#usage)
+    - [Using docker](#using-docker)
+- [Requirements](#requirements)
+- [Supported Providers](#supported-providers)
+- [Please Note](#please-note)
+- [Contributing](#contributing)
+- [Roadmap](#roadmap)
+
+# Introduction
+
+Chain-bench is an open-source tool for auditing your software supply chain stack for security compliance based on a new CIS Software Supply Chain benchmark.
+The auditing focuses on the entire SDLC process, where it can reveal risks from code time into deploy time. To
+
 # Quick start
+
 There is a primarily way to run chain-bench as a stand alone cli, that requires the personal access token of your account and the repository url in order to access your SCM.
 
-### For example
+## Usage
+
 ```
 chain-bench scan --repository-url <REPOSITORY_URL> --access-token <TOKEN> -o <OUTPUT_PATH>
 ```
 
+### Using docker
+
+```bash
+docker run aquasec/chain-bench scan --repository-url <REPOSITORY_URL> --access-token <TOKEN>
+```
+
 <details>
-<summary>Result</summary>
+<summary>Example output</summary>
 
 ```
 2022-06-13 15:22:18 INF 🚩	Fetch Starting
@@ -89,23 +117,29 @@ chain-bench scan --repository-url <REPOSITORY_URL> --access-token <TOKEN> -o <OU
  Total Passed Rules: 19 out of 36
 2022-06-13 15:22:31 INF Scan completed: 13.108s
 ```
+
 </details>
 
 # Requirements
+
 It is required to provide an access token with permission to these scopes: `repo`(all), `read:repo_hook`, `admin:org_hook`, `read:org`
 
 # Supported Providers
- We currently support Github as the first SCM, with PAT authentication.
 
-## Please Note
+We currently support Github as the first SCM, with PAT authentication.
+
+# Please Note
+
 Chain-bench implements the CIS Software Supply Chain Benchmark as closely as possible.
 You can find the current implemented checks under [AVD - Software Supply Chain CIS - 1.0](https://avd.aquasec.com/compliance/softwaresupplychain/cis-1.0/) that update every night based chain-bench metadata.json files
 Please raise issues here if chain-bench is not correctly implementing the test as described in the Benchmark. To report issues in the Benchmark itself (for example, tests that you believe are inappropriate), please join the CIS community.
 
-## Contributing
+# Contributing
+
 Kindly read [Contributing](CONTRIBUTING.md) before contributing.
 We welcome PRs and issue reports.
 
-## Roadmap
+# Roadmap
+
 Going forward we plan to release updates to chain-bench to increase the benchmark coverage with more checks and support more platforms.
 chain-bench is an Aqua Security open source project part of Trivy Family.

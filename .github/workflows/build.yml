@@ -25,7 +25,10 @@ jobs:
       - name: Build
         run: |
           make
-          
-      - name: Execute Tests
+
+      - name: Execute Tests with Coverage
         run: |
-          make test
+          make test-coverage
+
+      - name: Upload Coverage
+        uses: codecov/codecov-action@v2

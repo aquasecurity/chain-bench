@@ -1,5 +1,6 @@
 # This is an example .goreleaser.yml file with some sane defaults.
 # Make sure to check the documentation at http://goreleaser.com
+project_name: chain-bench
 before:
   hooks:
     # You may remove this if you don't use go modules.
@@ -11,11 +12,11 @@ builds:
     env:
       - CGO_ENABLED=0
     goos:
-      - linux
       - darwin
+      - linux
     goarch:
-      - arm64
       - amd64
+      - arm64
     binary: chain-bench
 release:
   discussion_category_name: Announcements
@@ -26,10 +27,71 @@ archives:
       linux: Linux
       amd64: 64bit
       arm64: ARM64
-
     files:
       - README.md
       - LICENSE
+
+dockers:
+  - image_templates:
+      - "{{ .Env.DOCKERHUB_PATH }}/chain-bench:{{ .Version }}-amd64"
+      - "{{ .Env.DOCKERHUB_PATH }}/chain-bench:latest-amd64"
+      - "{{ .Env.GHCR_PATH }}/chain-bench:{{ .Version }}-amd64"
+      - "{{ .Env.GHCR_PATH }}/chain-bench:latest-amd64"
+    use: buildx
+    goos: linux
+    goarch: amd64
+    dockerfile: Dockerfile.goreleaser
+    ids:
+      - chain-bench
+    build_flag_templates: 
+      - "--label=org.opencontainers.image.title={{ .ProjectName }}"
+      - "--label=org.opencontainers.image.description=Chain-bench is an open-source tool for auditing your software supply chain stack for security compliance based on a new CIS Software Supply Chain benchmark"
+      - "--label=org.opencontainers.image.vendor=Aqua Security"
+      - "--label=org.opencontainers.image.version={{ .Version }}"
+      - "--label=org.opencontainers.image.created={{ .Date }}"
+      - "--label=org.opencontainers.image.source=https://github.com/aquasecurity/chain-bench"
+      - "--label=org.opencontainers.image.revision={{ .FullCommit }}"
+      - "--label=org.opencontainers.image.url=https://github.com/aquasecurity/chain-bench"
+      - "--label=org.opencontainers.image.documentation=https://github.com/aquasecurity/chain-bench"
+      - "--platform=linux/amd64"
+  - image_templates:
+      - "{{ .Env.DOCKERHUB_PATH }}/chain-bench:{{ .Version }}-arm64"
+      - "{{ .Env.DOCKERHUB_PATH }}/chain-bench:latest-arm64"
+      - "{{ .Env.GHCR_PATH }}/chain-bench:{{ .Version }}-arm64"
+      - "{{ .Env.GHCR_PATH }}/chain-bench:latest-arm64"
+    use: buildx
+    goos: linux
+    goarch: arm64
+    dockerfile: Dockerfile.goreleaser
+    ids:
+      - chain-bench
+    build_flag_templates: 
+      - "--label=org.opencontainers.image.title={{ .ProjectName }}"
+      - "--label=org.opencontainers.image.description=Chain-bench is an open-source tool for auditing your software supply chain stack for security compliance based on a new CIS Software Supply Chain benchmark"
+      - "--label=org.opencontainers.image.vendor=Aqua Security"
+      - "--label=org.opencontainers.image.version={{ .Version }}"
+      - "--label=org.opencontainers.image.created={{ .Date }}"
+      - "--label=org.opencontainers.image.source=https://github.com/aquasecurity/chain-bench"
+      - "--label=org.opencontainers.image.revision={{ .FullCommit }}"
+      - "--label=org.opencontainers.image.url=https://github.com/aquasecurity/chain-bench"
+      - "--label=org.opencontainers.image.documentation=https://github.com/aquasecurity/chain-bench"
+      - "--platform=linux/arm64"
+
+docker_manifests:
+  - name_template: '{{ .Env.DOCKERHUB_PATH }}/chain-bench:{{ .Version }}'
+    image_templates: &dockerhub_image_templates
+      - '{{ .Env.DOCKERHUB_PATH }}/chain-bench:{{ .Version }}-amd64'
+      - '{{ .Env.DOCKERHUB_PATH }}/chain-bench:{{ .Version }}-arm64'
+  - name_template: '{{ .Env.GHCR_PATH }}/chain-bench:{{ .Version }}'
+    image_templates: &ghcr_image_templates
+      - '{{ .Env.GHCR_PATH }}/chain-bench:{{ .Version }}-amd64'
+      - '{{ .Env.GHCR_PATH }}/chain-bench:{{ .Version }}-arm64'
+  - name_template: '{{ .Env.DOCKERHUB_PATH }}/chain-bench:latest'
+    image_templates: *dockerhub_image_templates
+  - name_template: '{{ .Env.GHCR_PATH }}/chain-bench:latest'
+    image_templates: *ghcr_image_templates
+
+
 checksum:
   name_template: "checksums.txt"
 snapshot:
