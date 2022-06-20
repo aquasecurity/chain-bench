@@ -40,6 +40,10 @@ details_pipeline_pipelinesNotScannedForVulnerabilities := msg {
 	msg := "Pipelines are not scanned for vulnerabilities"
 }
 
+argon_scanner_action := "argonsecurity/scanner-action"
+
+trivy_scanner_action := "aquasecurity/trivy-action"
+
 status := stat {
 	stat := {
 		"Unknown": "Unknown",

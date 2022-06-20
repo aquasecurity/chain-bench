@@ -1,5 +1,7 @@
 package consts
 
 var (
-	sbomTask = "CycloneDX/gh-dotnet-generate-sbom"
+	SbomTask           = "CycloneDX/gh-dotnet-generate-sbom"
+	ArgonScannerAction = "argonsecurity/scanner-action"
+	TrivyScannerAction = "aquasecurity/trivy-action"
 )

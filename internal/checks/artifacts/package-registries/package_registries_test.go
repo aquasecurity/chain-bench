@@ -11,10 +11,6 @@ import (
 	"github.com/aquasecurity/chain-bench/internal/utils"
 )
 
-const (
-	vulnerabilityScanningTask = "argonsecurity/scanner-action"
-)
-
 func TestPackageRegistryChecker(t *testing.T) {
 	tests := []testutils.CheckTest{
 

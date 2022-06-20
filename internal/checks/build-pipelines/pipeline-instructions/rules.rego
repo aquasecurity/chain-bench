@@ -11,10 +11,10 @@ pipelineRuleIds = [
 	"2.3.8",
 ]
 
-pipeline_vulnerability_scan_tasks = ["argonsecurity/scanner-action", "aquasecurity/trivy-action"]
+pipeline_vulnerability_scan_tasks = [constsLib.argon_scanner_action, constsLib.trivy_scanner_action]
 
 secret_scan_tasks = [
-	"argonsecurity/scanner-action",
+	constsLib.argon_scanner_action,
 	"zricethezav/gitleaks-action",
 	"ShiftLeftSecurity/scan-action",
 ]

@@ -4,7 +4,7 @@ import data.common.consts as constsLib
 import data.generic.utils as utilsLib
 import future.keywords.in
 
-pipeline_vulnerability_scan_tasks = ["argonsecurity/scanner-action", "aquasecurity/trivy-action"]
+pipeline_vulnerability_scan_tasks = [constsLib.argon_scanner_action, constsLib.trivy_scanner_action]
 
 does_job_contain_one_of_tasks(job, regexes) {
 	job.steps[i].type == "task"

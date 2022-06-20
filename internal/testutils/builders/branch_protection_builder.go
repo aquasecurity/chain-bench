@@ -43,11 +43,6 @@ func (b *BranchProtectionBuilder) WithStrictMode(enabled bool) *BranchProtection
 	return b
 }
 
-func (b *BranchProtectionBuilder) WithRequireBranchToBeUpToDate(required bool) *BranchProtectionBuilder {
-	b.br_protection.RequiredStatusChecks.Strict = required
-	return b
-}
-
 func (b *BranchProtectionBuilder) WithMinimumReviwersBeforeMerge(num int) *BranchProtectionBuilder {
 	b.br_protection.RequiredPullRequestReviews.RequiredApprovingReviewCount = num
 	return b
