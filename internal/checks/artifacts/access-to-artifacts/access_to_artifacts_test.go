@@ -21,7 +21,8 @@ func TestAccessToArtifactsChecker(t *testing.T) {
 			Data: &checkmodels.CheckData{
 				AssetsMetadata: builders.NewAssetsDataBuilder().
 					WithOrganization(builders.NewOrganizationBuilder().Build()).
-					WithPackageRegistry(builders.NewRegistryBuilder().WithPackages("npm", "public", true).Build()).
+					WithRepository(builders.NewRepositoryBuilder().WithID(4344).Build()).
+					WithPackageRegistry(builders.NewRegistryBuilder().WithPackages("npm", "public", true, 4344).Build()).
 					Build(),
 			},
 			Expected: []*checkmodels.CheckRunResult{
@@ -42,35 +43,12 @@ func TestAccessToArtifactsChecker(t *testing.T) {
 			},
 		},
 		{
-			Name: "no org & no repo permissions",
-			Data: &checkmodels.CheckData{
-				AssetsMetadata: builders.NewAssetsDataBuilder().
-					WithPackageRegistry(builders.NewRegistryBuilder().WithPackages("npm", "public", true).Build()).
-					Build(),
-			},
-			Expected: []*checkmodels.CheckRunResult{
-				checkmodels.ToCheckRunResult("4.2.3", checksMetadata.Checks["4.2.3"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed}),
-				checkmodels.ToCheckRunResult("4.2.5", checksMetadata.Checks["4.2.5"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed, Details: "1 anonymous accessed packages"}),
-			},
-		},
-		{
-			Name: "repo permissions only, no org permissions",
-			Data: &checkmodels.CheckData{
-				AssetsMetadata: builders.NewAssetsDataBuilder().
-					WithPackageRegistry(builders.NewRegistryBuilder().WithPackages("npm", "public", true).Build()).
-					Build(),
-			},
-			Expected: []*checkmodels.CheckRunResult{
-				checkmodels.ToCheckRunResult("4.2.3", checksMetadata.Checks["4.2.3"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed}),
-				checkmodels.ToCheckRunResult("4.2.5", checksMetadata.Checks["4.2.5"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed, Details: "1 anonymous accessed packages"}),
-			},
-		},
-		{
 			Name: "Package registry with 2mfa disabled",
 			Data: &checkmodels.CheckData{
 				AssetsMetadata: builders.NewAssetsDataBuilder().
 					WithOrganization(builders.NewOrganizationBuilder().WithReposDefaultPermissions("read").Build()).
-					WithPackageRegistry(builders.NewRegistryBuilder().WithTwoFactorAuthenticationEnabled(false).WithPackages("npm", "public", true).Build()).
+					WithRepository(builders.NewRepositoryBuilder().WithID(4344).Build()).
+					WithPackageRegistry(builders.NewRegistryBuilder().WithTwoFactorAuthenticationEnabled(false).WithPackages("npm", "public", true, 4344).Build()).
 					Build(),
 			},
 			Expected: []*checkmodels.CheckRunResult{
@@ -83,7 +61,8 @@ func TestAccessToArtifactsChecker(t *testing.T) {
 			Data: &checkmodels.CheckData{
 				AssetsMetadata: builders.NewAssetsDataBuilder().
 					WithOrganization(builders.NewOrganizationBuilder().WithReposDefaultPermissions("read").Build()).
-					WithPackageRegistry(builders.NewRegistryBuilder().WithTwoFactorAuthenticationEnabled(true).WithPackages("npm", "public", true).Build()).
+					WithRepository(builders.NewRepositoryBuilder().WithID(4344).Build()).
+					WithPackageRegistry(builders.NewRegistryBuilder().WithTwoFactorAuthenticationEnabled(true).WithPackages("npm", "public", true, 4344).Build()).
 					Build(),
 			},
 			Expected: []*checkmodels.CheckRunResult{
@@ -95,7 +74,8 @@ func TestAccessToArtifactsChecker(t *testing.T) {
 			Name: "Package registry with 2 public packages under private repo",
 			Data: &checkmodels.CheckData{
 				AssetsMetadata: builders.NewAssetsDataBuilder().
-					WithPackageRegistry(builders.NewRegistryBuilder().WithTwoFactorAuthenticationEnabled(false).WithPackages("npm", "public", true).WithPackages("npm", "public", true).Build()).
+					WithRepository(builders.NewRepositoryBuilder().WithID(4344).Build()).
+					WithPackageRegistry(builders.NewRegistryBuilder().WithTwoFactorAuthenticationEnabled(false).WithPackages("npm", "public", true, 4344).WithPackages("npm", "public", true, 4344).Build()).
 					Build(),
 			},
 			Expected: []*checkmodels.CheckRunResult{
@@ -107,7 +87,8 @@ func TestAccessToArtifactsChecker(t *testing.T) {
 			Name: "Package registry with 1 private and 1 public packages under private repo",
 			Data: &checkmodels.CheckData{
 				AssetsMetadata: builders.NewAssetsDataBuilder().
-					WithPackageRegistry(builders.NewRegistryBuilder().WithTwoFactorAuthenticationEnabled(false).WithPackages("npm", "private", true).WithPackages("npm", "public", true).Build()).
+					WithRepository(builders.NewRepositoryBuilder().WithID(4344).Build()).
+					WithPackageRegistry(builders.NewRegistryBuilder().WithTwoFactorAuthenticationEnabled(false).WithPackages("npm", "private", true, 4344).WithPackages("npm", "public", true, 4344).Build()).
 					Build(),
 			},
 			Expected: []*checkmodels.CheckRunResult{
@@ -119,12 +100,26 @@ func TestAccessToArtifactsChecker(t *testing.T) {
 			Name: "Package registry with 2 private packages",
 			Data: &checkmodels.CheckData{
 				AssetsMetadata: builders.NewAssetsDataBuilder().
-					WithPackageRegistry(builders.NewRegistryBuilder().WithTwoFactorAuthenticationEnabled(false).WithPackages("npm", "private", true).WithPackages("npm", "private", true).Build()).
+					WithRepository(builders.NewRepositoryBuilder().WithID(4344).Build()).
+					WithPackageRegistry(builders.NewRegistryBuilder().WithTwoFactorAuthenticationEnabled(false).WithPackages("npm", "private", true, 4344).WithPackages("npm", "private", true, 4344).Build()).
 					Build(),
 			},
 			Expected: []*checkmodels.CheckRunResult{
 				checkmodels.ToCheckRunResult("4.2.3", checksMetadata.Checks["4.2.3"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed}),
 				checkmodels.ToCheckRunResult("4.2.5", checksMetadata.Checks["4.2.5"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Passed}),
+			},
+		},
+		{
+			Name: "Package registry with 2 public packages but only 1 under the scoped repository",
+			Data: &checkmodels.CheckData{
+				AssetsMetadata: builders.NewAssetsDataBuilder().
+					WithRepository(builders.NewRepositoryBuilder().WithID(4344).Build()).
+					WithPackageRegistry(builders.NewRegistryBuilder().WithTwoFactorAuthenticationEnabled(false).WithPackages("npm", "public", true, 4344).WithPackages("npm", "public", true, 65655).Build()).
+					Build(),
+			},
+			Expected: []*checkmodels.CheckRunResult{
+				checkmodels.ToCheckRunResult("4.2.3", checksMetadata.Checks["4.2.3"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed}),
+				checkmodels.ToCheckRunResult("4.2.5", checksMetadata.Checks["4.2.5"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed, Details: "1 anonymous accessed packages"}),
 			},
 		},
 	}

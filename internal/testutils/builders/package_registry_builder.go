@@ -18,11 +18,11 @@ func (p *PackageRegistryBuilder) WithTwoFactorAuthenticationEnabled(enabled bool
 	return p
 }
 
-func (p *PackageRegistryBuilder) WithPackages(packagetype string, visability string, isRepoPrivate bool) *PackageRegistryBuilder {
+func (p *PackageRegistryBuilder) WithPackages(packagetype string, visability string, isRepoPrivate bool, repoID int64) *PackageRegistryBuilder {
 	pkg := &models.Package{
 		PackageType: utils.GetPtr(packagetype),
 		Visibility:  utils.GetPtr(visability),
-		Repository:  &models.Repository{IsPrivate: utils.GetPtr(isRepoPrivate)}}
+		Repository:  &models.Repository{ID: utils.GetPtr(repoID), IsPrivate: utils.GetPtr(isRepoPrivate)}}
 
 	if p.registry.Packages == nil {
 		p.registry.Packages = []*models.Package{pkg}
