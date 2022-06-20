@@ -52,7 +52,7 @@ is_branch_protection_restrict_force_push {
 	input.BranchProtections.AllowForcePushes == false
 }
 
-is_branch_protection_restrict_delete_repo {
+is_branch_protection_restrict_delete_branch {
 	input.BranchProtections.AllowDeletions == false
 }
 
@@ -86,14 +86,24 @@ is_inactive_branches[inactiveCount] {
 	inactiveCount > 0
 }
 
+is_repository_allow_merge_commit {
+	input.Repository.AllowMergeCommit == true
+}
+
+is_repository_prevent_rebase_and_squash_merge {
+	input.Repository.AllowRebaseMerge == false
+	input.Repository.AllowSquashMerge == false
+}
+
 #missing permissions
 CbPolicy[msg] {
 	permissionslib.is_missing_repo_settings_permission
-	msg := {"ids": ["1.1.3", "1.1.4", "1.1.5", "1.1.9", "1.1.10", "1.1.11", "1.1.12", "1.1.14", "1.1.15", "1.1.16", "1.1.17"], "status": constsLib.status.Unknown}
+	msg := {"ids": ["1.1.3", "1.1.4", "1.1.5", "1.1.6", "1.1.9", "1.1.10", "1.1.11", "1.1.12", "1.1.13", "1.1.14", "1.1.15", "1.1.16", "1.1.17"], "status": constsLib.status.Unknown}
 }
 
 #Missing branch protection settings
 CbPolicy[msg] {
+	not permissionslib.is_missing_repo_settings_permission
 	is_no_branch_protection
 	msg := {"ids": ["1.1.3", "1.1.4", "1.1.5", "1.1.6", "1.1.9", "1.1.10", "1.1.11", "1.1.12", "1.1.14", "1.1.15", "1.1.16", "1.1.17"], "status": constsLib.status.Failed}
 }
@@ -172,6 +182,16 @@ CbPolicy[msg] {
 	msg := {"ids": ["1.1.12"], "status": constsLib.status.Failed}
 }
 
+CbPolicy[msg] {
+	is_repository_allow_merge_commit
+	msg := {"ids": ["1.1.13"], "status": constsLib.status.Failed, "details": constsLib.details_linearHistory_mergeCommitEnabled}
+}
+
+CbPolicy[msg] {
+	is_repository_prevent_rebase_and_squash_merge
+	msg := {"ids": ["1.1.13"], "status": constsLib.status.Failed, "details": constsLib.details_linearHistory_requireRebaseOrSquashCommitEnabled}
+}
+
 #Looking for default branch protection that doesn't enforced on admins
 CbPolicy[msg] {
 	not is_no_branch_protection
@@ -196,6 +216,6 @@ CbPolicy[msg] {
 #Looking for default branch protection that restrict who can delete protected branch
 CbPolicy[msg] {
 	not is_no_branch_protection
-	is_branch_protection_restrict_delete_repo
+	is_branch_protection_restrict_delete_branch
 	msg := {"ids": ["1.1.17"], "status": constsLib.status.Failed}
 }

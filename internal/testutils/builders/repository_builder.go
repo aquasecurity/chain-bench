@@ -54,11 +54,17 @@ func NewRepositoryBuilder() *RepositoryBuilder {
 				Login: utils.GetPtr("user3"),
 			},
 		}},
+		Branches: []*models.Branch{NewBranchBuilder().Build()},
 	}}
 }
 
 func (b *RepositoryBuilder) WithAllowRebaseMerge(enable bool) *RepositoryBuilder {
 	b.repository.AllowRebaseMerge = utils.GetPtr(enable)
+	return b
+}
+
+func (b *RepositoryBuilder) WithNoRepoPemissions() *RepositoryBuilder {
+	b.repository.AllowRebaseMerge = nil
 	return b
 }
 
@@ -72,6 +78,11 @@ func (b *RepositoryBuilder) WithAdminCollborator(admin bool, count int) *Reposit
 		})})
 	}
 
+	return b
+}
+
+func (b *RepositoryBuilder) WithNoCollborator() *RepositoryBuilder {
+	b.repository.Collaborators = nil
 	return b
 }
 
@@ -115,6 +126,11 @@ func (b *RepositoryBuilder) WithPackageWebHooks(url string, is_ssl string, secre
 		},
 		Events: []string{"package"},
 	}}
+	return b
+}
+
+func (b *RepositoryBuilder) WithBranch(branch *models.Branch) *RepositoryBuilder {
+	b.repository.Branches = append(b.repository.Branches, branch)
 	return b
 }
 

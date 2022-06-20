@@ -10,41 +10,16 @@ import (
 	"github.com/aquasecurity/chain-bench/internal/testutils/builders"
 )
 
-const (
-	sbomTask = "CycloneDX/gh-dotnet-generate-sbom"
-)
-
 func TestBuildChecker(t *testing.T) {
 	tests := []testutils.CheckTest{
-		{
-			Name: "Build job with SBOM task",
-			Data: &checkmodels.CheckData{
-				AssetsMetadata: builders.NewAssetsDataBuilder().
-					WithPipeline(builders.
-						NewPipelineBuilder().
-						WithJob(builders.
-							NewJobBuilder().
-							SetAsBuildJob().
-							WithTask(sbomTask, "commit").
-							Build(),
-						).
-						Build(),
-					).Build(),
-			},
-			Expected: []*checkmodels.CheckRunResult{
-				checkmodels.ToCheckRunResult("2.4.2", checksMetadata.Checks["2.4.2"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Passed}),
-				checkmodels.ToCheckRunResult("2.4.6", checksMetadata.Checks["2.4.6"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Passed}),
-			},
-		},
 		{
 			Name: "Build job without SBOM task",
 			Data: &checkmodels.CheckData{
 				AssetsMetadata: builders.NewAssetsDataBuilder().
 					WithPipeline(builders.
-						NewPipelineBuilder().
+						NewPipelineBuilder().WithNoJobs().
 						WithJob(builders.
-							NewJobBuilder().
-							SetAsBuildJob().
+							NewJobBuilder().WithNoTasks().
 							WithTask("NORMAL_TASK_NAME", "commit").
 							Build(),
 						).
@@ -52,59 +27,33 @@ func TestBuildChecker(t *testing.T) {
 					).Build(),
 			},
 			Expected: []*checkmodels.CheckRunResult{
-				checkmodels.ToCheckRunResult("2.4.2", checksMetadata.Checks["2.4.2"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Passed}),
 				checkmodels.ToCheckRunResult("2.4.6", checksMetadata.Checks["2.4.6"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed, Details: "1 pipeline(s) contain a build job without SBOM generation"}),
 			},
 		},
 		{
-			Name: "Multiple pipelines one with an SBOM task",
+			Name: "Multiple pipelines one with unpinned task",
 			Data: &checkmodels.CheckData{
 				AssetsMetadata: builders.NewAssetsDataBuilder().
 					WithPipeline(builders.
-						NewPipelineBuilder().
-						WithJob(builders.
-							NewJobBuilder().
-							SetAsBuildJob().
-							WithTask(sbomTask, "commit").
-							Build(),
-						).
+						NewPipelineBuilder().WithNoJobs().WithJob(builders.NewJobBuilder().WithTask("NORMAL_TASK_NAME", "tag").Build()).
 						Build(),
-					).WithPipeline(builders.
-					NewPipelineBuilder().
-					WithJob(builders.
-						NewJobBuilder().
-						WithTask("NORMAL_TASK_NAME", "commit").
-						WithTask("ANOTHER_TASK_NAME", "tag").
-						Build()).
-					Build(),
-				).Build(),
+					).Build(),
 			},
 			Expected: []*checkmodels.CheckRunResult{
 				checkmodels.ToCheckRunResult("2.4.2", checksMetadata.Checks["2.4.2"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed, Details: "1 task(s) are not pinned"}),
-				checkmodels.ToCheckRunResult("2.4.6", checksMetadata.Checks["2.4.6"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Passed}),
 			},
 		},
 		{
-			Name: "Normal job",
+			Name: "valid input - include normal task",
 			Data: &checkmodels.CheckData{
-				AssetsMetadata: builders.NewAssetsDataBuilder().WithPipeline(
-					builders.NewPipelineBuilder().
-						WithJob(builders.
-							NewJobBuilder().
-							WithTask("NORMAL_TASK_NAME", "commit").
-							Build()).
-						Build(),
-				).Build(),
+				AssetsMetadata: builders.NewAssetsDataBuilder().Build(),
 			},
-			Expected: []*checkmodels.CheckRunResult{
-				checkmodels.ToCheckRunResult("2.4.2", checksMetadata.Checks["2.4.2"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Passed}),
-				checkmodels.ToCheckRunResult("2.4.6", checksMetadata.Checks["2.4.6"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Passed}),
-			},
+			Expected: []*checkmodels.CheckRunResult{},
 		},
 		{
 			Name: "Failed to fetch pipelines",
 			Data: &checkmodels.CheckData{
-				AssetsMetadata: builders.NewAssetsDataBuilder().Build(),
+				AssetsMetadata: builders.NewAssetsDataBuilder().WithNoPipelinesData().Build(),
 			},
 			Expected: []*checkmodels.CheckRunResult{
 				checkmodels.ToCheckRunResult("2.4.2", checksMetadata.Checks["2.4.2"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Unknown}),
@@ -124,5 +73,5 @@ func TestBuildChecker(t *testing.T) {
 			},
 		},
 	}
-	testutils.RunCheckTests(t, common.GetRegoRunAction(regoQuery, checksMetadata), tests)
+	testutils.RunCheckTests(t, common.GetRegoRunAction(regoQuery, checksMetadata), tests, checksMetadata)
 }

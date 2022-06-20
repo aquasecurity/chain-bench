@@ -28,7 +28,7 @@ CbPolicy[msg] {
 CbPolicy[msg] {
 	not utilsLib.is_pipelines_data_missing
 	utilsLib.is_pipelines_list_empty
-	msg = {"ids": ["3.2.2", "3.2.3"], "status": constsLib.status.Unknown, "details": "No pipelines were found"}
+	msg = {"ids": ["3.2.2", "3.2.3"], "status": constsLib.status.Unknown, "details": constsLib.details_pipeline_noPipelinesFound}
 }
 
 # Looking for a pipeline that scans for vulnerabilities

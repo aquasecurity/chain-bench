@@ -15,7 +15,7 @@ func TestBuildChecker(t *testing.T) {
 		{
 			Name: "Failed to fetch pipelines",
 			Data: &checkmodels.CheckData{
-				AssetsMetadata: builders.NewAssetsDataBuilder().Build(),
+				AssetsMetadata: builders.NewAssetsDataBuilder().WithNoPipelinesData().Build(),
 			},
 			Expected: []*checkmodels.CheckRunResult{
 				checkmodels.ToCheckRunResult("3.1.7", checksMetadata.Checks["3.1.7"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Unknown}),
@@ -33,30 +33,22 @@ func TestBuildChecker(t *testing.T) {
 			},
 		},
 		{
-			Name: "pinned task",
+			Name: "valid input",
 			Data: &checkmodels.CheckData{
-				AssetsMetadata: builders.NewAssetsDataBuilder().WithPipeline(
-					builders.NewPipelineBuilder().
-						WithJob(builders.
-							NewJobBuilder().
-							WithTask("NORMAL_TASK_NAME", "commit").
-							Build()).
-						Build(),
-				).Build(),
+				AssetsMetadata: builders.NewAssetsDataBuilder().Build(),
 			},
 			Expected: []*checkmodels.CheckRunResult{
 				checkmodels.ToCheckRunResult("3.1.7", checksMetadata.Checks["3.1.7"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Passed}),
 			},
 		},
 		{
-			Name: "unpinned job",
+			Name: "with unpinned job",
 			Data: &checkmodels.CheckData{
-				AssetsMetadata: builders.NewAssetsDataBuilder().WithPipeline(
-					builders.NewPipelineBuilder().
-						WithJob(builders.
-							NewJobBuilder().
-							WithTask("NORMAL_TASK_NAME", "tag").
-							Build()).
+				AssetsMetadata: builders.NewAssetsDataBuilder().WithZeroPipelines().WithPipeline(
+					builders.NewPipelineBuilder().WithNoJobs().WithJob(builders.
+						NewJobBuilder().
+						WithTask("NORMAL_TASK_NAME", "tag").
+						Build()).
 						Build(),
 				).Build(),
 			},
@@ -65,5 +57,5 @@ func TestBuildChecker(t *testing.T) {
 			},
 		},
 	}
-	testutils.RunCheckTests(t, common.GetRegoRunAction(regoQuery, checksMetadata), tests)
+	testutils.RunCheckTests(t, common.GetRegoRunAction(regoQuery, checksMetadata), tests, checksMetadata)
 }

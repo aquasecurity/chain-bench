@@ -22,20 +22,7 @@ func TestPackageRegistryChecker(t *testing.T) {
 			Name: "no hooks permissions",
 			Data: &checkmodels.CheckData{
 				AssetsMetadata: builders.NewAssetsDataBuilder().
-					WithOrganization(builders.NewOrganizationBuilder().WithReposDefaultPermissions("").Build()).
-					WithRepository(builders.NewRepositoryBuilder().Build()).
-					Build(),
-			},
-			Expected: []*checkmodels.CheckRunResult{
-				checkmodels.ToCheckRunResult("4.3.4", checksMetadata.Checks["4.3.4"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Unknown, Details: consts.Details_hooks_missingMinimalPermissions}),
-			},
-		},
-		{
-			Name: "repo permissions only, no org permissions",
-			Data: &checkmodels.CheckData{
-				AssetsMetadata: builders.NewAssetsDataBuilder().
 					WithOrganization(builders.NewOrganizationBuilder().WithNoPackageWebHooks().Build()).
-					WithRepository(builders.NewRepositoryBuilder().WithPackageWebHooks("https://endpoint.com", "0", nil).Build()).
 					Build(),
 			},
 			Expected: []*checkmodels.CheckRunResult{
@@ -43,51 +30,32 @@ func TestPackageRegistryChecker(t *testing.T) {
 			},
 		},
 		{
-			Name: "ssl: 1 unsecured(ssl) org webhook and 1 unsecured(ssl) repo webhook",
+			Name: "ssl: 1 unsecured org webhook",
 			Data: &checkmodels.CheckData{
 				AssetsMetadata: builders.NewAssetsDataBuilder().
-					WithOrganization(builders.NewOrganizationBuilder().WithReposDefaultPermissions("read").WithPackageWebHooks("https://endpoint.com", "1", utils.GetPtr("**")).
-						Build()).
-					WithRepository(builders.NewRepositoryBuilder().WithPackageWebHooks("https://endpoint.com", "1", utils.GetPtr("**")).Build()).
-					Build(),
+					WithOrganization(builders.NewOrganizationBuilder().WithPackageWebHooks("https://endpoint.com", "1", utils.GetPtr("**")).Build()).Build(),
 			},
 			Expected: []*checkmodels.CheckRunResult{
-				checkmodels.ToCheckRunResult("4.3.4", checksMetadata.Checks["4.3.4"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed, Details: "2 unsecured webhooks"}),
+				checkmodels.ToCheckRunResult("4.3.4", checksMetadata.Checks["4.3.4"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed, Details: "1 unsecured webhooks"}),
 			},
 		},
 		{
-			Name: "missing secret: 1 unsecured org webhook and 1 unsecured repo webhook",
+			Name: "missing secret: 1 unsecured repo webhook",
 			Data: &checkmodels.CheckData{
 				AssetsMetadata: builders.NewAssetsDataBuilder().
-					WithOrganization(builders.NewOrganizationBuilder().WithReposDefaultPermissions("read").WithPackageWebHooks("https://endpoint.com", "0", nil).
-						Build()).
 					WithRepository(builders.NewRepositoryBuilder().WithPackageWebHooks("https://endpoint.com", "0", nil).Build()).
 					Build(),
 			},
 			Expected: []*checkmodels.CheckRunResult{
-				checkmodels.ToCheckRunResult("4.3.4", checksMetadata.Checks["4.3.4"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed, Details: "2 unsecured webhooks"}),
+				checkmodels.ToCheckRunResult("4.3.4", checksMetadata.Checks["4.3.4"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed, Details: "1 unsecured webhooks"}),
 			},
 		},
 		{
-			Name: "missing https: 1 unsecured org webhook and 1 unsecured repo webhook",
-			Data: &checkmodels.CheckData{
-				AssetsMetadata: builders.NewAssetsDataBuilder().
-					WithOrganization(builders.NewOrganizationBuilder().WithReposDefaultPermissions("read").WithPackageWebHooks("http://endpoint.com", "0", utils.GetPtr("**")).
-						Build()).
-					WithRepository(builders.NewRepositoryBuilder().WithPackageWebHooks("http://endpoint.com", "0", utils.GetPtr("**")).Build()).
-					Build(),
-			},
-			Expected: []*checkmodels.CheckRunResult{
-				checkmodels.ToCheckRunResult("4.3.4", checksMetadata.Checks["4.3.4"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed, Details: "2 unsecured webhooks"}),
-			},
-		},
-		{
-			Name: "1 unsecured org webhook",
+			Name: "missing https: 1 unsecured org webhook",
 			Data: &checkmodels.CheckData{
 				AssetsMetadata: builders.NewAssetsDataBuilder().
 					WithOrganization(builders.NewOrganizationBuilder().WithPackageWebHooks("http://endpoint.com", "0", utils.GetPtr("**")).
 						Build()).
-					WithRepository(builders.NewRepositoryBuilder().WithPackageWebHooks("https://endpoint.com", "0", utils.GetPtr("**")).Build()).
 					Build(),
 			},
 			Expected: []*checkmodels.CheckRunResult{
@@ -95,17 +63,12 @@ func TestPackageRegistryChecker(t *testing.T) {
 			},
 		},
 		{
-			Name: "1 unsecured repo webhook",
+			Name: "valid input",
 			Data: &checkmodels.CheckData{
-				AssetsMetadata: builders.NewAssetsDataBuilder().
-					WithOrganization(builders.NewOrganizationBuilder().Build()).
-					WithRepository(builders.NewRepositoryBuilder().WithPackageWebHooks("http://endpoint.com", "0", utils.GetPtr("**")).Build()).
-					Build(),
+				AssetsMetadata: builders.NewAssetsDataBuilder().Build(),
 			},
-			Expected: []*checkmodels.CheckRunResult{
-				checkmodels.ToCheckRunResult("4.3.4", checksMetadata.Checks["4.3.4"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed, Details: "1 unsecured webhooks"}),
-			},
+			Expected: []*checkmodels.CheckRunResult{},
 		},
 	}
-	testutils.RunCheckTests(t, common.GetRegoRunAction(regoQuery, checksMetadata), tests)
+	testutils.RunCheckTests(t, common.GetRegoRunAction(regoQuery, checksMetadata), tests, checksMetadata)
 }
