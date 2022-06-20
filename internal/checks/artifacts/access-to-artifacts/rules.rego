@@ -13,6 +13,7 @@ is_registry_packages_allows_anonymous_access[details] {
 	not permissionslib.is_missing_org_packages_permission
 	unauth_packages := count([p |
 		p := input.Registry.Packages[_]
+		p.Repository.ID == input.Repository.ID
 		p.Visibility == "public"
 		p.Repository.IsPrivate == true
 	])
