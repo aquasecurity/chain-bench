@@ -20,12 +20,12 @@ is_registry_packages_allows_anonymous_access[unauth_packages] {
 
 CbPolicy[msg] {
 	permissionslib.is_missing_org_settings_permission
-	msg := {"ids": ["4.2.3"], "status": "Unknown", "details": constsLib.details_organization_missingMinimalPermissions}
+	msg := {"ids": ["4.2.3"], "status": "Unknown", "details": constsLib.details.organization_missing_minimal_permissions}
 }
 
 CbPolicy[msg] {
 	permissionslib.is_missing_org_packages_permission
-	msg := {"ids": ["4.2.5"], "status": "Unknown", "details": constsLib.details_organization_packages_missingMinimalPermissions}
+	msg := {"ids": ["4.2.5"], "status": "Unknown", "details": constsLib.details.organization_packages_missing_minimal_permissions}
 }
 
 CbPolicy[msg] {

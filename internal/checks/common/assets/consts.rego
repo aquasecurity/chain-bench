@@ -1,43 +1,18 @@
 package common.consts
 
-details_organization_missingMinimalPermissions := msg {
-	msg := "Organization is missing minimal permissions"
-}
-
-details_repository_missingMinimalPermissions := msg {
-	msg := "Repository is missing minimal permissions"
-}
-
-details_organization_packages_missingMinimalPermissions := msg {
-	msg := "Organization Packages is missing minimal permissions"
-}
-
-details_hooks_missingMinimalPermissions := msg {
-	msg := "Organization & Repository Hooks is missing minimal permissions"
-}
-
-details_linearHistory_mergeCommitEnabled := msg {
-	msg := "MergeCommit is enabled for repository"
-}
-
-details_linearHistory_requireRebaseOrSquashCommitEnabled := msg {
-	msg := "Repository is not configured to allow rebase or squash merge"
-}
-
-details_pipeline_noPipelinesFound := msg {
-	msg := "No pipelines were found"
-}
-
-details_pipeline_noBuildJob := msg {
-	msg := "No build job was found in pipelines"
-}
-
-details_organization_premissiveDefaultRepositoryPermissions := msg {
-	msg := "Organization default permissions are too permissive"
-}
-
-details_pipeline_pipelinesNotScannedForVulnerabilities := msg {
-	msg := "Pipelines are not scanned for vulnerabilities"
+details := details {
+	details := {
+		"organization_missing_minimal_permissions": "Organization is missing minimal permissions",
+		"repository_missing_minimal_permissions": "Repository is missing minimal permissions",
+		"organization_packages_missing_minimal_permissions": "Organization Packages is missing minimal permissions",
+		"hooks_missing_minimal_permissions": "Organization & Repository Hooks is missing minimal permissions",
+		"linear_history_merge_commit_enabled": "MergeCommit is enabled for repository",
+		"linear_history_require_rebase_or_squash_commit_enabled": "Repository is not configured to allow rebase or squash merge",
+		"pipeline_no_pipelines_found": "No pipelines were found",
+		"pipeline_no_build_job": "No build job was found in pipelines",
+		"organization_premissive_default_repository_permissions": "Organization default permissions are too permissive",
+		"pipeline_pipelines_not_scanned_for_vulnerabilities": "Pipelines are not scanned for vulnerabilities",
+	}
 }
 
 argon_scanner_action := "argonsecurity/scanner-action"

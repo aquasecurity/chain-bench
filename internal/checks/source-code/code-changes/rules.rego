@@ -184,12 +184,12 @@ CbPolicy[msg] {
 
 CbPolicy[msg] {
 	is_repository_allow_merge_commit
-	msg := {"ids": ["1.1.13"], "status": constsLib.status.Failed, "details": constsLib.details_linearHistory_mergeCommitEnabled}
+	msg := {"ids": ["1.1.13"], "status": constsLib.status.Failed, "details": constsLib.details.linear_history_merge_commit_enabled}
 }
 
 CbPolicy[msg] {
 	is_repository_prevent_rebase_and_squash_merge
-	msg := {"ids": ["1.1.13"], "status": constsLib.status.Failed, "details": constsLib.details_linearHistory_requireRebaseOrSquashCommitEnabled}
+	msg := {"ids": ["1.1.13"], "status": constsLib.status.Failed, "details": constsLib.details.linear_history_require_rebase_or_squash_commit_enabled}
 }
 
 #Looking for default branch protection that doesn't enforced on admins

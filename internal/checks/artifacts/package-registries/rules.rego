@@ -20,7 +20,7 @@ is_org_have_unsucured_hooks[unsecuredHooks] {
 
 CbPolicy[msg] {
 	permissionslib.is_missing_org_or_repo_hooks_permission
-	msg := {"ids": ["4.3.4"], "status": "Unknown", "details": constsLib.details_hooks_missingMinimalPermissions}
+	msg := {"ids": ["4.3.4"], "status": "Unknown", "details": constsLib.details.hooks_missing_minimal_permissions}
 }
 
 #Looking for organization 2mfa enforcements that is disabled

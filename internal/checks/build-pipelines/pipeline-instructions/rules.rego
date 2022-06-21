@@ -61,7 +61,7 @@ CbPolicy[msg] {
 CbPolicy[msg] {
 	not utilsLib.is_pipelines_data_missing
 	utilsLib.is_pipelines_list_empty
-	msg = {"ids": pipelineRuleIds, "status": constsLib.status.Unknown, "details": constsLib.details_pipeline_noPipelinesFound}
+	msg = {"ids": pipelineRuleIds, "status": constsLib.status.Unknown, "details": constsLib.details.pipeline_no_pipelines_found}
 }
 
 # There is no build job
@@ -69,7 +69,7 @@ CbPolicy[msg] {
 	not utilsLib.is_pipelines_data_missing
 	not utilsLib.is_pipelines_list_empty
 	is_build_job_missing
-	msg := {"ids": ["2.3.1"], "status": "Failed", "details": constsLib.details_pipeline_noBuildJob}
+	msg := {"ids": ["2.3.1"], "status": "Failed", "details": constsLib.details.pipeline_no_build_job}
 }
 
 # In case organization is not fetched
@@ -89,7 +89,7 @@ CbPolicy[msg] {
 CbPolicy[msg] {
 	not utilsLib.is_organization_data_missing
 	not permissionsLib.is_org_default_permission_strict
-	msg = {"ids": ["2.3.5"], "status": "Failed", "details": constsLib.details_organization_premissiveDefaultRepositoryPermissions}
+	msg = {"ids": ["2.3.5"], "status": "Failed", "details": constsLib.details.organization_premissive_default_repository_permissions}
 }
 
 # Looking for a pipeline that scans for vulnerabilities
@@ -97,7 +97,7 @@ CbPolicy[msg] {
 	not utilsLib.is_pipelines_data_missing
 	not utilsLib.is_pipelines_list_empty
 	is_pipeline_scaning_tasks_missing
-	msg = {"ids": ["2.3.7"], "status": "Failed", "details": constsLib.details_pipeline_pipelinesNotScannedForVulnerabilities}
+	msg = {"ids": ["2.3.7"], "status": "Failed", "details": constsLib.details.pipeline_pipelines_not_scanned_for_vulnerabilities}
 }
 
 # Looking for a pipelinethat scans for secrets

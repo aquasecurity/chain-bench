@@ -27,7 +27,7 @@ CbPolicy[msg] {
 CbPolicy[msg] {
 	not utilsLib.is_pipelines_data_missing
 	utilsLib.is_pipelines_list_empty
-	msg = {"ids": ["3.1.7"], "status": constsLib.status.Unknown, "details": constsLib.details_pipeline_noPipelinesFound}
+	msg = {"ids": ["3.1.7"], "status": constsLib.status.Unknown, "details": constsLib.details.pipeline_no_pipelines_found}
 }
 
 # Looking for tasks that are not pinned
