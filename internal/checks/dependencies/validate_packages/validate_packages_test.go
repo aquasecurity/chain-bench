@@ -13,7 +13,7 @@ import (
 func TestBuildChecker(t *testing.T) {
 	tests := []testutils.CheckTest{
 		{
-			Name: "Failed to fetch pipelines",
+			Name: "Should return unknown when failed to fetch pipelines",
 			Data: &checkmodels.CheckData{
 				AssetsMetadata: builders.NewAssetsDataBuilder().WithNoPipelinesData().Build(),
 			},
@@ -23,7 +23,7 @@ func TestBuildChecker(t *testing.T) {
 			},
 		},
 		{
-			Name: "No pipelines",
+			Name: "Should return unknown with explanation when there are no pipelines",
 			Data: &checkmodels.CheckData{
 				AssetsMetadata: builders.NewAssetsDataBuilder().
 					WithZeroPipelines().
@@ -35,7 +35,7 @@ func TestBuildChecker(t *testing.T) {
 			},
 		},
 		{
-			Name: "Pipeline with one job without vulnerability scanner task",
+			Name: "Should fail with explanation when there is pipeline with one job without vulnerability scanner task",
 			Data: &checkmodels.CheckData{
 				AssetsMetadata: builders.NewAssetsDataBuilder().WithZeroPipelines().WithPipeline(
 					builders.NewPipelineBuilder().WithNoJobs().
@@ -52,7 +52,7 @@ func TestBuildChecker(t *testing.T) {
 			},
 		},
 		{
-			Name: "valid input - Job with a pipeline with a vulnerability scanner task",
+			Name: "valid input - Job with a pipeline with a vulnerability scanner task - all rules should pass",
 			Data: &checkmodels.CheckData{
 				AssetsMetadata: builders.NewAssetsDataBuilder().Build(),
 			},

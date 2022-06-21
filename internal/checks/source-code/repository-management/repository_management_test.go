@@ -18,7 +18,7 @@ func TestRepositoryChecker(t *testing.T) {
 
 	tests := []testutils.CheckTest{
 		{
-			Name: "Public repository without security.md file",
+			Name: "Should fail for public repository without security.md file",
 			Data: &checkmodels.CheckData{
 
 				AssetsMetadata: builders.NewAssetsDataBuilder().
@@ -29,7 +29,7 @@ func TestRepositoryChecker(t *testing.T) {
 			},
 		},
 		{
-			Name: "Repository without creation limited to trusted users",
+			Name: "Should fail for repository without creation limited to trusted users",
 			Data: &checkmodels.CheckData{
 
 				AssetsMetadata: builders.NewAssetsDataBuilder().
@@ -40,7 +40,7 @@ func TestRepositoryChecker(t *testing.T) {
 			},
 		},
 		{
-			Name: "Repository without issue deletion limited to trusted users",
+			Name: "Should fail for repository without issue deletion limited to trusted users",
 			Data: &checkmodels.CheckData{
 
 				AssetsMetadata: builders.NewAssetsDataBuilder().
@@ -51,7 +51,7 @@ func TestRepositoryChecker(t *testing.T) {
 			},
 		},
 		{
-			Name: "Organization with no limitations for repository deletion",
+			Name: "Should fail for organization with no limitations for repository deletion",
 			Data: &checkmodels.CheckData{
 
 				AssetsMetadata: builders.NewAssetsDataBuilder().
@@ -62,7 +62,7 @@ func TestRepositoryChecker(t *testing.T) {
 			},
 		},
 		{
-			Name: "Valid input",
+			Name: "Valid input -all rules should pass",
 			Data: &checkmodels.CheckData{
 				AssetsMetadata: builders.NewAssetsDataBuilder().Build(),
 			},

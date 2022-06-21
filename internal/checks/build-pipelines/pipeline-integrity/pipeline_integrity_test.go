@@ -13,7 +13,7 @@ import (
 func TestBuildChecker(t *testing.T) {
 	tests := []testutils.CheckTest{
 		{
-			Name: "Build job without SBOM task",
+			Name: "Should fail and return number of piplines contain build job without SBOM task",
 			Data: &checkmodels.CheckData{
 				AssetsMetadata: builders.NewAssetsDataBuilder().
 					WithPipeline(builders.
@@ -31,7 +31,7 @@ func TestBuildChecker(t *testing.T) {
 			},
 		},
 		{
-			Name: "Multiple pipelines one with unpinned task",
+			Name: "Multiple pipelines one with unpinned task should fail snd return number of tasks",
 			Data: &checkmodels.CheckData{
 				AssetsMetadata: builders.NewAssetsDataBuilder().
 					WithPipeline(builders.
@@ -44,14 +44,14 @@ func TestBuildChecker(t *testing.T) {
 			},
 		},
 		{
-			Name: "valid input - include normal task",
+			Name: "valid input - all rules should pass",
 			Data: &checkmodels.CheckData{
 				AssetsMetadata: builders.NewAssetsDataBuilder().Build(),
 			},
 			Expected: []*checkmodels.CheckRunResult{},
 		},
 		{
-			Name: "Failed to fetch pipelines",
+			Name: "Should return unkown when failed to fetch pipelines",
 			Data: &checkmodels.CheckData{
 				AssetsMetadata: builders.NewAssetsDataBuilder().WithNoPipelinesData().Build(),
 			},
@@ -61,7 +61,7 @@ func TestBuildChecker(t *testing.T) {
 			},
 		},
 		{
-			Name: "No pipelines",
+			Name: "Should return unkown when there are no pipelines",
 			Data: &checkmodels.CheckData{
 				AssetsMetadata: builders.NewAssetsDataBuilder().
 					WithZeroPipelines().

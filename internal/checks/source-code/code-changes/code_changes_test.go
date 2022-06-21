@@ -54,7 +54,7 @@ func TestCodeChangesChecker(t *testing.T) {
 			},
 		},
 		{
-			Name: "Repository with no collaborators",
+			Name: "Should return unknown for repository with no collaborators",
 			Data: &checkmodels.CheckData{
 				AssetsMetadata: builders.NewAssetsDataBuilder().WithRepository(builders.NewRepositoryBuilder().WithNoCollborator().Build()).Build(),
 			},
@@ -63,7 +63,7 @@ func TestCodeChangesChecker(t *testing.T) {
 			},
 		},
 		{
-			Name: "Repository with authourized user is not admin",
+			Name: "Should return unknown when authourized user is not admin",
 			Data: &checkmodels.CheckData{
 				AssetsMetadata: builders.NewAssetsDataBuilder().WithRepository(builders.NewRepositoryBuilder().WithAdminCollborator(true, 0).Build()).Build(),
 			},
@@ -72,7 +72,7 @@ func TestCodeChangesChecker(t *testing.T) {
 			},
 		},
 		{
-			Name: "Branch protection not requires dismissial restrictions",
+			Name: "Should fail when branch protection not requires dismissial restrictions",
 			Data: &checkmodels.CheckData{
 				AssetsMetadata: builders.NewAssetsDataBuilder().WithBranchProtections(builders.NewBranchProtectionBuilder().WithDismissalRestrictions(false).Build()).Build(),
 			},
@@ -81,7 +81,7 @@ func TestCodeChangesChecker(t *testing.T) {
 			},
 		},
 		{
-			Name: "Branch protection not requires 2 minimum reviewers before merge",
+			Name: "Should fail when branch protection not requires 2 minimum reviewers before merge",
 			Data: &checkmodels.CheckData{
 				AssetsMetadata: builders.NewAssetsDataBuilder().WithBranchProtections(builders.NewBranchProtectionBuilder().WithMinimumReviwersBeforeMerge(1).Build()).Build(),
 			},
@@ -90,7 +90,7 @@ func TestCodeChangesChecker(t *testing.T) {
 			},
 		},
 		{
-			Name: "Branch protection not requires dismiss stale reviews",
+			Name: "Should fail when branch protection not requires dismiss stale reviews",
 			Data: &checkmodels.CheckData{
 				AssetsMetadata: builders.NewAssetsDataBuilder().WithBranchProtections(builders.NewBranchProtectionBuilder().WithDismissStaleReviews(false).Build()).Build(),
 			},
@@ -99,7 +99,7 @@ func TestCodeChangesChecker(t *testing.T) {
 			},
 		},
 		{
-			Name: "Branch protection not requires code owner review",
+			Name: "Should fail when branch protection not requires code owner review",
 			Data: &checkmodels.CheckData{
 				AssetsMetadata: builders.NewAssetsDataBuilder().WithBranchProtections(builders.NewBranchProtectionBuilder().WithCodeOwnersReview(false).Build()).Build(),
 			},
@@ -108,7 +108,7 @@ func TestCodeChangesChecker(t *testing.T) {
 			},
 		},
 		{
-			Name: "Repository with inactive branches",
+			Name: "Should fail when repository with inactive branches",
 			Data: &checkmodels.CheckData{
 				AssetsMetadata: builders.NewAssetsDataBuilder().WithRepository(builders.NewRepositoryBuilder().WithBranch(builders.NewBranchBuilder().WithOldCommit().Build()).Build()).Build(),
 			},
@@ -117,7 +117,7 @@ func TestCodeChangesChecker(t *testing.T) {
 			},
 		},
 		{
-			Name: "Branch protection not requires status checks before merge",
+			Name: "Should fail when branch protection not requires status checks before merge",
 			Data: &checkmodels.CheckData{
 				AssetsMetadata: builders.NewAssetsDataBuilder().WithBranchProtections(builders.NewBranchProtectionBuilder().WithStatusCheckEnabled(false).Build()).Build(),
 			},
@@ -127,7 +127,7 @@ func TestCodeChangesChecker(t *testing.T) {
 			},
 		},
 		{
-			Name: "Branch protection not requires branch to be up to date before merge",
+			Name: "Should fail when branch protection not requires branch to be up to date before merge",
 			Data: &checkmodels.CheckData{
 				AssetsMetadata: builders.NewAssetsDataBuilder().WithBranchProtections(builders.NewBranchProtectionBuilder().WithStrictMode(false).Build()).Build(),
 			},
@@ -136,7 +136,7 @@ func TestCodeChangesChecker(t *testing.T) {
 			},
 		},
 		{
-			Name: "Branch protection not requires conversation resolution",
+			Name: "Should fail when branch protection not requires conversation resolution",
 			Data: &checkmodels.CheckData{
 				AssetsMetadata: builders.NewAssetsDataBuilder().WithBranchProtections(builders.NewBranchProtectionBuilder().WithResolveConversations(false).Build()).Build(),
 			},
@@ -145,7 +145,7 @@ func TestCodeChangesChecker(t *testing.T) {
 			},
 		},
 		{
-			Name: "Branch protection not requires signed commits",
+			Name: "Should fail when branch protection not requires signed commits",
 			Data: &checkmodels.CheckData{
 				AssetsMetadata: builders.NewAssetsDataBuilder().WithBranchProtections(builders.NewBranchProtectionBuilder().WithRequiredSignedCommits(false).Build()).Build(),
 			},
@@ -154,7 +154,7 @@ func TestCodeChangesChecker(t *testing.T) {
 			},
 		},
 		{
-			Name: "Repositoty allows merge commit",
+			Name: "Should fail when repositoty allows merge commit",
 			Data: &checkmodels.CheckData{
 				AssetsMetadata: builders.NewAssetsDataBuilder().WithRepository(builders.NewRepositoryBuilder().WithAllowMergeCommit(true).Build()).Build(),
 			},
@@ -163,7 +163,7 @@ func TestCodeChangesChecker(t *testing.T) {
 			},
 		},
 		{
-			Name: "Repository with all merge options prevented",
+			Name: "Should fail when repository with all merge options prevented",
 			Data: &checkmodels.CheckData{
 				AssetsMetadata: builders.NewAssetsDataBuilder().WithRepository(builders.NewRepositoryBuilder().WithAllowMergeCommit(false).WithAllowRebaseMerge(false).WithAllowSquashMerge(false).Build()).Build(),
 			},
@@ -172,7 +172,7 @@ func TestCodeChangesChecker(t *testing.T) {
 			},
 		},
 		{
-			Name: "Branch protection not enforced on admins",
+			Name: "Should fail when branch protection not enforced on admins",
 			Data: &checkmodels.CheckData{
 				AssetsMetadata: builders.NewAssetsDataBuilder().WithBranchProtections(builders.NewBranchProtectionBuilder().WithEnforceAdmin(false).Build()).Build(),
 			},
@@ -181,7 +181,7 @@ func TestCodeChangesChecker(t *testing.T) {
 			},
 		},
 		{
-			Name: "Branch protection doesnt include restriction for pushing",
+			Name: "Should fail when branch protection doesnt include restriction for pushing",
 			Data: &checkmodels.CheckData{
 				AssetsMetadata: builders.NewAssetsDataBuilder().WithBranchProtections(builders.NewBranchProtectionBuilder().WithPushRestrictions(false).Build()).Build(),
 			},
@@ -190,7 +190,7 @@ func TestCodeChangesChecker(t *testing.T) {
 			},
 		},
 		{
-			Name: "Branch protection doesnt include restriction for force push",
+			Name: "Should fail when branch protection doesnt include restriction for force push",
 			Data: &checkmodels.CheckData{
 				AssetsMetadata: builders.NewAssetsDataBuilder().WithBranchProtections(builders.NewBranchProtectionBuilder().WithForcePush(false).Build()).Build(),
 			},
@@ -199,7 +199,7 @@ func TestCodeChangesChecker(t *testing.T) {
 			},
 		},
 		{
-			Name: "Branch protection doesnt include restriction for deleting branch",
+			Name: "Should fail when branch protection doesnt include restriction for deleting branch",
 			Data: &checkmodels.CheckData{
 				AssetsMetadata: builders.NewAssetsDataBuilder().WithBranchProtections(builders.NewBranchProtectionBuilder().WithDeleteBranch(false).Build()).Build(),
 			},
@@ -208,7 +208,7 @@ func TestCodeChangesChecker(t *testing.T) {
 			},
 		},
 		{
-			Name: "Valid input - all tests passed",
+			Name: "Valid input - all rules should pass",
 			Data: &checkmodels.CheckData{
 				AssetsMetadata: builders.NewAssetsDataBuilder().Build(),
 			},

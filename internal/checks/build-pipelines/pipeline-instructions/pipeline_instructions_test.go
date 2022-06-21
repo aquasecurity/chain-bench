@@ -13,7 +13,7 @@ import (
 func TestBuildChecker(t *testing.T) {
 	tests := []testutils.CheckTest{
 		{
-			Name: "Organization not fetched",
+			Name: "should return unknown with explanation when organization wasnt fetched",
 			Data: &checkmodels.CheckData{
 				AssetsMetadata: builders.NewAssetsDataBuilder().WithNoOrganization().Build(),
 			},
@@ -22,7 +22,7 @@ func TestBuildChecker(t *testing.T) {
 			},
 		},
 		{
-			Name: "Organization permissions missing",
+			Name: "should return unknown with explanation when organization permissions missing",
 			Data: &checkmodels.CheckData{
 				AssetsMetadata: builders.NewAssetsDataBuilder().WithOrganization(builders.NewOrganizationBuilder().WithReposDefaultPermissions("").Build()).Build(),
 			},
@@ -31,14 +31,14 @@ func TestBuildChecker(t *testing.T) {
 			},
 		},
 		{
-			Name: "Valid input",
+			Name: "Valid input - all rules should pass",
 			Data: &checkmodels.CheckData{
 				AssetsMetadata: builders.NewAssetsDataBuilder().Build(),
 			},
 			Expected: []*checkmodels.CheckRunResult{},
 		},
 		{
-			Name: "Failed to fetch pipelines",
+			Name: "should return unknown when pipelines fetching was failed",
 			Data: &checkmodels.CheckData{
 				AssetsMetadata: builders.NewAssetsDataBuilder().WithNoPipelinesData().Build(),
 			},
@@ -49,7 +49,7 @@ func TestBuildChecker(t *testing.T) {
 			},
 		},
 		{
-			Name: "No pipelines",
+			Name: "should return unknown with explanation when there are no pipelines",
 			Data: &checkmodels.CheckData{
 				AssetsMetadata: builders.NewAssetsDataBuilder().
 					WithZeroPipelines().
@@ -62,7 +62,7 @@ func TestBuildChecker(t *testing.T) {
 			},
 		},
 		{
-			Name: "build job not found in pipelines",
+			Name: "Should fail when build job not found in pipelines",
 			Data: &checkmodels.CheckData{
 				AssetsMetadata: builders.NewAssetsDataBuilder().WithZeroPipelines().WithPipeline(builders.NewPipelineBuilder().WithNoJobs().WithJob(builders.NewJobBuilder().SetAsBuildJob(false).Build()).Build()).
 					Build(),
@@ -72,7 +72,7 @@ func TestBuildChecker(t *testing.T) {
 			},
 		},
 		{
-			Name: "Organization with strict repo permissions",
+			Name: "Should fail when the organization is with strict repo permissions",
 			Data: &checkmodels.CheckData{
 				AssetsMetadata: builders.NewAssetsDataBuilder().WithOrganization(builders.NewOrganizationBuilder().WithReposDefaultPermissions("write").Build()).
 					Build(),
@@ -82,7 +82,7 @@ func TestBuildChecker(t *testing.T) {
 			},
 		},
 		{
-			Name: "Repository with no scanning tasks",
+			Name: "Should fail with explanation when repository have no scanning tasks",
 			Data: &checkmodels.CheckData{
 				AssetsMetadata: builders.NewAssetsDataBuilder().WithZeroPipelines().WithPipeline(builders.NewPipelineBuilder().WithNoJobs().WithJob(builders.NewJobBuilder().WithNoTasks().WithTask("aquasecurity/trivy-action", "tag").Build()).Build()).Build(),
 			},
@@ -91,7 +91,7 @@ func TestBuildChecker(t *testing.T) {
 			},
 		},
 		{
-			Name: "Pipelines scanning tasks are missing",
+			Name: "Should fail with explanation when pipelines scanning tasks are missing",
 			Data: &checkmodels.CheckData{
 				AssetsMetadata: builders.NewAssetsDataBuilder().WithZeroPipelines().WithPipeline(builders.NewPipelineBuilder().WithNoJobs().WithJob(builders.NewJobBuilder().WithNoTasks().WithTask("zricethezav/gitleaks-action", "tag").Build()).Build()).Build(),
 			},

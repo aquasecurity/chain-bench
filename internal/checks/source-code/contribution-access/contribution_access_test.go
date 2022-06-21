@@ -13,7 +13,7 @@ import (
 func TestOrganizationChecker(t *testing.T) {
 	tests := []testutils.CheckTest{
 		{
-			Name: "Organization without org settings permissions, without admin permissions, and with no commits ",
+			Name: "Should return unknown for organization without org settings permissions, without admin permissions, and with no commits",
 			Data: &checkmodels.CheckData{
 				AssetsMetadata: builders.NewAssetsDataBuilder().WithOrganization(builders.NewOrganizationBuilder().WithNoMembers().WithReposDefaultPermissions("").Build()).WithRepository(builders.NewRepositoryBuilder().WithNoCommits().Build()).Build(),
 			},
@@ -26,7 +26,7 @@ func TestOrganizationChecker(t *testing.T) {
 			},
 		},
 		{
-			Name: "Organization with unverified status",
+			Name: "Should fail for organization with unverified status",
 			Data: &checkmodels.CheckData{
 				AssetsMetadata: builders.NewAssetsDataBuilder().WithOrganization(builders.NewOrganizationBuilder().WithVerifiedBadge(false).Build()).Build(),
 			},
@@ -35,7 +35,7 @@ func TestOrganizationChecker(t *testing.T) {
 			},
 		},
 		{
-			Name: "Organization without strict default permission",
+			Name: "Should fail for organization without strict default permission",
 			Data: &checkmodels.CheckData{
 				AssetsMetadata: builders.NewAssetsDataBuilder().WithOrganization(builders.NewOrganizationBuilder().
 					WithReposDefaultPermissions("write").Build()).Build(),
@@ -45,7 +45,7 @@ func TestOrganizationChecker(t *testing.T) {
 			},
 		},
 		{
-			Name: "Organization with 2mfa disabled",
+			Name: "Should fail for organization with 2mfa disabled",
 			Data: &checkmodels.CheckData{
 				AssetsMetadata: builders.NewAssetsDataBuilder().WithOrganization(builders.NewOrganizationBuilder().
 					WithMFAEnabled(false).Build()).Build(),
@@ -55,7 +55,7 @@ func TestOrganizationChecker(t *testing.T) {
 			},
 		},
 		{
-			Name: "Organization with less then 2 admins",
+			Name: "Should fail for organization with less then 2 admins",
 			Data: &checkmodels.CheckData{
 				AssetsMetadata: builders.NewAssetsDataBuilder().
 					WithOrganization(builders.NewOrganizationBuilder().WithMembers("admin", 1).Build()).Build(),
@@ -65,7 +65,7 @@ func TestOrganizationChecker(t *testing.T) {
 			},
 		},
 		{
-			Name: "Repository with no 2 admins",
+			Name: "Should fail for repository with no 2 admins",
 			Data: &checkmodels.CheckData{
 				AssetsMetadata: builders.NewAssetsDataBuilder().
 					WithRepository(builders.NewRepositoryBuilder().WithAdminCollborator(true, 1).Build()).Build(),
@@ -75,7 +75,7 @@ func TestOrganizationChecker(t *testing.T) {
 			},
 		},
 		{
-			Name: "Repository with inactive user",
+			Name: "Should fail for repository with inactive user",
 			Data: &checkmodels.CheckData{
 				AssetsMetadata: builders.NewAssetsDataBuilder().
 					WithOrganization(builders.NewOrganizationBuilder().WithMembers("admin", 5).Build()).Build(),
@@ -85,7 +85,7 @@ func TestOrganizationChecker(t *testing.T) {
 			},
 		},
 		{
-			Name: "valid input",
+			Name: "valid input - all rules should pass",
 			Data: &checkmodels.CheckData{
 				AssetsMetadata: builders.NewAssetsDataBuilder().Build(),
 			},

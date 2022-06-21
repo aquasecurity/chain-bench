@@ -13,7 +13,7 @@ import (
 func TestAccessToArtifactsChecker(t *testing.T) {
 	tests := []testutils.CheckTest{
 		{
-			Name: "no org settings permissions",
+			Name: "should return unknown with explanation when there are no org settings permissions",
 			Data: &checkmodels.CheckData{
 				AssetsMetadata: builders.NewAssetsDataBuilder().
 					WithOrganization(builders.NewOrganizationBuilder().WithReposDefaultPermissions("").Build()).
@@ -24,7 +24,7 @@ func TestAccessToArtifactsChecker(t *testing.T) {
 			},
 		},
 		{
-			Name: "no org packages permissions",
+			Name: "should return unknown with explanation when there are no org packages permissions",
 			Data: &checkmodels.CheckData{
 				AssetsMetadata: builders.NewAssetsDataBuilder().WithPackageRegistry(builders.NewRegistryBuilder().WithNoPackages().Build()).Build(),
 			},
@@ -33,7 +33,7 @@ func TestAccessToArtifactsChecker(t *testing.T) {
 			},
 		},
 		{
-			Name: "Package registry with 2mfa disabled",
+			Name: "Should fail when the user have package registry with 2mfa disabled",
 			Data: &checkmodels.CheckData{
 				AssetsMetadata: builders.NewAssetsDataBuilder().
 					WithPackageRegistry(builders.NewRegistryBuilder().WithTwoFactorAuthenticationEnabled(false).Build()).
@@ -44,7 +44,7 @@ func TestAccessToArtifactsChecker(t *testing.T) {
 			},
 		},
 		{
-			Name: "Package registry with 1 public package under private repo",
+			Name: "Should fail when the user have package registry with 1 public package under private repo",
 			Data: &checkmodels.CheckData{
 				AssetsMetadata: builders.NewAssetsDataBuilder().
 					WithPackageRegistry(builders.NewRegistryBuilder().WithPackages("npm", "public", true).Build()).
@@ -55,7 +55,7 @@ func TestAccessToArtifactsChecker(t *testing.T) {
 			},
 		},
 		{
-			Name: "Valid input",
+			Name: "Valid input - all rules should pass",
 			Data: &checkmodels.CheckData{
 				AssetsMetadata: builders.NewAssetsDataBuilder().Build(),
 			},

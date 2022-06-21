@@ -15,7 +15,7 @@ func TestPackageRegistryChecker(t *testing.T) {
 	tests := []testutils.CheckTest{
 
 		{
-			Name: "no hooks permissions",
+			Name: "should return unknown when there are no hooks permissions",
 			Data: &checkmodels.CheckData{
 				AssetsMetadata: builders.NewAssetsDataBuilder().
 					WithOrganization(builders.NewOrganizationBuilder().WithNoPackageWebHooks().Build()).
@@ -26,7 +26,7 @@ func TestPackageRegistryChecker(t *testing.T) {
 			},
 		},
 		{
-			Name: "ssl: 1 unsecured org webhook",
+			Name: "should fail and return the number of unsecured hooks when the user has 1 org webhook with no ssl",
 			Data: &checkmodels.CheckData{
 				AssetsMetadata: builders.NewAssetsDataBuilder().
 					WithOrganization(builders.NewOrganizationBuilder().WithPackageWebHooks("https://endpoint.com", "1", utils.GetPtr("**")).Build()).Build(),
@@ -36,7 +36,7 @@ func TestPackageRegistryChecker(t *testing.T) {
 			},
 		},
 		{
-			Name: "missing secret: 1 unsecured repo webhook",
+			Name: "should fail and return the number of unsecured hooks when the user has 1 repo webhook with no secret",
 			Data: &checkmodels.CheckData{
 				AssetsMetadata: builders.NewAssetsDataBuilder().
 					WithRepository(builders.NewRepositoryBuilder().WithPackageWebHooks("https://endpoint.com", "0", nil).Build()).
@@ -47,7 +47,7 @@ func TestPackageRegistryChecker(t *testing.T) {
 			},
 		},
 		{
-			Name: "missing https: 1 unsecured org webhook",
+			Name: "should fail and return the number of unsecured hooks when the user has 1 org webhook with no https",
 			Data: &checkmodels.CheckData{
 				AssetsMetadata: builders.NewAssetsDataBuilder().
 					WithOrganization(builders.NewOrganizationBuilder().WithPackageWebHooks("http://endpoint.com", "0", utils.GetPtr("**")).
@@ -59,7 +59,7 @@ func TestPackageRegistryChecker(t *testing.T) {
 			},
 		},
 		{
-			Name: "valid input",
+			Name: "valid input - all rules should pass",
 			Data: &checkmodels.CheckData{
 				AssetsMetadata: builders.NewAssetsDataBuilder().Build(),
 			},
