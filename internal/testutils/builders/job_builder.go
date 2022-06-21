@@ -1,7 +1,7 @@
 package builders
 
 import (
-	"github.com/aquasecurity/chain-bench/internal/checks/consts"
+	"github.com/aquasecurity/chain-bench/internal/testutils"
 	"github.com/aquasecurity/chain-bench/internal/utils"
 	"github.com/argonsecurity/pipeline-parser/pkg/models"
 )
@@ -13,17 +13,17 @@ type JobBuilder struct {
 func NewJobBuilder() *JobBuilder {
 	return &JobBuilder{job: models.Job{
 		Steps: []*models.Step{{
-			Name: utils.GetPtr(consts.ArgonScannerAction),
+			Name: utils.GetPtr(testutils.ArgonScannerAction),
 			Type: "task",
 			Task: &models.Task{
-				Name:        utils.GetPtr(consts.ArgonScannerAction),
+				Name:        utils.GetPtr(testutils.ArgonScannerAction),
 				VersionType: models.VersionType("commit"),
 			},
 		}, {
-			Name: utils.GetPtr(consts.SbomTask),
+			Name: utils.GetPtr(testutils.SbomTask),
 			Type: "task",
 			Task: &models.Task{
-				Name:        utils.GetPtr(consts.SbomTask),
+				Name:        utils.GetPtr(testutils.SbomTask),
 				VersionType: models.VersionType("commit"),
 			},
 		}},
@@ -48,8 +48,8 @@ func (j *JobBuilder) WithNoVulnerabilityScannerTask() *JobBuilder {
 	var newStepsList = []*models.Step{}
 
 	for _, s := range j.job.Steps {
-		if utils.GetValue(s.Name) != consts.ArgonScannerAction &&
-			utils.GetValue(s.Name) != consts.TrivyScannerAction {
+		if utils.GetValue(s.Name) != testutils.ArgonScannerAction &&
+			utils.GetValue(s.Name) != testutils.TrivyScannerAction {
 			newStepsList = append(newStepsList, s)
 		}
 	}

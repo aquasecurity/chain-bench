@@ -17,6 +17,10 @@ type CheckTest struct {
 
 var AuthorizedUserMockId = int64(1234)
 
+var SbomTask  = "CycloneDX/gh-dotnet-generate-sbom"
+var ArgonScannerAction  = "argonsecurity/scanner-action"
+var TrivyScannerAction = "aquasecurity/trivy-action"
+
 func RunCheckTests(t *testing.T, testedAction checkmodels.CheckAction, tests []CheckTest, checksMetadata checkmodels.CheckMetadataMap) {
 	for _, test := range tests {
 		test := test
