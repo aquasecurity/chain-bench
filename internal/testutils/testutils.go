@@ -9,22 +9,24 @@ import (
 )
 
 type CheckTest struct {
-	Name      string
-	Data      *checkmodels.CheckData
-	Expected  []*checkmodels.CheckRunResult
-	ExpectedE error
+	Name                    string
+	Data                    *checkmodels.CheckData
+	Expected                []*checkmodels.CheckRunResult
+	ExpectedResultsForRules []*checkmodels.CheckRunResult
+	ExpectedE               error
 }
 
-var AuthorizedUserMockId = int64(1234)
-
-var SbomTask = "CycloneDX/gh-dotnet-generate-sbom"
-var ArgonScannerAction = "argonsecurity/scanner-action"
-var TrivyScannerAction = "aquasecurity/trivy-action"
+var (
+	AuthorizedUserMockId = int64(1234)
+	SbomTask             = "CycloneDX/gh-dotnet-generate-sbom"
+	ArgonScannerAction   = "argonsecurity/scanner-action"
+	TrivyScannerAction   = "aquasecurity/trivy-action"
+)
 
 func RunCheckTests(t *testing.T, testedAction checkmodels.CheckAction, tests []CheckTest, checksMetadata checkmodels.CheckMetadataMap) {
 	for _, test := range tests {
 		test := test
-		test.Expected = generateChecksByMetdata(checksMetadata, test.Expected)
+		test.ExpectedResultsForRules = generateChecksByMetadata(checksMetadata, test.Expected)
 		t.Run(test.Name, func(t *testing.T) {
 			t.Parallel()
 
@@ -36,20 +38,20 @@ func RunCheckTests(t *testing.T, testedAction checkmodels.CheckAction, tests []C
 				assert.EqualError(t, actualE, test.ExpectedE.Error())
 			}
 
-			if test.Expected == nil {
+			if test.ExpectedResultsForRules == nil {
 				assert.Nil(t, actual)
 			} else {
-				assert.ElementsMatch(t, test.Expected, actual)
+				assert.ElementsMatch(t, test.ExpectedResultsForRules, actual)
 			}
 		})
 	}
 }
 
-func generateChecksByMetdata(checksMetadata checkmodels.CheckMetadataMap, expectedResults []*checkmodels.CheckRunResult) []*checkmodels.CheckRunResult {
+func generateChecksByMetadata(checksMetadata checkmodels.CheckMetadataMap, expectedResults []*checkmodels.CheckRunResult) []*checkmodels.CheckRunResult {
 	checksArr := []*checkmodels.CheckRunResult{}
-	for key, element := range checksMetadata.Checks {
-		if !isCheckExistAlready(expectedResults, key) {
-			checksArr = append(checksArr, checkmodels.ToCheckRunResult(key, element, checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Passed}))
+	for id, check := range checksMetadata.Checks {
+		if !isCheckAlreadyExist(expectedResults, id) {
+			checksArr = append(checksArr, checkmodels.ToCheckRunResult(id, check, checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Passed}))
 		}
 	}
 
@@ -60,7 +62,7 @@ func generateChecksByMetdata(checksMetadata checkmodels.CheckMetadataMap, expect
 	return checksArr
 }
 
-func isCheckExistAlready(expectedResults []*checkmodels.CheckRunResult, checkId string) bool {
+func isCheckAlreadyExist(expectedResults []*checkmodels.CheckRunResult, checkId string) bool {
 	return funk.Contains(expectedResults, func(c *checkmodels.CheckRunResult) bool {
 		return c.ID == checkId
 	})
