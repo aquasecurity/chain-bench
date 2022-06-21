@@ -12,6 +12,10 @@ details := details {
 		"pipeline_no_build_job": "No build job was found in pipelines",
 		"organization_premissive_default_repository_permissions": "Organization default permissions are too permissive",
 		"pipeline_pipelines_not_scanned_for_vulnerabilities": "Pipelines are not scanned for vulnerabilities",
+		"organization_not_fetched": "Organization is not fetched",
+		"pipeline_repository_not_scanned_for_secrets": "Repository is not scanned for secrets",
+		"dependencies_pipelines_not_scanned_for_vulnerabilities": "Pipeline dependencies are not scanned for vulnerabilities",
+		"dependencies_pipelines_not_scanned_for_licenses": "Pipeline dependencies are not scanned for licenses",
 	}
 }
 

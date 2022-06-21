@@ -34,7 +34,7 @@ CbPolicy[msg] {
 	not utilsLib.is_pipelines_data_missing
 	not utilsLib.is_pipelines_list_empty
 	are_pipelines_dependencies_scanned_for_vulnerabilities
-	msg = {"ids": ["3.2.2"], "status": constsLib.status.Failed, "details": "Pipeline dependencies are not scanned for vulnerabilities"}
+	msg = {"ids": ["3.2.2"], "status": constsLib.status.Failed, "details": constsLib.details.dependencies_pipelines_not_scanned_for_vulnerabilities}
 }
 
 # Looking for a pipeline that scans for licenses
@@ -42,5 +42,5 @@ CbPolicy[msg] {
 	not utilsLib.is_pipelines_data_missing
 	not utilsLib.is_pipelines_list_empty
 	are_pipelines_dependencies_scanned_for_licenses
-	msg = {"ids": ["3.2.3"], "status": constsLib.status.Failed, "details": "Pipeline dependencies are not scanned for licenses"}
+	msg = {"ids": ["3.2.3"], "status": constsLib.status.Failed, "details": constsLib.details.dependencies_pipelines_not_scanned_for_licenses}
 }
