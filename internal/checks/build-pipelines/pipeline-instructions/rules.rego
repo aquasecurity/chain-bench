@@ -38,10 +38,6 @@ does_job_contain_one_of_shell_commands(job, regexes) {
 	regex.match(r, job.steps[i].shell.script)
 }
 
-is_organization_data_missing {
-	input.Organization == null
-}
-
 is_pipeline_scaning_tasks_missing {
 	count({job | job := input.Pipelines[_].jobs[_]; does_job_contain_one_of_tasks(job, pipeline_vulnerability_scan_tasks)}) == 0
 }
@@ -78,20 +74,20 @@ CbPolicy[msg] {
 
 # In case organization is not fetched
 CbPolicy[msg] {
-	is_organization_data_missing
+	utilsLib.is_organization_data_missing
 	msg = {"ids": ["2.3.5"], "status": "Unknown", "details": "Organization is not fetched"}
 }
 
 # In case oraganization default permissions weren't fetched
 CbPolicy[msg] {
-	not is_organization_data_missing
+	not utilsLib.is_organization_data_missing
 	permissionsLib.is_missing_org_settings_permission
 	msg = {"ids": ["2.3.5"], "status": "Unknown", "details": "Organization is missing minimal permissions"}
 }
 
 # In case organzation default permissions are too permissive
 CbPolicy[msg] {
-	not is_organization_data_missing
+	not utilsLib.is_organization_data_missing
 	not permissionsLib.is_org_default_permission_strict
 	msg = {"ids": ["2.3.5"], "status": "Failed", "details": constsLib.details_organization_premissiveDefaultRepositoryPermissions}
 }

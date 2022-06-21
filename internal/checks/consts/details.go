@@ -11,7 +11,7 @@ var (
 
 	Details_organization_hooks_missingMinimalPermissions = "Organization Packages is missing minimal permissions"
 
-	Details_repository_missingMinimalPermissions = "Repository is missing minimal permissions"
+	Details_repository_missing_minimal_permissions = "Repository is missing minimal permissions"
 
 	Details_pipeline_pipelinesNotScannedForVulnerabilities     = "Pipelines are not scanned for vulnerabilities"
 	Details_dependencies_pipelinesNotScannedForVulnerabilities = "Pipeline dependencies are not scanned for vulnerabilities"
