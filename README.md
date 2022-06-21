@@ -107,7 +107,7 @@ docker run aquasec/chain-bench scan --repository-url <REPOSITORY_URL> --access-t
  2.3.8    Ensure scanners are in place to identify and prevent sensitive data in pipeline files           Failed   Repository is not scanned for secrets
  2.4.2    Ensure all external dependencies used in the build process are locked                           Failed   16 task(s) are not pinned
  2.4.6    Ensure pipeline steps produce an SBOM                                                           Passed
- 3.1.7    Ensure dependencies are pinned to a specific, verified version                                  Failed   16 dependenc(ies) are not pinned
+ 3.1.7    Ensure dependencies are pinned to a specific, verified version                                  Failed   16 dependencies are not pinned
  3.2.2    Ensure packages are automatically scanned for known vulnerabilities                             Passed
  3.2.3    Ensure packages are automatically scanned for license implications                              Passed
  4.2.3    Ensure user's access to the package registry utilizes MFA                                       Passed

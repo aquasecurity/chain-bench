@@ -15,9 +15,20 @@ details := details {
 	}
 }
 
-argon_scanner_action := "argonsecurity/scanner-action"
+actions := actions {
+	actions := {
+		"argon_scanner_action": "argonsecurity/scanner-action",
+		"trivy_scanner_action": "aquasecurity/trivy-action",
+	}
+}
 
-trivy_scanner_action := "aquasecurity/trivy-action"
+pipeline_vulnerability_scan_tasks = [actions.argon_scanner_action, actions.trivy_scanner_action]
+
+secret_scan_tasks = [
+	actions.argon_scanner_action,
+	"zricethezav/gitleaks-action",
+	"ShiftLeftSecurity/scan-action",
+]
 
 status := stat {
 	stat := {

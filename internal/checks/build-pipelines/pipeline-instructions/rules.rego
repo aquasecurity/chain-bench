@@ -11,14 +11,6 @@ pipelineRuleIds = [
 	"2.3.8",
 ]
 
-pipeline_vulnerability_scan_tasks = [constsLib.argon_scanner_action, constsLib.trivy_scanner_action]
-
-secret_scan_tasks = [
-	constsLib.argon_scanner_action,
-	"zricethezav/gitleaks-action",
-	"ShiftLeftSecurity/scan-action",
-]
-
 secret_scan_commands = [
 	`spectral.* scan`,
 	`git secrets --scan`,
@@ -39,11 +31,11 @@ does_job_contain_one_of_shell_commands(job, regexes) {
 }
 
 is_pipeline_scaning_tasks_missing {
-	count({job | job := input.Pipelines[_].jobs[_]; does_job_contain_one_of_tasks(job, pipeline_vulnerability_scan_tasks)}) == 0
+	count({job | job := input.Pipelines[_].jobs[_]; does_job_contain_one_of_tasks(job, constsLib.pipeline_vulnerability_scan_tasks)}) == 0
 }
 
 is_repository_scanning_tasks_missing {
-	count({job | job := input.Pipelines[_].jobs[_]; does_job_contain_one_of_tasks(job, secret_scan_tasks)}) == 0
+	count({job | job := input.Pipelines[_].jobs[_]; does_job_contain_one_of_tasks(job, constsLib.secret_scan_tasks)}) == 0
 	count({job | job := input.Pipelines[_].jobs[_]; does_job_contain_one_of_shell_commands(job, secret_scan_commands)}) == 0
 }
 

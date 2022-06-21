@@ -34,6 +34,6 @@ CbPolicy[msg] {
 CbPolicy[msg] {
 	not utilsLib.is_pipelines_data_missing
 	unpinnedDepsCount := are_there_unpinned_deps[i]
-	details := sprintf("%v dependenc(ies) are not pinned", [unpinnedDepsCount])
+	details := sprintf("%v dependencies are not pinned", [unpinnedDepsCount])
 	msg := {"ids": ["3.1.7"], "status": constsLib.status.Failed, "details": details}
 }

@@ -53,7 +53,7 @@ func TestBuildChecker(t *testing.T) {
 				).Build(),
 			},
 			Expected: []*checkmodels.CheckRunResult{
-				checkmodels.ToCheckRunResult("3.1.7", checksMetadata.Checks["3.1.7"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed, Details: "1 dependenc(ies) are not pinned"}),
+				checkmodels.ToCheckRunResult("3.1.7", checksMetadata.Checks["3.1.7"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed, Details: "1 dependencies are not pinned"}),
 			},
 		},
 	}

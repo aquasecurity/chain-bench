@@ -4,19 +4,17 @@ import data.common.consts as constsLib
 import data.generic.utils as utilsLib
 import future.keywords.in
 
-pipeline_vulnerability_scan_tasks = [constsLib.argon_scanner_action, constsLib.trivy_scanner_action]
-
 does_job_contain_one_of_tasks(job, regexes) {
 	job.steps[i].type == "task"
 	regex.match(regexes[_], job.steps[i].task.name)
 }
 
 are_pipelines_dependencies_scanned_for_vulnerabilities {
-	count({job | job := input.Pipelines[_].jobs[_]; does_job_contain_one_of_tasks(job, pipeline_vulnerability_scan_tasks)}) == 0
+	count({job | job := input.Pipelines[_].jobs[_]; does_job_contain_one_of_tasks(job, constsLib.pipeline_vulnerability_scan_tasks)}) == 0
 }
 
 are_pipelines_dependencies_scanned_for_licenses {
-	count({job | job := input.Pipelines[_].jobs[_]; does_job_contain_one_of_tasks(job, pipeline_vulnerability_scan_tasks)}) == 0
+	count({job | job := input.Pipelines[_].jobs[_]; does_job_contain_one_of_tasks(job, constsLib.pipeline_vulnerability_scan_tasks)}) == 0
 }
 
 CbPolicy[msg] {
