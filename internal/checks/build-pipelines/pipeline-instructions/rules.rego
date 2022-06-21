@@ -69,27 +69,27 @@ CbPolicy[msg] {
 	not utilsLib.is_pipelines_data_missing
 	not utilsLib.is_pipelines_list_empty
 	is_build_job_missing
-	msg := {"ids": ["2.3.1"], "status": "Failed", "details": constsLib.details.pipeline_no_build_job}
+	msg := {"ids": ["2.3.1"], "status": constsLib.status.Failed, "details": constsLib.details.pipeline_no_build_job}
 }
 
 # In case organization is not fetched
 CbPolicy[msg] {
 	utilsLib.is_organization_data_missing
-	msg = {"ids": ["2.3.5"], "status": "Unknown", "details": "Organization is not fetched"}
+	msg = {"ids": ["2.3.5"], "status": constsLib.status.Unknown, "details": "Organization is not fetched"}
 }
 
 # In case oraganization default permissions weren't fetched
 CbPolicy[msg] {
 	not utilsLib.is_organization_data_missing
 	permissionsLib.is_missing_org_settings_permission
-	msg = {"ids": ["2.3.5"], "status": "Unknown", "details": "Organization is missing minimal permissions"}
+	msg = {"ids": ["2.3.5"], "status": constsLib.status.Unknown, "details": "Organization is missing minimal permissions"}
 }
 
 # In case organzation default permissions are too permissive
 CbPolicy[msg] {
 	not utilsLib.is_organization_data_missing
 	not permissionsLib.is_org_default_permission_strict
-	msg = {"ids": ["2.3.5"], "status": "Failed", "details": constsLib.details.organization_premissive_default_repository_permissions}
+	msg = {"ids": ["2.3.5"], "status": constsLib.status.Failed, "details": constsLib.details.organization_premissive_default_repository_permissions}
 }
 
 # Looking for a pipeline that scans for vulnerabilities
@@ -97,7 +97,7 @@ CbPolicy[msg] {
 	not utilsLib.is_pipelines_data_missing
 	not utilsLib.is_pipelines_list_empty
 	is_pipeline_scaning_tasks_missing
-	msg = {"ids": ["2.3.7"], "status": "Failed", "details": constsLib.details.pipeline_pipelines_not_scanned_for_vulnerabilities}
+	msg = {"ids": ["2.3.7"], "status": constsLib.status.Failed, "details": constsLib.details.pipeline_pipelines_not_scanned_for_vulnerabilities}
 }
 
 # Looking for a pipelinethat scans for secrets
@@ -105,5 +105,5 @@ CbPolicy[msg] {
 	not utilsLib.is_pipelines_data_missing
 	not utilsLib.is_pipelines_list_empty
 	is_repository_scanning_tasks_missing
-	msg = {"ids": ["2.3.8"], "status": "Failed", "details": "Repository is not scanned for secrets"}
+	msg = {"ids": ["2.3.8"], "status": constsLib.status.Failed, "details": "Repository is not scanned for secrets"}
 }
