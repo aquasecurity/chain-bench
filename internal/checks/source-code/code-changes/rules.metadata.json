@@ -81,7 +81,7 @@
       "entity": "Repository",
       "description": "Linear history is the name for Git history where all of the commits come one after another. Such history exists if a pull request is merged either by rebase merge (re-order the commits history) or squash merge (squashes all commits to one). Ensure that linear history is required by enforcing the use of rebase or squash merge when merging a pull request.",
       "remediation": "For each repository in use, require linear history and/or allow only rebase merge and squash merge.",
-      "scannerType": "Custom"
+      "scannerType": "Rego"
     },
     "1.1.14": {
       "title": "Ensure branch protection rules are enforced on administrators",

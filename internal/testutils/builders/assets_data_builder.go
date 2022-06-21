@@ -13,7 +13,13 @@ type AssetsDataBuilder struct {
 }
 
 func NewAssetsDataBuilder() *AssetsDataBuilder {
-	return &AssetsDataBuilder{assetsData: &checkmodels.AssetsData{}}
+	return &AssetsDataBuilder{assetsData: &checkmodels.AssetsData{
+		Organization:      NewOrganizationBuilder().Build(),
+		Repository:        NewRepositoryBuilder().Build(),
+		BranchProtections: NewBranchProtectionBuilder().Build(),
+		AuthorizedUser:    &models.User{ID: utils.GetPtr(testutils.AuthorizedUserMockId)},
+		Pipelines:         []*pipelineParserModels.Pipeline{NewPipelineBuilder().Build()},
+	}}
 }
 
 func (b *AssetsDataBuilder) WithRepository(repo *models.Repository) *AssetsDataBuilder {
@@ -56,6 +62,16 @@ func (b *AssetsDataBuilder) WithPipeline(pipeline *pipelineParserModels.Pipeline
 
 func (b *AssetsDataBuilder) WithZeroPipelines() *AssetsDataBuilder {
 	b.assetsData.Pipelines = []*pipelineParserModels.Pipeline{}
+	return b
+}
+
+func (b *AssetsDataBuilder) WithNoPipelinesData() *AssetsDataBuilder {
+	b.assetsData.Pipelines = nil
+	return b
+}
+
+func (b *AssetsDataBuilder) WithNoOrganization() *AssetsDataBuilder {
+	b.assetsData.Organization = nil
 	return b
 }
 

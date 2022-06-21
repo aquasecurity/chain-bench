@@ -11,14 +11,6 @@ pipelineRuleIds = [
 	"2.3.8",
 ]
 
-pipeline_vulnerability_scan_tasks = ["argonsecurity/scanner-action", "aquasecurity/trivy-action"]
-
-secret_scan_tasks = [
-	"argonsecurity/scanner-action",
-	"zricethezav/gitleaks-action",
-	"ShiftLeftSecurity/scan-action",
-]
-
 secret_scan_commands = [
 	`spectral.* scan`,
 	`git secrets --scan`,
@@ -38,65 +30,72 @@ does_job_contain_one_of_shell_commands(job, regexes) {
 	regex.match(r, job.steps[i].shell.script)
 }
 
-ensure_organization_fetched {
-	input.Organization != null
+is_pipeline_scaning_tasks_missing {
+	count({job | job := input.Pipelines[_].jobs[_]; does_job_contain_one_of_tasks(job, constsLib.pipeline_vulnerability_scan_tasks)}) == 0
+}
+
+is_repository_scanning_tasks_missing {
+	count({job | job := input.Pipelines[_].jobs[_]; does_job_contain_one_of_tasks(job, constsLib.secret_scan_tasks)}) == 0
+	count({job | job := input.Pipelines[_].jobs[_]; does_job_contain_one_of_shell_commands(job, secret_scan_commands)}) == 0
+}
+
+is_build_job_missing {
+	count({job | job := input.Pipelines[_].jobs[_]; job.metadata.build == true}) == 0
 }
 
 # In case pipelines weren't fetched
 CbPolicy[msg] {
-	not utilsLib.ensure_pipelines_fetched
+	utilsLib.is_pipelines_data_missing
 	msg = {"ids": pipelineRuleIds, "status": constsLib.status.Unknown}
 }
 
 # In case there are no pipelines
 CbPolicy[msg] {
-	utilsLib.ensure_pipelines_fetched
-	not utilsLib.ensure_pipelines_exists
-	msg = {"ids": pipelineRuleIds, "status": constsLib.status.Unknown, "details": "No pipelines were found"}
+	not utilsLib.is_pipelines_data_missing
+	utilsLib.is_pipelines_list_empty
+	msg = {"ids": pipelineRuleIds, "status": constsLib.status.Unknown, "details": constsLib.details.pipeline_no_pipelines_found}
 }
 
 # There is no build job
 CbPolicy[msg] {
-	utilsLib.ensure_pipelines_fetched
-	utilsLib.ensure_pipelines_exists
-	count({job | job := input.Pipelines[_].jobs[_]; job.metadata.build == true}) == 0
-	msg := {"ids": ["2.3.1"], "status": constsLib.status.Failed, "details": "No build job was found in pipelines"}
+	not utilsLib.is_pipelines_data_missing
+	not utilsLib.is_pipelines_list_empty
+	is_build_job_missing
+	msg := {"ids": ["2.3.1"], "status": constsLib.status.Failed, "details": constsLib.details.pipeline_no_build_job}
 }
 
 # In case organization is not fetched
 CbPolicy[msg] {
-	not ensure_organization_fetched
-	msg = {"ids": ["2.3.5"], "status": constsLib.status.Unknown, "details": "Organization is not fetched"}
+	utilsLib.is_organization_data_missing
+	msg = {"ids": ["2.3.5"], "status": constsLib.status.Unknown, "details": constsLib.details.organization_not_fetched}
 }
 
 # In case oraganization default permissions weren't fetched
 CbPolicy[msg] {
-	ensure_organization_fetched
+	not utilsLib.is_organization_data_missing
 	permissionsLib.is_missing_org_settings_permission
-	msg = {"ids": ["2.3.5"], "status": constsLib.status.Unknown, "details": "Organization is missing minimal permissions"}
+	msg = {"ids": ["2.3.5"], "status": constsLib.status.Unknown, "details": constsLib.details.organization_missing_minimal_permissions}
 }
 
 # In case organzation default permissions are too permissive
 CbPolicy[msg] {
-	ensure_organization_fetched
+	not utilsLib.is_organization_data_missing
 	not permissionsLib.is_org_default_permission_strict
-	msg = {"ids": ["2.3.5"], "status": constsLib.status.Failed, "details": "Organization default permissions are too permissive"}
+	msg = {"ids": ["2.3.5"], "status": constsLib.status.Failed, "details": constsLib.details.organization_premissive_default_repository_permissions}
 }
 
 # Looking for a pipeline that scans for vulnerabilities
 CbPolicy[msg] {
-	utilsLib.ensure_pipelines_fetched
-	utilsLib.ensure_pipelines_exists
-	count({job | job := input.Pipelines[_].jobs[_]; does_job_contain_one_of_tasks(job, pipeline_vulnerability_scan_tasks)}) == 0
-	msg = {"ids": ["2.3.7"], "status": constsLib.status.Failed, "details": "Pipelines are not scanned for vulnerabilities"}
+	not utilsLib.is_pipelines_data_missing
+	not utilsLib.is_pipelines_list_empty
+	is_pipeline_scaning_tasks_missing
+	msg = {"ids": ["2.3.7"], "status": constsLib.status.Failed, "details": constsLib.details.pipeline_pipelines_not_scanned_for_vulnerabilities}
 }
 
 # Looking for a pipelinethat scans for secrets
 CbPolicy[msg] {
-	utilsLib.ensure_pipelines_fetched
-	utilsLib.ensure_pipelines_exists
-	count({job | job := input.Pipelines[_].jobs[_]; does_job_contain_one_of_tasks(job, secret_scan_tasks)}) == 0
-	count({job | job := input.Pipelines[_].jobs[_]; does_job_contain_one_of_shell_commands(job, secret_scan_commands)}) == 0
-
-	msg = {"ids": ["2.3.8"], "status": constsLib.status.Failed, "details": "Repository is not scanned for secrets"}
+	not utilsLib.is_pipelines_data_missing
+	not utilsLib.is_pipelines_list_empty
+	is_repository_scanning_tasks_missing
+	msg = {"ids": ["2.3.8"], "status": constsLib.status.Failed, "details": constsLib.details.pipeline_repository_not_scanned_for_secrets}
 }

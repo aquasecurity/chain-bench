@@ -9,37 +9,37 @@ is_no_branch_protection {
 	input.BranchProtections == null
 }
 
-is_branch_protection_requires_status_check {
+is_branch_protection_not_requires_status_check {
 	not is_no_branch_protection
 	input.BranchProtections.RequiredStatusChecks == null
 }
 
-is_branch_protection_requires_two_minimum_reviewers_before_merge {
+is_branch_protection_not_requires_two_minimum_reviewers_before_merge {
 	input.BranchProtections.RequiredPullRequestReviews.RequiredApprovingReviewCount < 2
 }
 
-is_branch_protection_requires_code_owner_review {
+is_branch_protection_not_requires_code_owner_review {
 	input.BranchProtections.RequiredPullRequestReviews.RequireCodeOwnerReviews == false
 }
 
-is_branch_protection_requires_dismiss_stale_reviews {
+is_branch_protection_not_requires_dismiss_stale_reviews {
 	input.BranchProtections.RequiredPullRequestReviews.DismissStaleReviews == false
 }
 
-is_branch_protection_requires_dismissal_restrictions {
+is_branch_protection_not_requires_dismissal_restrictions {
 	input.BranchProtections.RequiredPullRequestReviews.DismissalRestrictions == null
 }
 
-is_branch_protection_requires_conversation_resolution {
+is_branch_protection_not_requires_conversation_resolution {
 	input.BranchProtections.RequiredConversationResolution == false
 }
 
-is_branch_protection_requires_signed_commits {
-	input.BranchProtections.RequiredSignedCommit == true
+is_branch_protection_not_requires_signed_commits {
+	input.BranchProtections.RequiredSignedCommit == false
 }
 
-is_branch_protection_enforced_on_admins {
-	input.BranchProtections.EnforceAdmins.Enabled == true
+is_branch_protection_not_enforced_on_admins {
+	input.BranchProtections.EnforceAdmins.Enabled == false
 }
 
 is_admin {
@@ -52,25 +52,29 @@ is_branch_protection_restrict_force_push {
 	input.BranchProtections.AllowForcePushes == false
 }
 
-is_branch_protection_restrict_delete_repo {
+is_branch_protection_restrict_delete_branch {
 	input.BranchProtections.AllowDeletions == false
 }
 
-is_branch_protection_restrict_who_can_push {
+is_branch_protection_not_restrict_who_can_push {
+	input.BranchProtections.Restrictions == null
+}
+
+is_branch_protection_not_restrict_who_can_push {
 	input.BranchProtections.Restrictions != null
 	restrictUsers := count(input.BranchProtections.Restrictions.Users)
 	restrictTeams := count(input.BranchProtections.Restrictions.Teams)
 	restrictApps := count(input.BranchProtections.Restrictions.Apps)
 
-	(restrictUsers + restrictTeams) + restrictApps > 0
+	(restrictUsers + restrictTeams) + restrictApps == 0
 }
 
-is_branch_protection_requires_branch_up_to_date_before_merge {
-	input.BranchProtections.RequiredStatusChecks.Strict == true
+is_branch_protection_not_requires_branch_up_to_date_before_merge {
+	input.BranchProtections.RequiredStatusChecks.Strict == false
 }
 
 #looking for branches that the last commit pushed more than 2 month ago
-is_inactive_branches[details] {
+is_inactive_branches[inactiveCount] {
 	input.Repository.Branches != null
 	threshold := time.add_date(time.now_ns(), 0, -2, 0)
 
@@ -80,17 +84,26 @@ is_inactive_branches[details] {
 	})
 
 	inactiveCount > 0
-	details := sprintf("%v %v", [format_int(inactiveCount, 10), "inactive branches"])
+}
+
+is_repository_allow_merge_commit {
+	input.Repository.AllowMergeCommit == true
+}
+
+is_repository_prevent_rebase_and_squash_merge {
+	input.Repository.AllowRebaseMerge == false
+	input.Repository.AllowSquashMerge == false
 }
 
 #missing permissions
 CbPolicy[msg] {
 	permissionslib.is_missing_repo_settings_permission
-	msg := {"ids": ["1.1.3", "1.1.4", "1.1.5", "1.1.9", "1.1.10", "1.1.11", "1.1.12", "1.1.14", "1.1.15", "1.1.16", "1.1.17"], "status": constsLib.status.Unknown}
+	msg := {"ids": ["1.1.3", "1.1.4", "1.1.5", "1.1.6", "1.1.9", "1.1.10", "1.1.11", "1.1.12", "1.1.13", "1.1.14", "1.1.15", "1.1.16", "1.1.17"], "status": constsLib.status.Unknown}
 }
 
 #Missing branch protection settings
 CbPolicy[msg] {
+	not permissionslib.is_missing_repo_settings_permission
 	is_no_branch_protection
 	msg := {"ids": ["1.1.3", "1.1.4", "1.1.5", "1.1.6", "1.1.9", "1.1.10", "1.1.11", "1.1.12", "1.1.14", "1.1.15", "1.1.16", "1.1.17"], "status": constsLib.status.Failed}
 }
@@ -108,14 +121,14 @@ CbPolicy[msg] {
 
 CbPolicy[msg] {
 	not is_no_branch_protection
-	is_branch_protection_requires_two_minimum_reviewers_before_merge
+	is_branch_protection_not_requires_two_minimum_reviewers_before_merge
 	msg := {"ids": ["1.1.3"], "status": constsLib.status.Failed}
 }
 
 #Looking for default branch protection that doesn't requires dismiss stale reviews
 CbPolicy[msg] {
 	not is_no_branch_protection
-	is_branch_protection_requires_dismiss_stale_reviews
+	is_branch_protection_not_requires_dismiss_stale_reviews
 	msg := {"ids": ["1.1.4"], "status": constsLib.status.Failed}
 }
 
@@ -123,62 +136,73 @@ CbPolicy[msg] {
 CbPolicy[msg] {
 	not is_no_branch_protection
 	is_admin
-	is_branch_protection_requires_dismissal_restrictions
+	is_branch_protection_not_requires_dismissal_restrictions
 	msg := {"ids": ["1.1.5"], "status": constsLib.status.Failed}
 }
 
 CbPolicy[msg] {
 	not is_no_branch_protection
-	is_branch_protection_requires_code_owner_review
+	is_branch_protection_not_requires_code_owner_review
 	msg := {"ids": ["1.1.6"], "status": constsLib.status.Failed}
 }
 
 #Looking for inactive branches
 CbPolicy[msg] {
-	details := is_inactive_branches[i]
+	inactiveCount := is_inactive_branches[i]
+	details := sprintf("%v %v", [format_int(inactiveCount, 10), "inactive branches"])
 	msg := {"ids": ["1.1.8"], "status": constsLib.status.Failed, "details": details}
 }
 
 #Looking for default branch protection that doesn't requires status check
 CbPolicy[msg] {
 	not is_no_branch_protection
-	is_branch_protection_requires_status_check
+	is_branch_protection_not_requires_status_check
 	msg := {"ids": ["1.1.9", "1.1.10"], "status": constsLib.status.Failed}
 }
 
 #Looking for default branch protection that doesn't enforce branch to be up to date before merge
 CbPolicy[msg] {
 	not is_no_branch_protection
-	not is_branch_protection_requires_status_check
-	not is_branch_protection_requires_branch_up_to_date_before_merge
+	not is_branch_protection_not_requires_status_check
+	is_branch_protection_not_requires_branch_up_to_date_before_merge
 	msg := {"ids": ["1.1.10"], "status": constsLib.status.Failed}
 }
 
 #Looking for default branch protection that doesn't requires conversation resolution before merging
 CbPolicy[msg] {
 	not is_no_branch_protection
-	is_branch_protection_requires_conversation_resolution
+	is_branch_protection_not_requires_conversation_resolution
 	msg := {"ids": ["1.1.11"], "status": constsLib.status.Failed}
 }
 
 #Looking for default branch protection that doesn't requires signed commmits
 CbPolicy[msg] {
 	not is_no_branch_protection
-	not is_branch_protection_requires_signed_commits
+	is_branch_protection_not_requires_signed_commits
 	msg := {"ids": ["1.1.12"], "status": constsLib.status.Failed}
+}
+
+CbPolicy[msg] {
+	is_repository_allow_merge_commit
+	msg := {"ids": ["1.1.13"], "status": constsLib.status.Failed, "details": constsLib.details.linear_history_merge_commit_enabled}
+}
+
+CbPolicy[msg] {
+	is_repository_prevent_rebase_and_squash_merge
+	msg := {"ids": ["1.1.13"], "status": constsLib.status.Failed, "details": constsLib.details.linear_history_require_rebase_or_squash_commit_enabled}
 }
 
 #Looking for default branch protection that doesn't enforced on admins
 CbPolicy[msg] {
 	not is_no_branch_protection
-	not is_branch_protection_enforced_on_admins
+	is_branch_protection_not_enforced_on_admins
 	msg := {"ids": ["1.1.14"], "status": constsLib.status.Failed}
 }
 
 #Looking for default branch protection that restrict who can push to protected branch
 CbPolicy[msg] {
 	not is_no_branch_protection
-	not is_branch_protection_restrict_who_can_push
+	is_branch_protection_not_restrict_who_can_push
 	msg := {"ids": ["1.1.15"], "status": constsLib.status.Failed}
 }
 
@@ -192,6 +216,6 @@ CbPolicy[msg] {
 #Looking for default branch protection that restrict who can delete protected branch
 CbPolicy[msg] {
 	not is_no_branch_protection
-	is_branch_protection_restrict_delete_repo
+	is_branch_protection_restrict_delete_branch
 	msg := {"ids": ["1.1.17"], "status": constsLib.status.Failed}
 }

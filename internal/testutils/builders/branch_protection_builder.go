@@ -10,52 +10,57 @@ type BranchProtectionBuilder struct {
 }
 
 func NewBranchProtectionBuilder() *BranchProtectionBuilder {
-	return &BranchProtectionBuilder{br_protection: &models.Protection{EnforceAdmins: &models.AdminEnforcement{}, RequiredPullRequestReviews: &models.PullRequestReviewsEnforcement{}}}
+	return &BranchProtectionBuilder{br_protection: &models.Protection{
+		EnforceAdmins: &models.AdminEnforcement{
+			Enabled: true,
+		},
+		RequiredStatusChecks: &models.RequiredStatusChecks{Strict: true},
+		RequiredPullRequestReviews: &models.PullRequestReviewsEnforcement{
+			RequiredApprovingReviewCount: 2,
+			RequireCodeOwnerReviews:      true,
+			DismissStaleReviews:          true,
+			DismissalRestrictions:        &models.DismissalRestrictions{Users: []*models.User{}},
+		},
+		Restrictions:                   &models.BranchRestrictions{Users: []*models.User{{Name: utils.GetPtr("default")}}, Teams: []*models.Team{}, Apps: []*models.App{}},
+		RequiredSignedCommit:           true,
+		RequiredConversationResolution: true,
+		AllowForcePushes:               true,
+		AllowDeletions:                 true,
+	}}
 }
 
-func (b *BranchProtectionBuilder) WithStatusCheckEnabled() *BranchProtectionBuilder {
-	b.br_protection.RequiredStatusChecks = &models.RequiredStatusChecks{}
+func (b *BranchProtectionBuilder) WithStatusCheckEnabled(enabled bool) *BranchProtectionBuilder {
+	if !enabled {
+		b.br_protection.RequiredStatusChecks = nil
+	}
 	return b
 }
 
-func (b *BranchProtectionBuilder) WithRequireBranchToBeUpToDate(required bool) *BranchProtectionBuilder {
-	b.br_protection.RequiredStatusChecks.Strict = required
+func (b *BranchProtectionBuilder) WithStrictMode(enabled bool) *BranchProtectionBuilder {
+	if b.br_protection.RequiredStatusChecks != nil {
+		b.br_protection.RequiredStatusChecks.Strict = enabled
+	}
 	return b
 }
 
 func (b *BranchProtectionBuilder) WithMinimumReviwersBeforeMerge(num int) *BranchProtectionBuilder {
-	if b.br_protection.RequiredPullRequestReviews != nil {
-		b.br_protection.RequiredPullRequestReviews.RequiredApprovingReviewCount = num
-	} else {
-		b.br_protection.RequiredPullRequestReviews = &models.PullRequestReviewsEnforcement{RequiredApprovingReviewCount: num}
-	}
+	b.br_protection.RequiredPullRequestReviews.RequiredApprovingReviewCount = num
 	return b
 }
 
 func (b *BranchProtectionBuilder) WithCodeOwnersReview(requireCodeOwnerReviews bool) *BranchProtectionBuilder {
-	if b.br_protection.RequiredPullRequestReviews != nil {
-		b.br_protection.RequiredPullRequestReviews.RequireCodeOwnerReviews = requireCodeOwnerReviews
-	} else {
-		b.br_protection.RequiredPullRequestReviews = &models.PullRequestReviewsEnforcement{RequireCodeOwnerReviews: requireCodeOwnerReviews}
-	}
+	b.br_protection.RequiredPullRequestReviews.RequireCodeOwnerReviews = requireCodeOwnerReviews
 	return b
 }
 
 func (b *BranchProtectionBuilder) WithDismissStaleReviews(dismissStaleReviews bool) *BranchProtectionBuilder {
-	if b.br_protection.RequiredPullRequestReviews != nil {
-		b.br_protection.RequiredPullRequestReviews.DismissStaleReviews = dismissStaleReviews
-	} else {
-		b.br_protection.RequiredPullRequestReviews = &models.PullRequestReviewsEnforcement{DismissStaleReviews: dismissStaleReviews}
-	}
+	b.br_protection.RequiredPullRequestReviews.DismissStaleReviews = dismissStaleReviews
 	return b
 }
 
 func (b *BranchProtectionBuilder) WithDismissalRestrictions(dismissalRestrictions bool) *BranchProtectionBuilder {
-	if b.br_protection.RequiredPullRequestReviews == nil {
-		b.br_protection.RequiredPullRequestReviews = &models.PullRequestReviewsEnforcement{}
-	}
-	if dismissalRestrictions {
-		b.br_protection.RequiredPullRequestReviews.DismissalRestrictions = &models.DismissalRestrictions{Users: []*models.User{}}
+	if !dismissalRestrictions {
+		b.br_protection.RequiredPullRequestReviews.DismissalRestrictions = nil
 	}
 	return b
 }
@@ -76,7 +81,9 @@ func (b *BranchProtectionBuilder) WithEnforceAdmin(enforceAdmin bool) *BranchPro
 }
 
 func (b *BranchProtectionBuilder) WithPushRestrictions(pushRestriction bool) *BranchProtectionBuilder {
-	b.br_protection.Restrictions = &models.BranchRestrictions{Users: []*models.User{{Name: utils.GetPtr("default")}}, Teams: []*models.Team{}, Apps: []*models.App{}}
+	if !pushRestriction {
+		b.br_protection.Restrictions = nil
+	}
 	return b
 }
 

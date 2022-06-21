@@ -10,16 +10,12 @@ import (
 	"github.com/aquasecurity/chain-bench/internal/testutils/builders"
 )
 
-const (
-	vulnerabilityScanningTask = "argonsecurity/scanner-action"
-)
-
 func TestBuildChecker(t *testing.T) {
 	tests := []testutils.CheckTest{
 		{
-			Name: "Failed to fetch pipelines",
+			Name: "Should return unknown when failed to fetch pipelines",
 			Data: &checkmodels.CheckData{
-				AssetsMetadata: builders.NewAssetsDataBuilder().Build(),
+				AssetsMetadata: builders.NewAssetsDataBuilder().WithNoPipelinesData().Build(),
 			},
 			Expected: []*checkmodels.CheckRunResult{
 				checkmodels.ToCheckRunResult("3.2.2", checksMetadata.Checks["3.2.2"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Unknown}),
@@ -27,7 +23,7 @@ func TestBuildChecker(t *testing.T) {
 			},
 		},
 		{
-			Name: "No pipelines",
+			Name: "Should return unknown with explanation when there are no pipelines",
 			Data: &checkmodels.CheckData{
 				AssetsMetadata: builders.NewAssetsDataBuilder().
 					WithZeroPipelines().
@@ -39,41 +35,13 @@ func TestBuildChecker(t *testing.T) {
 			},
 		},
 		{
-			Name: "Multiple pipelines, one with a vulnerability scanner task",
+			Name: "Should fail with explanation when there is pipeline with one job without vulnerability scanner task",
 			Data: &checkmodels.CheckData{
-				AssetsMetadata: builders.NewAssetsDataBuilder().
-					WithPipeline(builders.
-						NewPipelineBuilder().
+				AssetsMetadata: builders.NewAssetsDataBuilder().WithZeroPipelines().WithPipeline(
+					builders.NewPipelineBuilder().WithNoJobs().
 						WithJob(builders.
-							NewJobBuilder().
-							SetAsBuildJob().
-							WithTask("NORMAL_TASK_NAME", "commit").
-							Build(),
-						).
-						Build(),
-					).WithPipeline(builders.
-					NewPipelineBuilder().
-					WithJob(builders.
-						NewJobBuilder().
-						WithTask("NORMAL_TASK_NAME", "commit").
-						WithTask(vulnerabilityScanningTask, "tag").
-						Build()).
-					Build(),
-				).Build(),
-			},
-			Expected: []*checkmodels.CheckRunResult{
-				checkmodels.ToCheckRunResult("3.2.2", checksMetadata.Checks["3.2.2"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Passed}),
-				checkmodels.ToCheckRunResult("3.2.3", checksMetadata.Checks["3.2.3"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Passed}),
-			},
-		},
-		{
-			Name: "Normal job without vulnerability scanner task",
-			Data: &checkmodels.CheckData{
-				AssetsMetadata: builders.NewAssetsDataBuilder().WithPipeline(
-					builders.NewPipelineBuilder().
-						WithJob(builders.
-							NewJobBuilder().
-							WithTask("NORMAL_TASK_NAME", "commit").
+							NewJobBuilder().WithNoTasks().
+							WithTask("NORMAL_TASK_NAME", "commit").WithNoVulnerabilityScannerTask().
 							Build()).
 						Build(),
 				).Build(),
@@ -84,17 +52,9 @@ func TestBuildChecker(t *testing.T) {
 			},
 		},
 		{
-			Name: "Job with a pipeline with a vulnerability scanner task",
+			Name: "valid input - Job with a pipeline with a vulnerability scanner task - all rules should pass",
 			Data: &checkmodels.CheckData{
-				AssetsMetadata: builders.NewAssetsDataBuilder().
-					WithPipeline(builders.
-						NewPipelineBuilder().
-						WithJob(builders.
-							NewJobBuilder().
-							WithTask(vulnerabilityScanningTask, "commit").
-							Build()).
-						Build()).
-					Build(),
+				AssetsMetadata: builders.NewAssetsDataBuilder().Build(),
 			},
 			Expected: []*checkmodels.CheckRunResult{
 				checkmodels.ToCheckRunResult("3.2.2", checksMetadata.Checks["3.2.2"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Passed}),
@@ -102,5 +62,5 @@ func TestBuildChecker(t *testing.T) {
 			},
 		},
 	}
-	testutils.RunCheckTests(t, common.GetRegoRunAction(regoQuery, checksMetadata), tests)
+	testutils.RunCheckTests(t, common.GetRegoRunAction(regoQuery, checksMetadata), tests, checksMetadata)
 }

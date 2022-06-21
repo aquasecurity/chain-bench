@@ -13,16 +13,16 @@ import (
 func TestBuildChecker(t *testing.T) {
 	tests := []testutils.CheckTest{
 		{
-			Name: "Failed to fetch pipelines",
+			Name: "Should return unknown when failed to fetch pipelines",
 			Data: &checkmodels.CheckData{
-				AssetsMetadata: builders.NewAssetsDataBuilder().Build(),
+				AssetsMetadata: builders.NewAssetsDataBuilder().WithNoPipelinesData().Build(),
 			},
 			Expected: []*checkmodels.CheckRunResult{
 				checkmodels.ToCheckRunResult("3.1.7", checksMetadata.Checks["3.1.7"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Unknown}),
 			},
 		},
 		{
-			Name: "No pipelines",
+			Name: "Should return unknown with explanation when there are no pipelines",
 			Data: &checkmodels.CheckData{
 				AssetsMetadata: builders.NewAssetsDataBuilder().
 					WithZeroPipelines().
@@ -33,37 +33,29 @@ func TestBuildChecker(t *testing.T) {
 			},
 		},
 		{
-			Name: "pinned task",
+			Name: "valid input - all rules should pass",
 			Data: &checkmodels.CheckData{
-				AssetsMetadata: builders.NewAssetsDataBuilder().WithPipeline(
-					builders.NewPipelineBuilder().
-						WithJob(builders.
-							NewJobBuilder().
-							WithTask("NORMAL_TASK_NAME", "commit").
-							Build()).
-						Build(),
-				).Build(),
+				AssetsMetadata: builders.NewAssetsDataBuilder().Build(),
 			},
 			Expected: []*checkmodels.CheckRunResult{
 				checkmodels.ToCheckRunResult("3.1.7", checksMetadata.Checks["3.1.7"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Passed}),
 			},
 		},
 		{
-			Name: "unpinned job",
+			Name: "Should fail and return number of dependencies when there is pipeline with unpinned job",
 			Data: &checkmodels.CheckData{
-				AssetsMetadata: builders.NewAssetsDataBuilder().WithPipeline(
-					builders.NewPipelineBuilder().
-						WithJob(builders.
-							NewJobBuilder().
-							WithTask("NORMAL_TASK_NAME", "tag").
-							Build()).
+				AssetsMetadata: builders.NewAssetsDataBuilder().WithZeroPipelines().WithPipeline(
+					builders.NewPipelineBuilder().WithNoJobs().WithJob(builders.
+						NewJobBuilder().
+						WithTask("NORMAL_TASK_NAME", "tag").
+						Build()).
 						Build(),
 				).Build(),
 			},
 			Expected: []*checkmodels.CheckRunResult{
-				checkmodels.ToCheckRunResult("3.1.7", checksMetadata.Checks["3.1.7"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed, Details: "1 dependenc(ies) are not pinned"}),
+				checkmodels.ToCheckRunResult("3.1.7", checksMetadata.Checks["3.1.7"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed, Details: "1 dependencies are not pinned"}),
 			},
 		},
 	}
-	testutils.RunCheckTests(t, common.GetRegoRunAction(regoQuery, checksMetadata), tests)
+	testutils.RunCheckTests(t, common.GetRegoRunAction(regoQuery, checksMetadata), tests, checksMetadata)
 }

@@ -18,134 +18,56 @@ func TestRepositoryChecker(t *testing.T) {
 
 	tests := []testutils.CheckTest{
 		{
-			Name: "Public repository without security.md file",
+			Name: "Should fail for public repository without security.md file",
 			Data: &checkmodels.CheckData{
 
 				AssetsMetadata: builders.NewAssetsDataBuilder().
-					WithOrganization(builders.NewOrganizationBuilder().WithReposDeletionLimitation(true).WithMembersCanCreateRepos(true).WithIssuesDeletionLimitation(true).Build()).
 					WithRepository(builders.NewRepositoryBuilder().WithPrivate(false).WithSecurityMdFile(false).Build()).Build(),
 			},
 			Expected: []*checkmodels.CheckRunResult{
 				checkmodels.ToCheckRunResult("1.2.1", checksMetadata.Checks["1.2.1"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed}),
-				checkmodels.ToCheckRunResult("1.2.2", checksMetadata.Checks["1.2.2"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed}),
-				checkmodels.ToCheckRunResult("1.2.3", checksMetadata.Checks["1.2.3"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Passed}),
-				checkmodels.ToCheckRunResult("1.2.4", checksMetadata.Checks["1.2.4"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Passed}),
 			},
 		},
 		{
-			Name: "Private repository without security.md file",
-			Data: &checkmodels.CheckData{
-				AssetsMetadata: builders.NewAssetsDataBuilder().WithOrganization(builders.NewOrganizationBuilder().WithReposDeletionLimitation(true).WithMembersCanCreateRepos(true).WithIssuesDeletionLimitation(true).Build()).
-					WithRepository(builders.NewRepositoryBuilder().WithPrivate(true).WithSecurityMdFile(false).Build()).Build(),
-			},
-			Expected: []*checkmodels.CheckRunResult{
-				checkmodels.ToCheckRunResult("1.2.1", checksMetadata.Checks["1.2.1"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Passed}),
-				checkmodels.ToCheckRunResult("1.2.2", checksMetadata.Checks["1.2.2"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed}),
-				checkmodels.ToCheckRunResult("1.2.3", checksMetadata.Checks["1.2.3"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Passed}),
-				checkmodels.ToCheckRunResult("1.2.4", checksMetadata.Checks["1.2.4"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Passed}),
-			},
-		},
-		{
-			Name: "Public repository with security.md file",
-			Data: &checkmodels.CheckData{
-				AssetsMetadata: builders.NewAssetsDataBuilder().WithOrganization(builders.NewOrganizationBuilder().WithReposDeletionLimitation(true).WithMembersCanCreateRepos(true).WithIssuesDeletionLimitation(true).Build()).
-					WithRepository(builders.NewRepositoryBuilder().WithPrivate(false).WithSecurityMdFile(true).Build()).Build(),
-			},
-			Expected: []*checkmodels.CheckRunResult{
-				checkmodels.ToCheckRunResult("1.2.1", checksMetadata.Checks["1.2.1"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Passed}),
-				checkmodels.ToCheckRunResult("1.2.2", checksMetadata.Checks["1.2.2"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed}),
-				checkmodels.ToCheckRunResult("1.2.3", checksMetadata.Checks["1.2.3"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Passed}),
-				checkmodels.ToCheckRunResult("1.2.4", checksMetadata.Checks["1.2.4"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Passed}),
-			},
-		},
-		{
-			Name: "Private repository with security.md file",
-			Data: &checkmodels.CheckData{
-				AssetsMetadata: builders.NewAssetsDataBuilder().WithOrganization(builders.NewOrganizationBuilder().WithReposDeletionLimitation(true).WithMembersCanCreateRepos(true).WithIssuesDeletionLimitation(true).Build()).
-					WithRepository(builders.NewRepositoryBuilder().WithPrivate(true).WithSecurityMdFile(true).Build()).Build(),
-			},
-			Expected: []*checkmodels.CheckRunResult{
-				checkmodels.ToCheckRunResult("1.2.1", checksMetadata.Checks["1.2.1"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Passed}),
-				checkmodels.ToCheckRunResult("1.2.2", checksMetadata.Checks["1.2.2"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed}),
-				checkmodels.ToCheckRunResult("1.2.3", checksMetadata.Checks["1.2.3"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Passed}),
-				checkmodels.ToCheckRunResult("1.2.4", checksMetadata.Checks["1.2.4"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Passed}),
-			},
-		},
-		{
-			Name: "Repository without stale branches",
+			Name: "Should fail for repository without creation limited to trusted users",
 			Data: &checkmodels.CheckData{
 
 				AssetsMetadata: builders.NewAssetsDataBuilder().
-					WithOrganization(builders.NewOrganizationBuilder().WithReposDeletionLimitation(true).WithIssuesDeletionLimitation(true).WithMembersCanCreateRepos(true).Build()).
-					WithRepository(builders.NewRepositoryBuilder().WithPrivate(true).WithSecurityMdFile(false).Build()).Build(),
+					WithOrganization(builders.NewOrganizationBuilder().WithMembersCanCreateRepos(true).Build()).Build(),
 			},
 			Expected: []*checkmodels.CheckRunResult{
-				checkmodels.ToCheckRunResult("1.2.1", checksMetadata.Checks["1.2.1"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Passed}),
 				checkmodels.ToCheckRunResult("1.2.2", checksMetadata.Checks["1.2.2"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed}),
-				checkmodels.ToCheckRunResult("1.2.3", checksMetadata.Checks["1.2.3"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Passed}),
-				checkmodels.ToCheckRunResult("1.2.4", checksMetadata.Checks["1.2.4"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Passed}),
 			},
 		},
 		{
-			Name: "Organization with repository and issue deletion limited to trusted users and with 1 stale branch",
+			Name: "Should fail for repository without issue deletion limited to trusted users",
 			Data: &checkmodels.CheckData{
 
 				AssetsMetadata: builders.NewAssetsDataBuilder().
-					WithOrganization(builders.NewOrganizationBuilder().WithReposDeletionLimitation(true).WithIssuesDeletionLimitation(true).WithMembersCanCreateRepos(true).Build()).
-					WithRepository(builders.NewRepositoryBuilder().WithPrivate(true).WithSecurityMdFile(true).Build()).Build(),
+					WithOrganization(builders.NewOrganizationBuilder().WithIssuesDeletionLimitation(false).Build()).Build(),
 			},
 			Expected: []*checkmodels.CheckRunResult{
-				checkmodels.ToCheckRunResult("1.2.1", checksMetadata.Checks["1.2.1"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Passed}),
-				checkmodels.ToCheckRunResult("1.2.2", checksMetadata.Checks["1.2.2"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed}),
-				checkmodels.ToCheckRunResult("1.2.3", checksMetadata.Checks["1.2.3"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Passed}),
-				checkmodels.ToCheckRunResult("1.2.4", checksMetadata.Checks["1.2.4"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Passed}),
+				checkmodels.ToCheckRunResult("1.2.4", checksMetadata.Checks["1.2.4"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed}),
 			},
 		},
 		{
-			Name: "Organization with no limitations for repository deletion",
+			Name: "Should fail for organization with no limitations for repository deletion",
 			Data: &checkmodels.CheckData{
 
 				AssetsMetadata: builders.NewAssetsDataBuilder().
-					WithOrganization(builders.NewOrganizationBuilder().WithReposDeletionLimitation(false).WithMembersCanCreateRepos(true).WithIssuesDeletionLimitation(true).Build()).
-					WithRepository(builders.NewRepositoryBuilder().WithPrivate(true).WithSecurityMdFile(true).Build()).Build(),
+					WithOrganization(builders.NewOrganizationBuilder().WithReposDeletionLimitation(false).Build()).Build(),
 			},
 			Expected: []*checkmodels.CheckRunResult{
-				checkmodels.ToCheckRunResult("1.2.1", checksMetadata.Checks["1.2.1"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Passed}),
-				checkmodels.ToCheckRunResult("1.2.2", checksMetadata.Checks["1.2.2"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed}),
 				checkmodels.ToCheckRunResult("1.2.3", checksMetadata.Checks["1.2.3"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed}),
-				checkmodels.ToCheckRunResult("1.2.4", checksMetadata.Checks["1.2.4"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Passed}),
 			},
 		},
 		{
-			Name: "Organization with no limitations for issue deletion",
+			Name: "Valid input -all rules should pass",
 			Data: &checkmodels.CheckData{
-
-				AssetsMetadata: builders.NewAssetsDataBuilder().
-					WithOrganization(builders.NewOrganizationBuilder().WithReposDeletionLimitation(true).WithMembersCanCreateRepos(true).WithIssuesDeletionLimitation(false).Build()).
-					WithRepository(builders.NewRepositoryBuilder().WithPrivate(true).WithSecurityMdFile(true).Build()).Build(),
+				AssetsMetadata: builders.NewAssetsDataBuilder().Build(),
 			},
-			Expected: []*checkmodels.CheckRunResult{
-				checkmodels.ToCheckRunResult("1.2.1", checksMetadata.Checks["1.2.1"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Passed}),
-				checkmodels.ToCheckRunResult("1.2.2", checksMetadata.Checks["1.2.2"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed}),
-				checkmodels.ToCheckRunResult("1.2.3", checksMetadata.Checks["1.2.3"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Passed}),
-				checkmodels.ToCheckRunResult("1.2.4", checksMetadata.Checks["1.2.4"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed}),
-			},
-		},
-		{
-			Name: "Organization with limitations for repositories creation",
-			Data: &checkmodels.CheckData{
-
-				AssetsMetadata: builders.NewAssetsDataBuilder().
-					WithOrganization(builders.NewOrganizationBuilder().WithReposDeletionLimitation(true).WithMembersCanCreateRepos(false).WithIssuesDeletionLimitation(false).Build()).
-					WithRepository(builders.NewRepositoryBuilder().WithPrivate(true).WithSecurityMdFile(true).Build()).Build(),
-			},
-			Expected: []*checkmodels.CheckRunResult{
-				checkmodels.ToCheckRunResult("1.2.1", checksMetadata.Checks["1.2.1"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Passed}),
-				checkmodels.ToCheckRunResult("1.2.2", checksMetadata.Checks["1.2.2"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Passed}),
-				checkmodels.ToCheckRunResult("1.2.3", checksMetadata.Checks["1.2.3"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Passed}),
-				checkmodels.ToCheckRunResult("1.2.4", checksMetadata.Checks["1.2.4"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed}),
-			},
+			Expected: []*checkmodels.CheckRunResult{},
 		},
 	}
-	testutils.RunCheckTests(t, common.GetRegoRunAction(regoQuery, checksMetadata), tests)
+	testutils.RunCheckTests(t, common.GetRegoRunAction(regoQuery, checksMetadata), tests, checksMetadata)
 }

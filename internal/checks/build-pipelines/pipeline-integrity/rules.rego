@@ -22,7 +22,7 @@ sbom_generation_commands = [
 	`syft .*`,
 	`spdx-sbom-generator`,
 	`cyclonedx-\w+`,
-        `jake sbom`,
+	`jake sbom`,
 ]
 
 does_job_contain_one_of_tasks(job, regexes) {
@@ -41,35 +41,17 @@ is_task_version_pinned(step) {
 	step.task.version_type != "commit"
 }
 
-# In case pipelines weren't fetched
-CbPolicy[msg] {
-	not utilsLib.ensure_pipelines_fetched
-	msg = {"ids": ruleIds, "status": constsLib.status.Unknown}
-}
-
-# In case there are no pipelines
-CbPolicy[msg] {
-	utilsLib.ensure_pipelines_fetched
-	not utilsLib.ensure_pipelines_exists
-	msg = {"ids": ruleIds, "status": constsLib.status.Unknown, "details": "No pipelines were found"}
-}
-
-# Looking for tasks that are not pinned
-CbPolicy[msg] {
-	utilsLib.ensure_pipelines_fetched
-	unpinnedtaskCount := count({step |
+is_all_tasks_pinned[unpinnedtaskCount] {
+	unpinnedtaskCount = count({step |
 		step = input.Pipelines[_].jobs[_].steps[_]
 		is_task_version_pinned(step)
 	})
 
 	unpinnedtaskCount > 0
-	msg := {"ids": ["2.4.2"], "status": constsLib.status.Failed, "details": sprintf("%v task(s) are not pinned", [unpinnedtaskCount])}
 }
 
-# Looking for build jobs with an SBOM
-CbPolicy[msg] {
-	utilsLib.ensure_pipelines_fetched
-	pipelinesWithoutSBOM = count({i |
+are_there_pipelines_without_sbom[pipelinesWithoutSBOM] {
+	pipelinesWithoutSBOM := count({i |
 		input.Pipelines[i].jobs[j].metadata.build == true
 		job := input.Pipelines[i].jobs[j]
 		not does_job_contain_one_of_tasks(job, sbom_tasks)
@@ -77,5 +59,33 @@ CbPolicy[msg] {
 	})
 
 	pipelinesWithoutSBOM > 0
-	msg = {"ids": ["2.4.6"], "status": constsLib.status.Failed, "details": sprintf("%v pipeline(s) contain a build job without SBOM generation", [pipelinesWithoutSBOM])}
+}
+
+# In case pipelines weren't fetched
+CbPolicy[msg] {
+	utilsLib.is_pipelines_data_missing
+	msg = {"ids": ruleIds, "status": constsLib.status.Unknown}
+}
+
+# In case there are no pipelines
+CbPolicy[msg] {
+	not utilsLib.is_pipelines_data_missing
+	utilsLib.is_pipelines_list_empty
+	msg = {"ids": ruleIds, "status": constsLib.status.Unknown, "details": constsLib.details.pipeline_no_pipelines_found}
+}
+
+# Looking for tasks that are not pinned
+CbPolicy[msg] {
+	not utilsLib.is_pipelines_data_missing
+	unpinnedtaskCount := is_all_tasks_pinned[i]
+	details := sprintf("%v task(s) are not pinned", [unpinnedtaskCount])
+	msg := {"ids": ["2.4.2"], "status": constsLib.status.Failed, "details": details}
+}
+
+# Looking for build jobs with an SBOM
+CbPolicy[msg] {
+	not utilsLib.is_pipelines_data_missing
+	pipelinesWithoutSBOM := are_there_pipelines_without_sbom[i]
+	details := sprintf("%v pipeline(s) contain a build job without SBOM generation", [pipelinesWithoutSBOM])
+	msg = {"ids": ["2.4.6"], "status": constsLib.status.Failed, "details": details}
 }
