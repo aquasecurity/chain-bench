@@ -5,7 +5,7 @@ import (
 
 	"github.com/aquasecurity/chain-bench/internal/models/checkmodels"
 	"github.com/stretchr/testify/assert"
-	"golang.org/x/exp/slices"
+	funk "github.com/thoas/go-funk"
 )
 
 type CheckTest struct {
@@ -17,8 +17,8 @@ type CheckTest struct {
 
 var AuthorizedUserMockId = int64(1234)
 
-var SbomTask  = "CycloneDX/gh-dotnet-generate-sbom"
-var ArgonScannerAction  = "argonsecurity/scanner-action"
+var SbomTask = "CycloneDX/gh-dotnet-generate-sbom"
+var ArgonScannerAction = "argonsecurity/scanner-action"
 var TrivyScannerAction = "aquasecurity/trivy-action"
 
 func RunCheckTests(t *testing.T, testedAction checkmodels.CheckAction, tests []CheckTest, checksMetadata checkmodels.CheckMetadataMap) {
@@ -61,5 +61,7 @@ func generateChecksByMetdata(checksMetadata checkmodels.CheckMetadataMap, expect
 }
 
 func isCheckExistAlready(expectedResults []*checkmodels.CheckRunResult, checkId string) bool {
-	return slices.IndexFunc(expectedResults, func(c *checkmodels.CheckRunResult) bool { return c.ID == checkId }) != -1
+	return funk.Contains(expectedResults, func(c *checkmodels.CheckRunResult) bool {
+		return c.ID == checkId
+	})
 }
