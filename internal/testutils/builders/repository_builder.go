@@ -11,7 +11,51 @@ type RepositoryBuilder struct {
 }
 
 func NewRepositoryBuilder() *RepositoryBuilder {
-	return &RepositoryBuilder{repository: &models.Repository{}}
+	return &RepositoryBuilder{repository: &models.Repository{
+		AllowRebaseMerge: utils.GetPtr(true),
+		AllowSquashMerge: utils.GetPtr(true),
+		AllowMergeCommit: utils.GetPtr(false),
+		Collaborators: []*models.User{{
+			ID: utils.GetPtr(testutils.AuthorizedUserMockId),
+			Permissions: utils.GetPtr(map[string]bool{
+				"admin": true,
+			}),
+		}, {
+			ID: utils.GetPtr(int64(1)),
+			Permissions: utils.GetPtr(map[string]bool{
+				"admin": true,
+			}),
+		}},
+		IsPrivate:            utils.GetPtr(true),
+		IsContainsSecurityMd: true,
+		Hooks: []*models.Hook{{
+			URL: utils.GetPtr("https://endpoint.com"),
+			Config: &models.HookConfig{
+				URL:          utils.GetPtr("https://endpoint.com"),
+				Insecure_SSL: utils.GetPtr("0"),
+				Secret:       utils.GetPtr("**"),
+			},
+			Events: []string{"package"},
+		}},
+		Commits: []*models.RepositoryCommit{{
+			Author: &models.CommitAuthor{
+				Login: utils.GetPtr("user0"),
+			},
+		}, {
+			Author: &models.CommitAuthor{
+				Login: utils.GetPtr("user1"),
+			},
+		}, {
+			Author: &models.CommitAuthor{
+				Login: utils.GetPtr("user2"),
+			},
+		}, {
+			Author: &models.CommitAuthor{
+				Login: utils.GetPtr("user3"),
+			},
+		}},
+		Branches: []*models.Branch{NewBranchBuilder().Build()},
+	}}
 }
 
 func (b *RepositoryBuilder) WithID(id int64) *RepositoryBuilder {
@@ -21,6 +65,11 @@ func (b *RepositoryBuilder) WithID(id int64) *RepositoryBuilder {
 
 func (b *RepositoryBuilder) WithAllowRebaseMerge(enable bool) *RepositoryBuilder {
 	b.repository.AllowRebaseMerge = utils.GetPtr(enable)
+	return b
+}
+
+func (b *RepositoryBuilder) WithNoRepoPemissions() *RepositoryBuilder {
+	b.repository.AllowRebaseMerge = nil
 	return b
 }
 
@@ -34,6 +83,11 @@ func (b *RepositoryBuilder) WithAdminCollborator(admin bool, count int) *Reposit
 		})})
 	}
 
+	return b
+}
+
+func (b *RepositoryBuilder) WithNoCollborator() *RepositoryBuilder {
+	b.repository.Collaborators = nil
 	return b
 }
 
@@ -62,6 +116,11 @@ func (b *RepositoryBuilder) WithCommit(login string) *RepositoryBuilder {
 	return b
 }
 
+func (b *RepositoryBuilder) WithNoCommits() *RepositoryBuilder {
+	b.repository.Commits = nil
+	return b
+}
+
 func (b *RepositoryBuilder) WithPackageWebHooks(url string, is_ssl string, secret *string) *RepositoryBuilder {
 	b.repository.Hooks = []*models.Hook{{
 		URL: &url,
@@ -72,6 +131,11 @@ func (b *RepositoryBuilder) WithPackageWebHooks(url string, is_ssl string, secre
 		},
 		Events: []string{"package"},
 	}}
+	return b
+}
+
+func (b *RepositoryBuilder) WithBranch(branch *models.Branch) *RepositoryBuilder {
+	b.repository.Branches = append(b.repository.Branches, branch)
 	return b
 }
 

@@ -12,7 +12,7 @@ is_missing_repo_settings_permission {
 	input.Repository.AllowRebaseMerge == null
 }
 
-is_missing_org_hooks_permission {
+is_missing_hooks_permission {
 	missingOrgPerm := to_number(input.Organization.Hooks == null)
 	missingRepoPerm := to_number(input.Repository.Hooks == null)
 	missingOrgPerm + missingRepoPerm > 0

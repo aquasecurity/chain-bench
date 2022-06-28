@@ -10,7 +10,14 @@ type PackageRegistryBuilder struct {
 }
 
 func NewRegistryBuilder() *PackageRegistryBuilder {
-	return &PackageRegistryBuilder{registry: &models.PackageRegistry{}}
+	return &PackageRegistryBuilder{registry: &models.PackageRegistry{
+		TwoFactorRequirementEnabled: utils.GetPtr(true),
+		Packages: []*models.Package{{
+			PackageType: utils.GetPtr("npm"),
+			Visibility:  utils.GetPtr("private"),
+			Repository:  &models.Repository{IsPrivate: utils.GetPtr(true)},
+		}},
+	}}
 }
 
 func (p *PackageRegistryBuilder) WithTwoFactorAuthenticationEnabled(enabled bool) *PackageRegistryBuilder {
@@ -29,6 +36,11 @@ func (p *PackageRegistryBuilder) WithPackages(packagetype string, visability str
 	} else {
 		p.registry.Packages = append(p.registry.Packages, pkg)
 	}
+	return p
+}
+
+func (p *PackageRegistryBuilder) WithNoPackages() *PackageRegistryBuilder {
+	p.registry.Packages = nil
 	return p
 }
 

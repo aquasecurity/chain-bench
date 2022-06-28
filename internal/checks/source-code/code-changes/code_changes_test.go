@@ -2,30 +2,26 @@ package codechanges
 
 import (
 	"testing"
-	"time"
 
 	"github.com/aquasecurity/chain-bench/internal/checks/common"
+	"github.com/aquasecurity/chain-bench/internal/checks/consts"
 	"github.com/aquasecurity/chain-bench/internal/models/checkmodels"
 	"github.com/aquasecurity/chain-bench/internal/testutils"
 	"github.com/aquasecurity/chain-bench/internal/testutils/builders"
-	"github.com/aquasecurity/chain-bench/internal/utils"
 )
 
 func TestCodeChangesChecker(t *testing.T) {
 	tests := []testutils.CheckTest{
 		{
-			Name: "Organization with no branch protection",
+			Name: "Organization with no branch protection fails all tests related to branch protection",
 			Data: &checkmodels.CheckData{
-				AssetsMetadata: builders.NewAssetsDataBuilder().WithAuthorizedUser().WithOrganization(builders.NewOrganizationBuilder().Build()).
-					WithRepository(builders.NewRepositoryBuilder().WithAllowRebaseMerge(true).Build()).
-					WithBranch(builders.NewBranchBuilder().WithCommit("GD2", utils.Timestamp{Time: time.Now().AddDate(-1, 0, 0)}).Build()).Build(),
+				AssetsMetadata: builders.NewAssetsDataBuilder().WithBranchProtections(nil).Build(),
 			},
 			Expected: []*checkmodels.CheckRunResult{
 				checkmodels.ToCheckRunResult("1.1.3", checksMetadata.Checks["1.1.3"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed}),
 				checkmodels.ToCheckRunResult("1.1.4", checksMetadata.Checks["1.1.4"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed}),
-				checkmodels.ToCheckRunResult("1.1.5", checksMetadata.Checks["1.1.5"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Unknown}),
+				checkmodels.ToCheckRunResult("1.1.5", checksMetadata.Checks["1.1.5"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed}),
 				checkmodels.ToCheckRunResult("1.1.6", checksMetadata.Checks["1.1.6"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed}),
-				checkmodels.ToCheckRunResult("1.1.8", checksMetadata.Checks["1.1.8"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed, Details: "1 inactive branches"}),
 				checkmodels.ToCheckRunResult("1.1.9", checksMetadata.Checks["1.1.9"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed}),
 				checkmodels.ToCheckRunResult("1.1.10", checksMetadata.Checks["1.1.10"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed}),
 				checkmodels.ToCheckRunResult("1.1.11", checksMetadata.Checks["1.1.11"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed}),
@@ -37,22 +33,20 @@ func TestCodeChangesChecker(t *testing.T) {
 			},
 		},
 		{
-			Name: "Organization with no repo settings permission",
+			Name: "Organization with no repo settings permission - all tests related to branch protection return unknown",
 			Data: &checkmodels.CheckData{
-				AssetsMetadata: builders.NewAssetsDataBuilder().WithAuthorizedUser().WithOrganization(builders.NewOrganizationBuilder().Build()).
-					WithRepository(builders.NewRepositoryBuilder().Build()).
-					WithBranch(builders.NewBranchBuilder().WithCommit("GD2", utils.Timestamp{Time: time.Now().AddDate(-1, 0, 0)}).Build()).Build(),
+				AssetsMetadata: builders.NewAssetsDataBuilder().WithRepository(builders.NewRepositoryBuilder().WithNoRepoPemissions().Build()).Build(),
 			},
 			Expected: []*checkmodels.CheckRunResult{
 				checkmodels.ToCheckRunResult("1.1.3", checksMetadata.Checks["1.1.3"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Unknown}),
 				checkmodels.ToCheckRunResult("1.1.4", checksMetadata.Checks["1.1.4"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Unknown}),
 				checkmodels.ToCheckRunResult("1.1.5", checksMetadata.Checks["1.1.5"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Unknown}),
-				checkmodels.ToCheckRunResult("1.1.6", checksMetadata.Checks["1.1.6"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed}),
-				checkmodels.ToCheckRunResult("1.1.8", checksMetadata.Checks["1.1.8"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed, Details: "1 inactive branches"}),
+				checkmodels.ToCheckRunResult("1.1.6", checksMetadata.Checks["1.1.6"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Unknown}),
 				checkmodels.ToCheckRunResult("1.1.9", checksMetadata.Checks["1.1.9"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Unknown}),
 				checkmodels.ToCheckRunResult("1.1.10", checksMetadata.Checks["1.1.10"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Unknown}),
 				checkmodels.ToCheckRunResult("1.1.11", checksMetadata.Checks["1.1.11"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Unknown}),
 				checkmodels.ToCheckRunResult("1.1.12", checksMetadata.Checks["1.1.12"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Unknown}),
+				checkmodels.ToCheckRunResult("1.1.13", checksMetadata.Checks["1.1.13"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Unknown}),
 				checkmodels.ToCheckRunResult("1.1.14", checksMetadata.Checks["1.1.14"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Unknown}),
 				checkmodels.ToCheckRunResult("1.1.15", checksMetadata.Checks["1.1.15"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Unknown}),
 				checkmodels.ToCheckRunResult("1.1.16", checksMetadata.Checks["1.1.16"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Unknown}),
@@ -60,382 +54,166 @@ func TestCodeChangesChecker(t *testing.T) {
 			},
 		},
 		{
-			Name: "Organization with branch protection with enforce approval of two strongly authenticated users",
+			Name: "Should return unknown for repository with no collaborators",
 			Data: &checkmodels.CheckData{
-				AssetsMetadata: builders.NewAssetsDataBuilder().WithAuthorizedUser().WithOrganization(builders.NewOrganizationBuilder().Build()).
-					WithRepository(builders.NewRepositoryBuilder().WithAllowRebaseMerge(true).Build()).
-					WithBranch(builders.NewBranchBuilder().WithCommit("GD2", utils.Timestamp{Time: time.Now().AddDate(-1, 0, 0)}).Build()).
-					WithBranchProtections(builders.NewBranchProtectionBuilder().WithMinimumReviwersBeforeMerge(2).
-						Build()).Build(),
+				AssetsMetadata: builders.NewAssetsDataBuilder().WithRepository(builders.NewRepositoryBuilder().WithNoCollborator().Build()).Build(),
 			},
 			Expected: []*checkmodels.CheckRunResult{
-				checkmodels.ToCheckRunResult("1.1.3", checksMetadata.Checks["1.1.3"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Passed}),
-				checkmodels.ToCheckRunResult("1.1.4", checksMetadata.Checks["1.1.4"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed}),
 				checkmodels.ToCheckRunResult("1.1.5", checksMetadata.Checks["1.1.5"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Unknown}),
+			},
+		},
+		{
+			Name: "Should return unknown when authourized user is not admin",
+			Data: &checkmodels.CheckData{
+				AssetsMetadata: builders.NewAssetsDataBuilder().WithRepository(builders.NewRepositoryBuilder().WithAdminCollborator(true, 0).Build()).Build(),
+			},
+			Expected: []*checkmodels.CheckRunResult{
+				checkmodels.ToCheckRunResult("1.1.5", checksMetadata.Checks["1.1.5"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Unknown}),
+			},
+		},
+		{
+			Name: "Should fail when branch protection not requires dismissial restrictions",
+			Data: &checkmodels.CheckData{
+				AssetsMetadata: builders.NewAssetsDataBuilder().WithBranchProtections(builders.NewBranchProtectionBuilder().WithDismissalRestrictions(false).Build()).Build(),
+			},
+			Expected: []*checkmodels.CheckRunResult{
+				checkmodels.ToCheckRunResult("1.1.5", checksMetadata.Checks["1.1.5"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed}),
+			},
+		},
+		{
+			Name: "Should fail when branch protection not requires 2 minimum reviewers before merge",
+			Data: &checkmodels.CheckData{
+				AssetsMetadata: builders.NewAssetsDataBuilder().WithBranchProtections(builders.NewBranchProtectionBuilder().WithMinimumReviwersBeforeMerge(1).Build()).Build(),
+			},
+			Expected: []*checkmodels.CheckRunResult{
+				checkmodels.ToCheckRunResult("1.1.3", checksMetadata.Checks["1.1.3"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed}),
+			},
+		},
+		{
+			Name: "Should fail when branch protection not requires dismiss stale reviews",
+			Data: &checkmodels.CheckData{
+				AssetsMetadata: builders.NewAssetsDataBuilder().WithBranchProtections(builders.NewBranchProtectionBuilder().WithDismissStaleReviews(false).Build()).Build(),
+			},
+			Expected: []*checkmodels.CheckRunResult{
+				checkmodels.ToCheckRunResult("1.1.4", checksMetadata.Checks["1.1.4"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed}),
+			},
+		},
+		{
+			Name: "Should fail when branch protection not requires code owner review",
+			Data: &checkmodels.CheckData{
+				AssetsMetadata: builders.NewAssetsDataBuilder().WithBranchProtections(builders.NewBranchProtectionBuilder().WithCodeOwnersReview(false).Build()).Build(),
+			},
+			Expected: []*checkmodels.CheckRunResult{
 				checkmodels.ToCheckRunResult("1.1.6", checksMetadata.Checks["1.1.6"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed}),
+			},
+		},
+		{
+			Name: "Should fail when repository with inactive branches",
+			Data: &checkmodels.CheckData{
+				AssetsMetadata: builders.NewAssetsDataBuilder().WithRepository(builders.NewRepositoryBuilder().WithBranch(builders.NewBranchBuilder().WithOldCommit().Build()).Build()).Build(),
+			},
+			Expected: []*checkmodels.CheckRunResult{
 				checkmodels.ToCheckRunResult("1.1.8", checksMetadata.Checks["1.1.8"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed, Details: "1 inactive branches"}),
+			},
+		},
+		{
+			Name: "Should fail when branch protection not requires status checks before merge",
+			Data: &checkmodels.CheckData{
+				AssetsMetadata: builders.NewAssetsDataBuilder().WithBranchProtections(builders.NewBranchProtectionBuilder().WithStatusCheckEnabled(false).Build()).Build(),
+			},
+			Expected: []*checkmodels.CheckRunResult{
 				checkmodels.ToCheckRunResult("1.1.9", checksMetadata.Checks["1.1.9"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed}),
 				checkmodels.ToCheckRunResult("1.1.10", checksMetadata.Checks["1.1.10"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed}),
-				checkmodels.ToCheckRunResult("1.1.11", checksMetadata.Checks["1.1.11"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed}),
-				checkmodels.ToCheckRunResult("1.1.12", checksMetadata.Checks["1.1.12"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed}),
-				checkmodels.ToCheckRunResult("1.1.14", checksMetadata.Checks["1.1.14"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed}),
-				checkmodels.ToCheckRunResult("1.1.15", checksMetadata.Checks["1.1.15"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed}),
-				checkmodels.ToCheckRunResult("1.1.16", checksMetadata.Checks["1.1.16"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed}),
-				checkmodels.ToCheckRunResult("1.1.17", checksMetadata.Checks["1.1.17"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed}),
 			},
 		},
 		{
-			Name: "Organization with branch protection with dissmiss stale approvals",
+			Name: "Should fail when branch protection not requires branch to be up to date before merge",
 			Data: &checkmodels.CheckData{
-				AssetsMetadata: builders.NewAssetsDataBuilder().WithAuthorizedUser().WithOrganization(builders.NewOrganizationBuilder().Build()).
-					WithRepository(builders.NewRepositoryBuilder().WithAllowRebaseMerge(true).Build()).
-					WithBranch(builders.NewBranchBuilder().WithCommit("GD2", utils.Timestamp{Time: time.Now().AddDate(-1, 0, 0)}).Build()).
-					WithBranchProtections(builders.NewBranchProtectionBuilder().WithDismissStaleReviews(true).
-						Build()).Build(),
+				AssetsMetadata: builders.NewAssetsDataBuilder().WithBranchProtections(builders.NewBranchProtectionBuilder().WithStrictMode(false).Build()).Build(),
 			},
 			Expected: []*checkmodels.CheckRunResult{
-				checkmodels.ToCheckRunResult("1.1.3", checksMetadata.Checks["1.1.3"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed}),
-				checkmodels.ToCheckRunResult("1.1.4", checksMetadata.Checks["1.1.4"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Passed}),
-				checkmodels.ToCheckRunResult("1.1.5", checksMetadata.Checks["1.1.5"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Unknown}),
-				checkmodels.ToCheckRunResult("1.1.6", checksMetadata.Checks["1.1.6"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed}),
-				checkmodels.ToCheckRunResult("1.1.8", checksMetadata.Checks["1.1.8"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed, Details: "1 inactive branches"}),
-				checkmodels.ToCheckRunResult("1.1.9", checksMetadata.Checks["1.1.9"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed}),
 				checkmodels.ToCheckRunResult("1.1.10", checksMetadata.Checks["1.1.10"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed}),
+			},
+		},
+		{
+			Name: "Should fail when branch protection not requires conversation resolution",
+			Data: &checkmodels.CheckData{
+				AssetsMetadata: builders.NewAssetsDataBuilder().WithBranchProtections(builders.NewBranchProtectionBuilder().WithResolveConversations(false).Build()).Build(),
+			},
+			Expected: []*checkmodels.CheckRunResult{
 				checkmodels.ToCheckRunResult("1.1.11", checksMetadata.Checks["1.1.11"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed}),
+			},
+		},
+		{
+			Name: "Should fail when branch protection not requires signed commits",
+			Data: &checkmodels.CheckData{
+				AssetsMetadata: builders.NewAssetsDataBuilder().WithBranchProtections(builders.NewBranchProtectionBuilder().WithRequiredSignedCommits(false).Build()).Build(),
+			},
+			Expected: []*checkmodels.CheckRunResult{
 				checkmodels.ToCheckRunResult("1.1.12", checksMetadata.Checks["1.1.12"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed}),
+			},
+		},
+		{
+			Name: "Should fail when repositoty allows merge commit",
+			Data: &checkmodels.CheckData{
+				AssetsMetadata: builders.NewAssetsDataBuilder().WithRepository(builders.NewRepositoryBuilder().WithAllowMergeCommit(true).Build()).Build(),
+			},
+			Expected: []*checkmodels.CheckRunResult{
+				checkmodels.ToCheckRunResult("1.1.13", checksMetadata.Checks["1.1.13"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed, Details: consts.Details_linearHistory_mergeCommitEnabled}),
+			},
+		},
+		{
+			Name: "Should fail when repository with all merge options prevented",
+			Data: &checkmodels.CheckData{
+				AssetsMetadata: builders.NewAssetsDataBuilder().WithRepository(builders.NewRepositoryBuilder().WithAllowMergeCommit(false).WithAllowRebaseMerge(false).WithAllowSquashMerge(false).Build()).Build(),
+			},
+			Expected: []*checkmodels.CheckRunResult{
+				checkmodels.ToCheckRunResult("1.1.13", checksMetadata.Checks["1.1.13"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed, Details: consts.Details_linearHistory_requireRebaseOrSquashCommitEnabled}),
+			},
+		},
+		{
+			Name: "Should fail when branch protection not enforced on admins",
+			Data: &checkmodels.CheckData{
+				AssetsMetadata: builders.NewAssetsDataBuilder().WithBranchProtections(builders.NewBranchProtectionBuilder().WithEnforceAdmin(false).Build()).Build(),
+			},
+			Expected: []*checkmodels.CheckRunResult{
 				checkmodels.ToCheckRunResult("1.1.14", checksMetadata.Checks["1.1.14"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed}),
+			},
+		},
+		{
+			Name: "Should fail when branch protection doesnt include restriction for pushing",
+			Data: &checkmodels.CheckData{
+				AssetsMetadata: builders.NewAssetsDataBuilder().WithBranchProtections(builders.NewBranchProtectionBuilder().WithPushRestrictions(false).Build()).Build(),
+			},
+			Expected: []*checkmodels.CheckRunResult{
 				checkmodels.ToCheckRunResult("1.1.15", checksMetadata.Checks["1.1.15"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed}),
+			},
+		},
+		{
+			Name: "Should fail when branch protection doesnt include restriction for force push",
+			Data: &checkmodels.CheckData{
+				AssetsMetadata: builders.NewAssetsDataBuilder().WithBranchProtections(builders.NewBranchProtectionBuilder().WithForcePush(false).Build()).Build(),
+			},
+			Expected: []*checkmodels.CheckRunResult{
 				checkmodels.ToCheckRunResult("1.1.16", checksMetadata.Checks["1.1.16"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed}),
+			},
+		},
+		{
+			Name: "Should fail when branch protection doesnt include restriction for deleting branch",
+			Data: &checkmodels.CheckData{
+				AssetsMetadata: builders.NewAssetsDataBuilder().WithBranchProtections(builders.NewBranchProtectionBuilder().WithDeleteBranch(false).Build()).Build(),
+			},
+			Expected: []*checkmodels.CheckRunResult{
 				checkmodels.ToCheckRunResult("1.1.17", checksMetadata.Checks["1.1.17"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed}),
 			},
 		},
 		{
-			Name: "Organization with branch protection with restriction on who can dismiss",
+			Name: "Valid input - all rules should pass",
 			Data: &checkmodels.CheckData{
-				AssetsMetadata: builders.NewAssetsDataBuilder().WithAuthorizedUser().WithOrganization(builders.NewOrganizationBuilder().Build()).
-					WithRepository(builders.NewRepositoryBuilder().WithAdminCollborator(true, 1).WithAllowRebaseMerge(true).Build()).
-					WithBranch(builders.NewBranchBuilder().WithCommit("GD2", utils.Timestamp{Time: time.Now().AddDate(-1, 0, 0)}).Build()).
-					WithBranchProtections(builders.NewBranchProtectionBuilder().WithDismissalRestrictions(true).
-						Build()).Build(),
+				AssetsMetadata: builders.NewAssetsDataBuilder().Build(),
 			},
-			Expected: []*checkmodels.CheckRunResult{
-				checkmodels.ToCheckRunResult("1.1.3", checksMetadata.Checks["1.1.3"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed}),
-				checkmodels.ToCheckRunResult("1.1.4", checksMetadata.Checks["1.1.4"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed}),
-				checkmodels.ToCheckRunResult("1.1.5", checksMetadata.Checks["1.1.5"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Passed}),
-				checkmodels.ToCheckRunResult("1.1.6", checksMetadata.Checks["1.1.6"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed}),
-				checkmodels.ToCheckRunResult("1.1.8", checksMetadata.Checks["1.1.8"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed, Details: "1 inactive branches"}),
-				checkmodels.ToCheckRunResult("1.1.9", checksMetadata.Checks["1.1.9"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed}),
-				checkmodels.ToCheckRunResult("1.1.10", checksMetadata.Checks["1.1.10"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed}),
-				checkmodels.ToCheckRunResult("1.1.11", checksMetadata.Checks["1.1.11"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed}),
-				checkmodels.ToCheckRunResult("1.1.12", checksMetadata.Checks["1.1.12"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed}),
-				checkmodels.ToCheckRunResult("1.1.14", checksMetadata.Checks["1.1.14"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed}),
-				checkmodels.ToCheckRunResult("1.1.15", checksMetadata.Checks["1.1.15"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed}),
-				checkmodels.ToCheckRunResult("1.1.16", checksMetadata.Checks["1.1.16"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed}),
-				checkmodels.ToCheckRunResult("1.1.17", checksMetadata.Checks["1.1.17"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed}),
-			},
-		},
-		{
-			Name: "Organization with branch protection with restriction on who can dismiss and authorized user with no admin permissions",
-			Data: &checkmodels.CheckData{
-				AssetsMetadata: builders.NewAssetsDataBuilder().WithAuthorizedUser().WithOrganization(builders.NewOrganizationBuilder().Build()).
-					WithRepository(builders.NewRepositoryBuilder().WithAllowRebaseMerge(true).WithAdminCollborator(false, 1).Build()).
-					WithBranch(builders.NewBranchBuilder().WithCommit("GD2", utils.Timestamp{Time: time.Now().AddDate(-1, 0, 0)}).Build()).
-					WithBranchProtections(builders.NewBranchProtectionBuilder().WithDismissalRestrictions(true).
-						Build()).Build(),
-			},
-			Expected: []*checkmodels.CheckRunResult{
-				checkmodels.ToCheckRunResult("1.1.3", checksMetadata.Checks["1.1.3"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed}),
-				checkmodels.ToCheckRunResult("1.1.4", checksMetadata.Checks["1.1.4"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed}),
-				checkmodels.ToCheckRunResult("1.1.5", checksMetadata.Checks["1.1.5"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Unknown}),
-				checkmodels.ToCheckRunResult("1.1.6", checksMetadata.Checks["1.1.6"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed}),
-				checkmodels.ToCheckRunResult("1.1.8", checksMetadata.Checks["1.1.8"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed, Details: "1 inactive branches"}),
-				checkmodels.ToCheckRunResult("1.1.9", checksMetadata.Checks["1.1.9"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed}),
-				checkmodels.ToCheckRunResult("1.1.10", checksMetadata.Checks["1.1.10"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed}),
-				checkmodels.ToCheckRunResult("1.1.11", checksMetadata.Checks["1.1.11"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed}),
-				checkmodels.ToCheckRunResult("1.1.12", checksMetadata.Checks["1.1.12"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed}),
-				checkmodels.ToCheckRunResult("1.1.14", checksMetadata.Checks["1.1.14"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed}),
-				checkmodels.ToCheckRunResult("1.1.15", checksMetadata.Checks["1.1.15"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed}),
-				checkmodels.ToCheckRunResult("1.1.16", checksMetadata.Checks["1.1.16"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed}),
-				checkmodels.ToCheckRunResult("1.1.17", checksMetadata.Checks["1.1.17"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed}),
-			},
-		},
-		{
-			Name: "Organization with branch protection with code owners enforcement",
-			Data: &checkmodels.CheckData{
-				AssetsMetadata: builders.NewAssetsDataBuilder().WithAuthorizedUser().WithOrganization(builders.NewOrganizationBuilder().Build()).
-					WithRepository(builders.NewRepositoryBuilder().WithAllowRebaseMerge(true).Build()).
-					WithBranch(builders.NewBranchBuilder().WithCommit("GD2", utils.Timestamp{Time: time.Now().AddDate(-1, 0, 0)}).Build()).
-					WithBranchProtections(builders.NewBranchProtectionBuilder().WithCodeOwnersReview(true).
-						Build()).Build(),
-			},
-			Expected: []*checkmodels.CheckRunResult{
-				checkmodels.ToCheckRunResult("1.1.3", checksMetadata.Checks["1.1.3"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed}),
-				checkmodels.ToCheckRunResult("1.1.4", checksMetadata.Checks["1.1.4"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed}),
-				checkmodels.ToCheckRunResult("1.1.5", checksMetadata.Checks["1.1.5"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Unknown}),
-				checkmodels.ToCheckRunResult("1.1.6", checksMetadata.Checks["1.1.6"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Passed}),
-				checkmodels.ToCheckRunResult("1.1.8", checksMetadata.Checks["1.1.8"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed, Details: "1 inactive branches"}),
-				checkmodels.ToCheckRunResult("1.1.9", checksMetadata.Checks["1.1.9"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed}),
-				checkmodels.ToCheckRunResult("1.1.10", checksMetadata.Checks["1.1.10"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed}),
-				checkmodels.ToCheckRunResult("1.1.11", checksMetadata.Checks["1.1.11"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed}),
-				checkmodels.ToCheckRunResult("1.1.12", checksMetadata.Checks["1.1.12"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed}),
-				checkmodels.ToCheckRunResult("1.1.14", checksMetadata.Checks["1.1.14"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed}),
-				checkmodels.ToCheckRunResult("1.1.15", checksMetadata.Checks["1.1.15"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed}),
-				checkmodels.ToCheckRunResult("1.1.16", checksMetadata.Checks["1.1.16"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed}),
-				checkmodels.ToCheckRunResult("1.1.17", checksMetadata.Checks["1.1.17"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed}),
-			},
-		},
-		{
-			Name: "Organization that enforce inactive branches",
-			Data: &checkmodels.CheckData{
-				AssetsMetadata: builders.NewAssetsDataBuilder().WithAuthorizedUser().WithOrganization(builders.NewOrganizationBuilder().Build()).
-					WithRepository(builders.NewRepositoryBuilder().WithAllowRebaseMerge(true).Build()).
-					WithBranch(builders.NewBranchBuilder().WithCommit("GD2", utils.Timestamp{Time: time.Now()}).Build()).
-					WithBranchProtections(builders.NewBranchProtectionBuilder().WithDismissStaleReviews(false).
-						Build()).Build(),
-			},
-			Expected: []*checkmodels.CheckRunResult{
-				checkmodels.ToCheckRunResult("1.1.3", checksMetadata.Checks["1.1.3"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed}),
-				checkmodels.ToCheckRunResult("1.1.4", checksMetadata.Checks["1.1.4"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed}),
-				checkmodels.ToCheckRunResult("1.1.5", checksMetadata.Checks["1.1.5"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Unknown}),
-				checkmodels.ToCheckRunResult("1.1.6", checksMetadata.Checks["1.1.6"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed}),
-				checkmodels.ToCheckRunResult("1.1.8", checksMetadata.Checks["1.1.8"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Passed}),
-				checkmodels.ToCheckRunResult("1.1.9", checksMetadata.Checks["1.1.9"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed}),
-				checkmodels.ToCheckRunResult("1.1.10", checksMetadata.Checks["1.1.10"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed}),
-				checkmodels.ToCheckRunResult("1.1.11", checksMetadata.Checks["1.1.11"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed}),
-				checkmodels.ToCheckRunResult("1.1.12", checksMetadata.Checks["1.1.12"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed}),
-				checkmodels.ToCheckRunResult("1.1.14", checksMetadata.Checks["1.1.14"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed}),
-				checkmodels.ToCheckRunResult("1.1.15", checksMetadata.Checks["1.1.15"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed}),
-				checkmodels.ToCheckRunResult("1.1.16", checksMetadata.Checks["1.1.16"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed}),
-				checkmodels.ToCheckRunResult("1.1.17", checksMetadata.Checks["1.1.17"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed}),
-			},
-		},
-		{
-			Name: "Organization with branch protection with enforce that checks have passed before merge and no enforce that branch is up to date berfore merge",
-			Data: &checkmodels.CheckData{
-				AssetsMetadata: builders.NewAssetsDataBuilder().WithAuthorizedUser().WithOrganization(builders.NewOrganizationBuilder().Build()).
-					WithRepository(builders.NewRepositoryBuilder().WithAllowRebaseMerge(true).Build()).
-					WithBranch(builders.NewBranchBuilder().WithCommit("GD2", utils.Timestamp{Time: time.Now().AddDate(-1, 0, 0)}).Build()).
-					WithBranchProtections(builders.NewBranchProtectionBuilder().WithStatusCheckEnabled().WithRequireBranchToBeUpToDate(false).
-						Build()).Build(),
-			},
-			Expected: []*checkmodels.CheckRunResult{
-				checkmodels.ToCheckRunResult("1.1.3", checksMetadata.Checks["1.1.3"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed}),
-				checkmodels.ToCheckRunResult("1.1.4", checksMetadata.Checks["1.1.4"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed}),
-				checkmodels.ToCheckRunResult("1.1.5", checksMetadata.Checks["1.1.5"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Unknown}),
-				checkmodels.ToCheckRunResult("1.1.6", checksMetadata.Checks["1.1.6"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed}),
-				checkmodels.ToCheckRunResult("1.1.8", checksMetadata.Checks["1.1.8"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed, Details: "1 inactive branches"}),
-				checkmodels.ToCheckRunResult("1.1.9", checksMetadata.Checks["1.1.9"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Passed}),
-				checkmodels.ToCheckRunResult("1.1.10", checksMetadata.Checks["1.1.10"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed}),
-				checkmodels.ToCheckRunResult("1.1.11", checksMetadata.Checks["1.1.11"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed}),
-				checkmodels.ToCheckRunResult("1.1.12", checksMetadata.Checks["1.1.12"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed}),
-				checkmodels.ToCheckRunResult("1.1.14", checksMetadata.Checks["1.1.14"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed}),
-				checkmodels.ToCheckRunResult("1.1.15", checksMetadata.Checks["1.1.15"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed}),
-				checkmodels.ToCheckRunResult("1.1.16", checksMetadata.Checks["1.1.16"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed}),
-				checkmodels.ToCheckRunResult("1.1.17", checksMetadata.Checks["1.1.17"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed}),
-			},
-		},
-		{
-			Name: "Organization with branch protection with enforce that checks have passed before merge and with enforce that branch is up to date berfore merge",
-			Data: &checkmodels.CheckData{
-				AssetsMetadata: builders.NewAssetsDataBuilder().WithAuthorizedUser().WithOrganization(builders.NewOrganizationBuilder().Build()).
-					WithRepository(builders.NewRepositoryBuilder().WithAllowRebaseMerge(true).Build()).
-					WithBranch(builders.NewBranchBuilder().WithCommit("GD2", utils.Timestamp{Time: time.Now().AddDate(-1, 0, 0)}).Build()).
-					WithBranchProtections(builders.NewBranchProtectionBuilder().WithStatusCheckEnabled().WithRequireBranchToBeUpToDate(true).
-						Build()).Build(),
-			},
-			Expected: []*checkmodels.CheckRunResult{
-				checkmodels.ToCheckRunResult("1.1.3", checksMetadata.Checks["1.1.3"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed}),
-				checkmodels.ToCheckRunResult("1.1.4", checksMetadata.Checks["1.1.4"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed}),
-				checkmodels.ToCheckRunResult("1.1.5", checksMetadata.Checks["1.1.5"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Unknown}),
-				checkmodels.ToCheckRunResult("1.1.6", checksMetadata.Checks["1.1.6"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed}),
-				checkmodels.ToCheckRunResult("1.1.8", checksMetadata.Checks["1.1.8"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed, Details: "1 inactive branches"}),
-				checkmodels.ToCheckRunResult("1.1.9", checksMetadata.Checks["1.1.9"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Passed}),
-				checkmodels.ToCheckRunResult("1.1.10", checksMetadata.Checks["1.1.10"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Passed}),
-				checkmodels.ToCheckRunResult("1.1.11", checksMetadata.Checks["1.1.11"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed}),
-				checkmodels.ToCheckRunResult("1.1.12", checksMetadata.Checks["1.1.12"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed}),
-				checkmodels.ToCheckRunResult("1.1.14", checksMetadata.Checks["1.1.14"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed}),
-				checkmodels.ToCheckRunResult("1.1.15", checksMetadata.Checks["1.1.15"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed}),
-				checkmodels.ToCheckRunResult("1.1.16", checksMetadata.Checks["1.1.16"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed}),
-				checkmodels.ToCheckRunResult("1.1.17", checksMetadata.Checks["1.1.17"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed}),
-			},
-		},
-		{
-			Name: "Organization with branch protection with enforce of resolve converstation before merge",
-			Data: &checkmodels.CheckData{
-				AssetsMetadata: builders.NewAssetsDataBuilder().WithAuthorizedUser().WithOrganization(builders.NewOrganizationBuilder().Build()).
-					WithRepository(builders.NewRepositoryBuilder().WithAllowRebaseMerge(true).Build()).
-					WithBranch(builders.NewBranchBuilder().WithCommit("GD2", utils.Timestamp{Time: time.Now().AddDate(-1, 0, 0)}).Build()).
-					WithBranchProtections(builders.NewBranchProtectionBuilder().WithResolveConversations(true).
-						Build()).Build(),
-			},
-			Expected: []*checkmodels.CheckRunResult{
-				checkmodels.ToCheckRunResult("1.1.3", checksMetadata.Checks["1.1.3"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed}),
-				checkmodels.ToCheckRunResult("1.1.4", checksMetadata.Checks["1.1.4"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed}),
-				checkmodels.ToCheckRunResult("1.1.5", checksMetadata.Checks["1.1.5"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Unknown}),
-				checkmodels.ToCheckRunResult("1.1.6", checksMetadata.Checks["1.1.6"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed}),
-				checkmodels.ToCheckRunResult("1.1.8", checksMetadata.Checks["1.1.8"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed, Details: "1 inactive branches"}),
-				checkmodels.ToCheckRunResult("1.1.9", checksMetadata.Checks["1.1.9"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed}),
-				checkmodels.ToCheckRunResult("1.1.10", checksMetadata.Checks["1.1.10"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed}),
-				checkmodels.ToCheckRunResult("1.1.11", checksMetadata.Checks["1.1.11"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Passed}),
-				checkmodels.ToCheckRunResult("1.1.12", checksMetadata.Checks["1.1.12"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed}),
-				checkmodels.ToCheckRunResult("1.1.14", checksMetadata.Checks["1.1.14"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed}),
-				checkmodels.ToCheckRunResult("1.1.15", checksMetadata.Checks["1.1.15"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed}),
-				checkmodels.ToCheckRunResult("1.1.16", checksMetadata.Checks["1.1.16"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed}),
-				checkmodels.ToCheckRunResult("1.1.17", checksMetadata.Checks["1.1.17"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed}),
-			},
-		},
-		{
-			Name: "Organization with branch protection rules enforce on admins",
-			Data: &checkmodels.CheckData{
-				AssetsMetadata: builders.NewAssetsDataBuilder().WithAuthorizedUser().WithOrganization(builders.NewOrganizationBuilder().Build()).
-					WithRepository(builders.NewRepositoryBuilder().WithAllowRebaseMerge(true).Build()).
-					WithBranch(builders.NewBranchBuilder().WithCommit("GD2", utils.Timestamp{Time: time.Now().AddDate(-1, 0, 0)}).Build()).
-					WithBranchProtections(builders.NewBranchProtectionBuilder().WithEnforceAdmin(true).
-						Build()).Build(),
-			},
-			Expected: []*checkmodels.CheckRunResult{
-				checkmodels.ToCheckRunResult("1.1.3", checksMetadata.Checks["1.1.3"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed}),
-				checkmodels.ToCheckRunResult("1.1.4", checksMetadata.Checks["1.1.4"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed}),
-				checkmodels.ToCheckRunResult("1.1.5", checksMetadata.Checks["1.1.5"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Unknown}),
-				checkmodels.ToCheckRunResult("1.1.6", checksMetadata.Checks["1.1.6"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed}),
-				checkmodels.ToCheckRunResult("1.1.8", checksMetadata.Checks["1.1.8"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed, Details: "1 inactive branches"}),
-				checkmodels.ToCheckRunResult("1.1.9", checksMetadata.Checks["1.1.9"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed}),
-				checkmodels.ToCheckRunResult("1.1.10", checksMetadata.Checks["1.1.10"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed}),
-				checkmodels.ToCheckRunResult("1.1.11", checksMetadata.Checks["1.1.11"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed}),
-				checkmodels.ToCheckRunResult("1.1.12", checksMetadata.Checks["1.1.12"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed}),
-				checkmodels.ToCheckRunResult("1.1.14", checksMetadata.Checks["1.1.14"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Passed}),
-				checkmodels.ToCheckRunResult("1.1.15", checksMetadata.Checks["1.1.15"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed}),
-				checkmodels.ToCheckRunResult("1.1.16", checksMetadata.Checks["1.1.16"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed}),
-				checkmodels.ToCheckRunResult("1.1.17", checksMetadata.Checks["1.1.17"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed}),
-			},
-		},
-		{
-			Name: "Organization with branch protection that restrict who can push",
-			Data: &checkmodels.CheckData{
-				AssetsMetadata: builders.NewAssetsDataBuilder().WithOrganization(builders.NewOrganizationBuilder().Build()).
-					WithRepository(builders.NewRepositoryBuilder().WithAllowRebaseMerge(true).Build()).
-					WithBranch(builders.NewBranchBuilder().WithCommit("GD2", utils.Timestamp{Time: time.Now().AddDate(-1, 0, 0)}).Build()).
-					WithBranchProtections(builders.NewBranchProtectionBuilder().WithPushRestrictions(true).
-						Build()).Build(),
-			},
-			Expected: []*checkmodels.CheckRunResult{
-				checkmodels.ToCheckRunResult("1.1.3", checksMetadata.Checks["1.1.3"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed}),
-				checkmodels.ToCheckRunResult("1.1.4", checksMetadata.Checks["1.1.4"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed}),
-				checkmodels.ToCheckRunResult("1.1.5", checksMetadata.Checks["1.1.5"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Unknown}),
-				checkmodels.ToCheckRunResult("1.1.6", checksMetadata.Checks["1.1.6"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed}),
-				checkmodels.ToCheckRunResult("1.1.8", checksMetadata.Checks["1.1.8"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed, Details: "1 inactive branches"}),
-				checkmodels.ToCheckRunResult("1.1.9", checksMetadata.Checks["1.1.9"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed}),
-				checkmodels.ToCheckRunResult("1.1.10", checksMetadata.Checks["1.1.10"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed}),
-				checkmodels.ToCheckRunResult("1.1.11", checksMetadata.Checks["1.1.11"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed}),
-				checkmodels.ToCheckRunResult("1.1.12", checksMetadata.Checks["1.1.12"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed}),
-				checkmodels.ToCheckRunResult("1.1.14", checksMetadata.Checks["1.1.14"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed}),
-				checkmodels.ToCheckRunResult("1.1.15", checksMetadata.Checks["1.1.15"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Passed}),
-				checkmodels.ToCheckRunResult("1.1.16", checksMetadata.Checks["1.1.16"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed}),
-				checkmodels.ToCheckRunResult("1.1.17", checksMetadata.Checks["1.1.17"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed}),
-			},
-		},
-		{
-			Name: "Organization with branch protection that restrict who can push",
-			Data: &checkmodels.CheckData{
-				AssetsMetadata: builders.NewAssetsDataBuilder().WithOrganization(builders.NewOrganizationBuilder().Build()).
-					WithRepository(builders.NewRepositoryBuilder().WithAllowRebaseMerge(true).Build()).
-					WithBranch(builders.NewBranchBuilder().WithCommit("GD2", utils.Timestamp{Time: time.Now().AddDate(-1, 0, 0)}).Build()).
-					WithBranchProtections(builders.NewBranchProtectionBuilder().WithForcePush(true).
-						Build()).Build(),
-			},
-			Expected: []*checkmodels.CheckRunResult{
-				checkmodels.ToCheckRunResult("1.1.3", checksMetadata.Checks["1.1.3"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed}),
-				checkmodels.ToCheckRunResult("1.1.4", checksMetadata.Checks["1.1.4"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed}),
-				checkmodels.ToCheckRunResult("1.1.5", checksMetadata.Checks["1.1.5"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Unknown}),
-				checkmodels.ToCheckRunResult("1.1.6", checksMetadata.Checks["1.1.6"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed}),
-				checkmodels.ToCheckRunResult("1.1.8", checksMetadata.Checks["1.1.8"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed, Details: "1 inactive branches"}),
-				checkmodels.ToCheckRunResult("1.1.9", checksMetadata.Checks["1.1.9"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed}),
-				checkmodels.ToCheckRunResult("1.1.10", checksMetadata.Checks["1.1.10"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed}),
-				checkmodels.ToCheckRunResult("1.1.11", checksMetadata.Checks["1.1.11"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed}),
-				checkmodels.ToCheckRunResult("1.1.12", checksMetadata.Checks["1.1.12"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed}),
-				checkmodels.ToCheckRunResult("1.1.14", checksMetadata.Checks["1.1.14"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed}),
-				checkmodels.ToCheckRunResult("1.1.15", checksMetadata.Checks["1.1.15"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed}),
-				checkmodels.ToCheckRunResult("1.1.16", checksMetadata.Checks["1.1.16"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Passed}),
-				checkmodels.ToCheckRunResult("1.1.17", checksMetadata.Checks["1.1.17"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed}),
-			},
-		},
-		{
-			Name: "Organization with branch protection that restrict who can push",
-			Data: &checkmodels.CheckData{
-				AssetsMetadata: builders.NewAssetsDataBuilder().WithOrganization(builders.NewOrganizationBuilder().Build()).
-					WithRepository(builders.NewRepositoryBuilder().WithAllowRebaseMerge(true).Build()).
-					WithBranch(builders.NewBranchBuilder().WithCommit("GD2", utils.Timestamp{Time: time.Now().AddDate(-1, 0, 0)}).Build()).
-					WithBranchProtections(builders.NewBranchProtectionBuilder().WithDeleteBranch(true).
-						Build()).Build(),
-			},
-			Expected: []*checkmodels.CheckRunResult{
-				checkmodels.ToCheckRunResult("1.1.3", checksMetadata.Checks["1.1.3"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed}),
-				checkmodels.ToCheckRunResult("1.1.4", checksMetadata.Checks["1.1.4"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed}),
-				checkmodels.ToCheckRunResult("1.1.5", checksMetadata.Checks["1.1.5"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Unknown}),
-				checkmodels.ToCheckRunResult("1.1.6", checksMetadata.Checks["1.1.6"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed}),
-				checkmodels.ToCheckRunResult("1.1.8", checksMetadata.Checks["1.1.8"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed, Details: "1 inactive branches"}),
-				checkmodels.ToCheckRunResult("1.1.9", checksMetadata.Checks["1.1.9"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed}),
-				checkmodels.ToCheckRunResult("1.1.10", checksMetadata.Checks["1.1.10"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed}),
-				checkmodels.ToCheckRunResult("1.1.11", checksMetadata.Checks["1.1.11"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed}),
-				checkmodels.ToCheckRunResult("1.1.12", checksMetadata.Checks["1.1.12"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed}),
-				checkmodels.ToCheckRunResult("1.1.14", checksMetadata.Checks["1.1.14"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed}),
-				checkmodels.ToCheckRunResult("1.1.15", checksMetadata.Checks["1.1.15"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed}),
-				checkmodels.ToCheckRunResult("1.1.16", checksMetadata.Checks["1.1.16"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed}),
-				checkmodels.ToCheckRunResult("1.1.17", checksMetadata.Checks["1.1.17"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Passed}),
-			},
-		},
-		{
-			Name: "Organization with branch protection that require signed commits",
-			Data: &checkmodels.CheckData{
-				AssetsMetadata: builders.NewAssetsDataBuilder().WithOrganization(builders.NewOrganizationBuilder().Build()).
-					WithRepository(builders.NewRepositoryBuilder().WithAllowRebaseMerge(true).Build()).
-					WithBranch(builders.NewBranchBuilder().WithCommit("GD2", utils.Timestamp{Time: time.Now().AddDate(-1, 0, 0)}).Build()).
-					WithBranchProtections(builders.NewBranchProtectionBuilder().WithRequiredSignedCommits(true).
-						Build()).Build(),
-			},
-			Expected: []*checkmodels.CheckRunResult{
-				checkmodels.ToCheckRunResult("1.1.3", checksMetadata.Checks["1.1.3"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed}),
-				checkmodels.ToCheckRunResult("1.1.4", checksMetadata.Checks["1.1.4"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed}),
-				checkmodels.ToCheckRunResult("1.1.5", checksMetadata.Checks["1.1.5"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Unknown}),
-				checkmodels.ToCheckRunResult("1.1.6", checksMetadata.Checks["1.1.6"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed}),
-				checkmodels.ToCheckRunResult("1.1.8", checksMetadata.Checks["1.1.8"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed, Details: "1 inactive branches"}),
-				checkmodels.ToCheckRunResult("1.1.9", checksMetadata.Checks["1.1.9"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed}),
-				checkmodels.ToCheckRunResult("1.1.10", checksMetadata.Checks["1.1.10"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed}),
-				checkmodels.ToCheckRunResult("1.1.11", checksMetadata.Checks["1.1.11"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed}),
-				checkmodels.ToCheckRunResult("1.1.12", checksMetadata.Checks["1.1.12"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Passed}),
-				checkmodels.ToCheckRunResult("1.1.14", checksMetadata.Checks["1.1.14"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed}),
-				checkmodels.ToCheckRunResult("1.1.15", checksMetadata.Checks["1.1.15"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed}),
-				checkmodels.ToCheckRunResult("1.1.16", checksMetadata.Checks["1.1.16"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed}),
-				checkmodels.ToCheckRunResult("1.1.17", checksMetadata.Checks["1.1.17"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed}),
-			},
-		},
-		{
-			Name: "All Checks Passed",
-			Data: &checkmodels.CheckData{
-				AssetsMetadata: builders.NewAssetsDataBuilder().WithAuthorizedUser().WithOrganization(builders.NewOrganizationBuilder().Build()).
-					WithRepository(builders.NewRepositoryBuilder().WithAdminCollborator(true, 1).WithAllowRebaseMerge(true).Build()).
-					WithBranch(builders.NewBranchBuilder().WithCommit("GD2", utils.Timestamp{Time: time.Now()}).Build()).
-					WithBranchProtections(builders.NewBranchProtectionBuilder().WithMinimumReviwersBeforeMerge(2).WithDismissStaleReviews(true).WithDismissalRestrictions(true).
-						WithCodeOwnersReview(true).WithRequiredSignedCommits(true).WithStatusCheckEnabled().WithRequireBranchToBeUpToDate(true).WithResolveConversations(true).WithEnforceAdmin(true).WithPushRestrictions(true).WithDeleteBranch(true).
-						WithForcePush(true).
-						Build()).Build(),
-			},
-			Expected: []*checkmodels.CheckRunResult{
-				checkmodels.ToCheckRunResult("1.1.3", checksMetadata.Checks["1.1.3"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Passed}),
-				checkmodels.ToCheckRunResult("1.1.4", checksMetadata.Checks["1.1.4"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Passed}),
-				checkmodels.ToCheckRunResult("1.1.5", checksMetadata.Checks["1.1.5"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Passed}),
-				checkmodels.ToCheckRunResult("1.1.6", checksMetadata.Checks["1.1.6"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Passed}),
-				checkmodels.ToCheckRunResult("1.1.8", checksMetadata.Checks["1.1.8"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Passed}),
-				checkmodels.ToCheckRunResult("1.1.9", checksMetadata.Checks["1.1.9"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Passed}),
-				checkmodels.ToCheckRunResult("1.1.10", checksMetadata.Checks["1.1.10"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Passed}),
-				checkmodels.ToCheckRunResult("1.1.11", checksMetadata.Checks["1.1.11"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Passed}),
-				checkmodels.ToCheckRunResult("1.1.12", checksMetadata.Checks["1.1.12"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Passed}),
-				checkmodels.ToCheckRunResult("1.1.14", checksMetadata.Checks["1.1.14"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Passed}),
-				checkmodels.ToCheckRunResult("1.1.15", checksMetadata.Checks["1.1.15"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Passed}),
-				checkmodels.ToCheckRunResult("1.1.16", checksMetadata.Checks["1.1.16"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Passed}),
-				checkmodels.ToCheckRunResult("1.1.17", checksMetadata.Checks["1.1.17"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Passed}),
-			},
+			Expected: []*checkmodels.CheckRunResult{},
 		},
 	}
-	testutils.RunCheckTests(t, common.GetRegoRunAction(regoQuery, checksMetadata), tests)
+	testutils.RunCheckTests(t, common.GetRegoRunAction(regoQuery, checksMetadata), tests, checksMetadata)
 }

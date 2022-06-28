@@ -1,6 +1,7 @@
 package builders
 
 import (
+	"github.com/aquasecurity/chain-bench/internal/utils"
 	"github.com/argonsecurity/pipeline-parser/pkg/models"
 )
 
@@ -9,7 +10,14 @@ type PipelineBuilder struct {
 }
 
 func NewPipelineBuilder() *PipelineBuilder {
-	return &PipelineBuilder{pipeline: &models.Pipeline{}}
+	return &PipelineBuilder{pipeline: &models.Pipeline{
+		Jobs: []*models.Job{utils.GetPtr(NewJobBuilder().Build())},
+	}}
+}
+
+func (p *PipelineBuilder) WithNoJobs() *PipelineBuilder {
+	p.pipeline.Jobs = make([]*models.Job, 0)
+	return p
 }
 
 func (p *PipelineBuilder) WithJob(job models.Job) *PipelineBuilder {
