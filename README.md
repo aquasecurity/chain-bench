@@ -28,7 +28,7 @@ The auditing focuses on the entire SDLC process, where it can reveal risks from 
 [go-report-card]: https://goreportcard.com/badge/github.com/aquasecurity/chain-bench?style=flat-square
 
 <figure style="text-align: center">
-  <img src="docs/imgs/demo.gif" width="1000" alt="Vulnerability Detection">
+  <img src="docs/imgs/demo.gif" width="1000" alt="demo">
 </figure>
 
 # Contents

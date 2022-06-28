@@ -11,6 +11,7 @@ is_two_factor_authentication_disabled_in_registry {
 is_registry_packages_allows_anonymous_access[unauth_packages] {
 	unauth_packages := count([p |
 		p := input.Registry.Packages[_]
+		p.Repository.ID == input.Repository.ID
 		p.Visibility == "public"
 		p.Repository.IsPrivate == true
 	])

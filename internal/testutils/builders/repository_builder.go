@@ -58,6 +58,11 @@ func NewRepositoryBuilder() *RepositoryBuilder {
 	}}
 }
 
+func (b *RepositoryBuilder) WithID(id int64) *RepositoryBuilder {
+	b.repository.ID = utils.GetPtr(id)
+	return b
+}
+
 func (b *RepositoryBuilder) WithAllowRebaseMerge(enable bool) *RepositoryBuilder {
 	b.repository.AllowRebaseMerge = utils.GetPtr(enable)
 	return b

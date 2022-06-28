@@ -47,7 +47,8 @@ func TestAccessToArtifactsChecker(t *testing.T) {
 			Name: "Should fail when the user have package registry with 1 public package under private repo",
 			Data: &checkmodels.CheckData{
 				AssetsMetadata: builders.NewAssetsDataBuilder().
-					WithPackageRegistry(builders.NewRegistryBuilder().WithPackages("npm", "public", true).Build()).
+					WithRepository(builders.NewRepositoryBuilder().WithID(4344).Build()).
+					WithPackageRegistry(builders.NewRegistryBuilder().WithPackages("npm", "public", true, 4344).Build()).
 					Build(),
 			},
 			Expected: []*checkmodels.CheckRunResult{
@@ -60,6 +61,18 @@ func TestAccessToArtifactsChecker(t *testing.T) {
 				AssetsMetadata: builders.NewAssetsDataBuilder().Build(),
 			},
 			Expected: []*checkmodels.CheckRunResult{},
+		},
+		{
+			Name: "Should fail when the user has Package registry with 2 public packages but only 1 under the scoped repository",
+			Data: &checkmodels.CheckData{
+				AssetsMetadata: builders.NewAssetsDataBuilder().
+					WithRepository(builders.NewRepositoryBuilder().WithID(4344).Build()).
+					WithPackageRegistry(builders.NewRegistryBuilder().WithPackages("npm", "public", true, 4344).WithPackages("npm", "public", true, 65655).Build()).
+					Build(),
+			},
+			Expected: []*checkmodels.CheckRunResult{
+				checkmodels.ToCheckRunResult("4.2.5", checksMetadata.Checks["4.2.5"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed, Details: "1 anonymous accessed packages"}),
+			},
 		},
 	}
 	testutils.RunCheckTests(t, common.GetRegoRunAction(regoQuery, checksMetadata), tests, checksMetadata)

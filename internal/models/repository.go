@@ -3,7 +3,7 @@ package models
 import "github.com/aquasecurity/chain-bench/internal/utils"
 
 type Repository struct {
-	ID               *int64           `json:"id,omitempty"`
+	ID               *int64
 	NodeID           *string          `json:"node_id,omitempty"`
 	Owner            *User            `json:"owner,omitempty"`
 	Name             *string          `json:"name,omitempty"`
