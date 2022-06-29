@@ -16,12 +16,6 @@ var (
 	output io.Writer = os.Stdout
 )
 
-type Statistics struct {
-	Passed  int
-	Failed  int
-	Unknown int
-	Total   int
-}
 type reportResult struct {
 	ID          string
 	Name        string
@@ -70,12 +64,7 @@ func PrintOutputToFile(data []checkmodels.CheckRunResult, outputFilePath string)
 
 func getPrintFormat(results []checkmodels.CheckRunResult) ([]reportResult, Statistics) {
 	resultsToDisplay := []reportResult{}
-	statistics := Statistics{
-		Passed:  0,
-		Failed:  0,
-		Unknown: 0,
-		Total:   len(results),
-	}
+	statistics := NewStatistics()
 
 	for _, r := range results {
 		resultsToDisplay = append(resultsToDisplay, reportResult{
@@ -87,29 +76,10 @@ func getPrintFormat(results []checkmodels.CheckRunResult) ([]reportResult, Stati
 			Reason:      r.Result.Details,
 			Url:         r.Metadata.Url})
 
-		switch r.Result.Status {
-		case "Passed":
-			statistics.Passed += 1
-		case "Failed":
-			statistics.Failed += 1
-		case "Unknown":
-			statistics.Unknown += 1
-		}
+		statistics.Add(r.Result.Status)
 	}
 
 	return resultsToDisplay, statistics
-}
-
-func initializeStatistics() Statistics {
-	return Statistics{Passed: 0, Failed: 0, Unknown: 0, Total: 0}
-}
-
-func addToStatistics(s *Statistics, r checkmodels.ResultStatus) {
-	if r == checkmodels.Passed {
-		s.Passed++
-	} else {
-		s.Failed++
-	}
 }
 
 // PrintErrorf prints a message with error color
