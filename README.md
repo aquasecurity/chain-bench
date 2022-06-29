@@ -9,7 +9,7 @@
 
 <p align="center">
 Chain-bench is an open-source tool for auditing your software supply chain stack for security compliance based on a new 
-  <a href="https://workbench.cisecurity.org/communities/142">CIS Software Supply Chain benchmark</a>.
+  <a href="docs/CIS-Software-Supply-Chain-Security-Guide-v1.0.pdf">CIS Software Supply Chain benchmark</a>.
 The auditing focuses on the entire SDLC process, where it can reveal risks from code time into deploy time. To win the race against hackers and protect your sensitive data and customer trust, you need to ensure your code is compliant with your organization’s policies.
 </p>
 
@@ -46,7 +46,7 @@ The auditing focuses on the entire SDLC process, where it can reveal risks from 
 
 # Introduction
 
-Chain-bench is an open-source tool for auditing your software supply chain stack for security compliance based on a new [CIS Software Supply Chain benchmark](https://workbench.cisecurity.org/communities/142).
+Chain-bench is an open-source tool for auditing your software supply chain stack for security compliance based on a new [CIS Software Supply Chain benchmark](/docs/CIS-Software-Supply-Chain-Security-Guide-v1.0.pdf).
 The auditing focuses on the entire SDLC process, where it can reveal risks from code time into deploy time.
 
 # Quick start
