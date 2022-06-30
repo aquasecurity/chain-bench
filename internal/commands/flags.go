@@ -17,18 +17,14 @@ var (
 	logFilePathFlagName  = "log-file"
 	logFilePathShortFlag = "l"
 
-	// logLevel the minimum log level
-	logLevel         string
-	logLevelFlagName = "log-level"
-
 	// logFormat the format of the logs
 	logFormat         string
 	logFormatFlagName = "log-format"
 
-	// verbose should log to console
-	verbose          bool
-	verboseFlagName  = "verbose"
-	verboseShortFlag = "v"
+	// number if flags determinds log level verbosiry (0 - info, 1 - debug, 2 - trace)
+	verbosity          int
+	verbosityFlagName  = "verbose"
+	verbosityShortFlag = "v"
 
 	// noColor disables output color
 	noColor         bool

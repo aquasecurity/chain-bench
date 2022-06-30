@@ -19,7 +19,7 @@ const (
 )
 
 // InitLogger initiates the global logger
-func InitLogger(logLevel string, logFormat string, filePath string, noColor bool) error {
+func InitLogger(logLevel LogLevel, logFormat string, filePath string, noColor bool) error {
 	logFile := io.Discard
 	consoleOutput := os.Stdout
 
