@@ -27,9 +27,10 @@ func Execute(version string) error {
 
 func NewChainBenchCommand(version string) *cobra.Command {
 	return &cobra.Command{
-		Use:     "chain-bench",
-		Short:   "Run CIS Benchmarks checks against your software supply chain",
-		Version: version,
+		Use:          "chain-bench",
+		Short:        "Run CIS Benchmarks checks against your software supply chain",
+		Version:      version,
+		SilenceUsage: true,
 		PersistentPreRunE: func(cmd *cobra.Command, args []string) error {
 			var err error
 
