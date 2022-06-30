@@ -41,11 +41,11 @@ func FetchClientData(accessToken string, repoUrl string) (*checkmodels.AssetsDat
 	logger.FetchingFinished("Branch Protection Settings", emoji.Seedling)
 
 	orgMembers, err := adapter.ListOrganizationMembers(orgName)
-	if err != nil {
-		return nil, err
+
+	if err == nil {
+		org.Members = orgMembers
+		logger.FetchingFinished("Members", emoji.Emoji(emoji.WomanAndManHoldingHands.Tone()))
 	}
-	org.Members = orgMembers
-	logger.FetchingFinished("Members", emoji.Emoji(emoji.WomanAndManHoldingHands.Tone()))
 
 	pipelines, _ := adapter.GetPipelines(orgName, repoName, defaultBranch)
 	logger.FetchingFinished("Pipelines", emoji.Wrench)

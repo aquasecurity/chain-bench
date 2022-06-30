@@ -103,7 +103,7 @@ is_repository_prevent_rebase_and_squash_merge {
 #couldnt get repository data
 CbPolicy[msg] {
 	utilsLib.is_repository_data_missing
-	msg := {"ids": ["1.1.3", "1.1.4", "1.1.5", "1.1.6", "1.1.9", "1.1.10", "1.1.11", "1.1.12", "1.1.13", "1.1.14", "1.1.15", "1.1.16", "1.1.17"], "status": constsLib.status.Unknown}
+	msg := {"ids": ["1.1.3", "1.1.4", "1.1.5", "1.1.6", "1.1.8", "1.1.9", "1.1.10", "1.1.11", "1.1.12", "1.1.13", "1.1.14", "1.1.15", "1.1.16", "1.1.17"], "status": constsLib.status.Unknown, "details": constsLib.details.repository_data_is_missing}
 }
 
 #missing permissions
@@ -166,6 +166,7 @@ CbPolicy[msg] {
 
 #Looking for inactive branches
 CbPolicy[msg] {
+	not utilsLib.is_repository_data_missing
 	inactiveCount := is_inactive_branches[i]
 	details := sprintf("%v %v", [format_int(inactiveCount, 10), "inactive branches"])
 	msg := {"ids": ["1.1.8"], "status": constsLib.status.Failed, "details": details}

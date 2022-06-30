@@ -20,7 +20,7 @@ are_there_unpinned_deps[unpinnedDepsCount] {
 
 CbPolicy[msg] {
 	utilsLib.is_pipelines_data_missing
-	msg = {"ids": ["3.1.7"], "status": constsLib.status.Unknown}
+	msg = {"ids": ["3.1.7"], "status": constsLib.status.Unknown, "details": constsLib.details.pipeline_data_is_missing}
 }
 
 # In case there are no pipelines

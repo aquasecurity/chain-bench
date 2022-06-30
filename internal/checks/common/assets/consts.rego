@@ -4,6 +4,7 @@ details := details {
 	details := {
 		"organization_missing_minimal_permissions": "Organization is missing minimal permissions",
 		"repository_missing_minimal_permissions": "Repository is missing minimal permissions",
+		"repository_data_is_missing": "Repository is not fetched",
 		"organization_packages_missing_minimal_permissions": "Organization Packages is missing minimal permissions",
 		"hooks_missing_minimal_permissions": "Organization & Repository Hooks is missing minimal permissions",
 		"linear_history_merge_commit_enabled": "MergeCommit is enabled for repository",
@@ -16,6 +17,8 @@ details := details {
 		"pipeline_repository_not_scanned_for_secrets": "Repository is not scanned for secrets",
 		"dependencies_pipelines_not_scanned_for_vulnerabilities": "Pipeline dependencies are not scanned for vulnerabilities",
 		"dependencies_pipelines_not_scanned_for_licenses": "Pipeline dependencies are not scanned for licenses",
+		"registry_data_is_missing": "Registry is not fetched",
+		"pipeline_data_is_missing": "Pipelines are not fetched"
 	}
 }
 
