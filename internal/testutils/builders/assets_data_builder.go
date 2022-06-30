@@ -70,6 +70,11 @@ func (b *AssetsDataBuilder) WithNoPipelinesData() *AssetsDataBuilder {
 	return b
 }
 
+func (b *AssetsDataBuilder) WithNoRepositoryData() *AssetsDataBuilder {
+	b.assetsData.Repository = nil
+	return b
+}
+
 func (b *AssetsDataBuilder) WithNoOrganization() *AssetsDataBuilder {
 	b.assetsData.Organization = nil
 	return b

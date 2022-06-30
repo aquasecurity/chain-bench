@@ -2,6 +2,7 @@ package main
 
 import data.common.consts as constsLib
 import data.common.permissions as permissionslib
+import data.generic.utils as utilsLib
 import future.keywords.in
 
 # for repository without branch protection setting
@@ -28,6 +29,10 @@ is_branch_protection_not_requires_dismiss_stale_reviews {
 
 is_branch_protection_not_requires_dismissal_restrictions {
 	input.BranchProtections.RequiredPullRequestReviews.DismissalRestrictions == null
+}
+
+is_required_pull_request_reviews_disabled {
+	input.BranchProtections.RequiredPullRequestReviews == null
 }
 
 is_branch_protection_not_requires_conversation_resolution {
@@ -95,14 +100,22 @@ is_repository_prevent_rebase_and_squash_merge {
 	input.Repository.AllowSquashMerge == false
 }
 
+#couldnt get repository data
+CbPolicy[msg] {
+	utilsLib.is_repository_data_missing
+	msg := {"ids": ["1.1.3", "1.1.4", "1.1.5", "1.1.6", "1.1.9", "1.1.10", "1.1.11", "1.1.12", "1.1.13", "1.1.14", "1.1.15", "1.1.16", "1.1.17"], "status": constsLib.status.Unknown}
+}
+
 #missing permissions
 CbPolicy[msg] {
+	not utilsLib.is_repository_data_missing
 	permissionslib.is_missing_repo_settings_permission
-	msg := {"ids": ["1.1.3", "1.1.4", "1.1.5", "1.1.6", "1.1.9", "1.1.10", "1.1.11", "1.1.12", "1.1.13", "1.1.14", "1.1.15", "1.1.16", "1.1.17"], "status": constsLib.status.Unknown}
+	msg := {"ids": ["1.1.3", "1.1.4", "1.1.5", "1.1.6", "1.1.9", "1.1.10", "1.1.11", "1.1.12", "1.1.13", "1.1.14", "1.1.15", "1.1.16", "1.1.17"], "status": constsLib.status.Unknown, "details": constsLib.details.repository_missing_minimal_permissions}
 }
 
 #Missing branch protection settings
 CbPolicy[msg] {
+	not utilsLib.is_repository_data_missing
 	not permissionslib.is_missing_repo_settings_permission
 	is_no_branch_protection
 	msg := {"ids": ["1.1.3", "1.1.4", "1.1.5", "1.1.6", "1.1.9", "1.1.10", "1.1.11", "1.1.12", "1.1.14", "1.1.15", "1.1.16", "1.1.17"], "status": constsLib.status.Failed}
@@ -117,6 +130,11 @@ CbPolicy[msg] {
 	input.Repository.Collaborators != null
 	not is_admin
 	msg := {"ids": ["1.1.5"], "status": constsLib.status.Unknown}
+}
+
+CbPolicy[msg] {
+	is_required_pull_request_reviews_disabled
+	msg := {"ids": ["1.1.3", "1.1.4", "1.1.5", "1.1.6"], "status": constsLib.status.Failed}
 }
 
 CbPolicy[msg] {

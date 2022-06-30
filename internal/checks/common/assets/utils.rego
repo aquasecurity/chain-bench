@@ -11,3 +11,7 @@ is_pipelines_list_empty {
 is_organization_data_missing {
 	input.Organization == null
 }
+
+is_repository_data_missing {
+	input.Repository == null
+}

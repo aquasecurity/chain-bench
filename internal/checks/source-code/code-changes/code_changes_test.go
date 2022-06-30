@@ -38,6 +38,27 @@ func TestCodeChangesChecker(t *testing.T) {
 				AssetsMetadata: builders.NewAssetsDataBuilder().WithRepository(builders.NewRepositoryBuilder().WithNoRepoPemissions().Build()).Build(),
 			},
 			Expected: []*checkmodels.CheckRunResult{
+				checkmodels.ToCheckRunResult("1.1.3", checksMetadata.Checks["1.1.3"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Unknown, Details: consts.Details_repository_missing_minimal_permissions}),
+				checkmodels.ToCheckRunResult("1.1.4", checksMetadata.Checks["1.1.4"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Unknown, Details: consts.Details_repository_missing_minimal_permissions}),
+				checkmodels.ToCheckRunResult("1.1.5", checksMetadata.Checks["1.1.5"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Unknown, Details: consts.Details_repository_missing_minimal_permissions}),
+				checkmodels.ToCheckRunResult("1.1.6", checksMetadata.Checks["1.1.6"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Unknown, Details: consts.Details_repository_missing_minimal_permissions}),
+				checkmodels.ToCheckRunResult("1.1.9", checksMetadata.Checks["1.1.9"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Unknown, Details: consts.Details_repository_missing_minimal_permissions}),
+				checkmodels.ToCheckRunResult("1.1.10", checksMetadata.Checks["1.1.10"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Unknown, Details: consts.Details_repository_missing_minimal_permissions}),
+				checkmodels.ToCheckRunResult("1.1.11", checksMetadata.Checks["1.1.11"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Unknown, Details: consts.Details_repository_missing_minimal_permissions}),
+				checkmodels.ToCheckRunResult("1.1.12", checksMetadata.Checks["1.1.12"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Unknown, Details: consts.Details_repository_missing_minimal_permissions}),
+				checkmodels.ToCheckRunResult("1.1.13", checksMetadata.Checks["1.1.13"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Unknown, Details: consts.Details_repository_missing_minimal_permissions}),
+				checkmodels.ToCheckRunResult("1.1.14", checksMetadata.Checks["1.1.14"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Unknown, Details: consts.Details_repository_missing_minimal_permissions}),
+				checkmodels.ToCheckRunResult("1.1.15", checksMetadata.Checks["1.1.15"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Unknown, Details: consts.Details_repository_missing_minimal_permissions}),
+				checkmodels.ToCheckRunResult("1.1.16", checksMetadata.Checks["1.1.16"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Unknown, Details: consts.Details_repository_missing_minimal_permissions}),
+				checkmodels.ToCheckRunResult("1.1.17", checksMetadata.Checks["1.1.17"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Unknown, Details: consts.Details_repository_missing_minimal_permissions}),
+			},
+		},
+		{
+			Name: "Couldnt get repostiroty data because of missing permissions or wrong url",
+			Data: &checkmodels.CheckData{
+				AssetsMetadata: builders.NewAssetsDataBuilder().WithNoRepositoryData().Build(),
+			},
+			Expected: []*checkmodels.CheckRunResult{
 				checkmodels.ToCheckRunResult("1.1.3", checksMetadata.Checks["1.1.3"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Unknown}),
 				checkmodels.ToCheckRunResult("1.1.4", checksMetadata.Checks["1.1.4"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Unknown}),
 				checkmodels.ToCheckRunResult("1.1.5", checksMetadata.Checks["1.1.5"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Unknown}),
