@@ -35,7 +35,7 @@ func println(msg string) {
 }
 
 func PrintOutputToFile(data []checkmodels.CheckRunResult, outputFilePath string) {
-	file, _ := json.MarshalIndent(getPrintFormat(data), "", "")
+	file, _ := json.MarshalIndent(getPrintFormat(data), "", "  ")
 	err := ioutil.WriteFile(outputFilePath, file, 0644)
 	if err != nil {
 		PrintError("Failed to write to output file, make sure your path is valid")
