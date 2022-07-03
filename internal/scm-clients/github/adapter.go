@@ -49,24 +49,24 @@ func (ca *ClientAdapterImpl) GetRepository(owner string, repo string) (*models.R
 
 	commits, _, err := ca.client.ListCommits(owner, repo, &github.CommitsListOptions{Since: time.Now().AddDate(0, -3, 0)})
 	if err != nil {
-		logger.Error(err, "error in fetching commits data")
+		logger.WarnE(err, "failed to fetch commits data")
 	}
 
 	branches, err := ca.ListRepositoryBranches(owner, repo)
 	if err != nil {
-		logger.Error(err, "error in fetching branches data")
+		logger.WarnE(err, "failed to fetch branches data")
 	}
 
 	isRepoContainsSecurityMD := ca.isRepositoryContainsSecurityMdFile(owner, repo, utils.GetValue(rep.DefaultBranch))
 
 	collaborators, _, err := ca.client.ListRepositoryCollaborators(owner, repo)
 	if err != nil {
-		logger.Error(err, "error in fetching collaborators data")
+		logger.WarnE(err, "failed to fetch collaborators data")
 	}
 
 	hooks, _, err := ca.client.ListRepositoryHooks(owner, repo)
 	if err != nil {
-		logger.Error(err, "error in fetching hooks data")
+		logger.WarnE(err, "failed to fetch hooks data")
 	}
 
 	return toRepository(rep, branches, toUsers(collaborators), toHooks(hooks), toCommits(commits), isRepoContainsSecurityMD), nil
@@ -84,7 +84,7 @@ func (ca *ClientAdapterImpl) ListRepositoryBranches(owner string, repo string) (
 	for _, b := range branches {
 		commit, _, err := ca.client.GetCommit(owner, repo, utils.GetValue(b.Commit.SHA))
 		if err != nil {
-			logger.Error(err, "error in fetching branches commit")
+			logger.WarnE(err, "failed to fetch branches commit")
 		} else {
 			branch := &github.Branch{
 				Name:      b.Name,
@@ -111,17 +111,17 @@ func (ca *ClientAdapterImpl) isRepositoryContainsSecurityMdFile(owner, repo, def
 	return false
 }
 
-// GetRepositoryBranch implements clients.ClientAdapter
+// GetCommit implements clients.ClientAdapter
 func (ca *ClientAdapterImpl) GetCommit(owner string, repo string, sha string) (*models.RepositoryCommit, error) {
 	commit, _, err := ca.client.GetCommit(owner, repo, sha)
 	if err != nil {
-		logger.Error(err, "error in fetching branch protection")
+		logger.Error(err, "error in fetching commit")
 		return nil, err
 	}
 	return toCommit(commit), nil
 }
 
-// GetRepositoryBranch implements clients.ClientAdapter
+// GetBranchProtection implements clients.ClientAdapter
 func (ca *ClientAdapterImpl) GetBranchProtection(owner string, repo string, branch string) (*models.Protection, error) {
 	prot, _, err := ca.client.GetBranchProtection(owner, repo, branch)
 	if err != nil {
@@ -131,7 +131,7 @@ func (ca *ClientAdapterImpl) GetBranchProtection(owner string, repo string, bran
 
 	sc, _, err := ca.client.GetSignaturesOfProtectedBranch(owner, repo, branch)
 	if err != nil {
-		logger.Error(err, "error in fetching commit signature protection")
+		logger.WarnE(err, "failed to fetch commit signature protection")
 	}
 	return toBranchProtection(prot, sc), nil
 }
@@ -144,7 +144,7 @@ func (ca *ClientAdapterImpl) GetOrganization(owner string) (*models.Organization
 	}
 	hooks, _, err := ca.client.ListOrganizationHooks(owner)
 	if err != nil {
-		logger.Error(err, "error in fetching organization hooks")
+		logger.WarnE(err, "failed to fetch organization hooks")
 	}
 	return toOrganization(org, toHooks(hooks)), nil
 }
@@ -173,7 +173,7 @@ func (ca *ClientAdapterImpl) GetRegistry(organization *models.Organization) (*mo
 	for _, packageType := range packagesTypes {
 		pkgs, _, err := ca.client.ListOrganizationPackages(*organization.Login, packageType)
 		if err != nil {
-			logger.Error(err, "error in fetching org packages")
+			logger.WarnE(err, "failed to fetch org packages")
 			packages = nil
 			break
 		}
