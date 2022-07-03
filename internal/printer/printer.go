@@ -29,7 +29,7 @@ func PrintFindings(results []checkmodels.CheckRunResult, outputFilePath string, 
 		PrintOutputToFile(results, outputFilePath)
 	}
 	if !isQuiet {
-		s := initializeStatistics()
+		s := NewStatistics()
 		table.Header = CreateHeader([]string{"ID", "Name", "Result", "Reason"})
 		for _, row := range results {
 			rowData := []CellData{
@@ -39,7 +39,7 @@ func PrintFindings(results []checkmodels.CheckRunResult, outputFilePath string, 
 				{text: row.Result.Details},
 			}
 			table.Body.Cells = append(table.Body.Cells, CreateBodyRow(rowData))
-			addToStatistics(&s, row.Result.Status)
+			s.Add(row.Result.Status)
 		}
 		table.Footer = CreateFooter(s, len(table.Header.Cells))
 		fmt.Println(table.String())
