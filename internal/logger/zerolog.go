@@ -13,10 +13,12 @@ var (
 	normalFileWriter    zerolog.ConsoleWriter = zerolog.ConsoleWriter{Out: io.Discard, TimeFormat: "2006-01-02T15:04:05Z07:00", NoColor: true}
 )
 
-func setLogLevel(levelName string) error {
+func setLogLevel(levelName LogLevel) error {
 	var level zerolog.Level
 
-	switch strings.ToUpper(levelName) {
+	switch strings.ToUpper(levelName.String()) {
+	case "TRACE":
+		level = zerolog.TraceLevel
 	case "DEBUG":
 		level = zerolog.DebugLevel
 	case "INFO":
