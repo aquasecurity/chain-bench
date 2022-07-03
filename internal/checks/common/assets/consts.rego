@@ -18,7 +18,7 @@ details := details {
 		"dependencies_pipelines_not_scanned_for_vulnerabilities": "Pipeline dependencies are not scanned for vulnerabilities",
 		"dependencies_pipelines_not_scanned_for_licenses": "Pipeline dependencies are not scanned for licenses",
 		"registry_data_is_missing": "Registry is not fetched",
-		"pipeline_data_is_missing": "Pipelines are not fetched"
+		"pipeline_data_is_missing": "Pipelines are not fetched",
 	}
 }
 
