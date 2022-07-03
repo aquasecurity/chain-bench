@@ -17,6 +17,21 @@ type Logger interface {
 	Panicf(msg string, v ...interface{})
 }
 
+type LogLevel string
+
+const (
+	TraceLevel LogLevel = "trace"
+	DebugLevel          = "debug"
+	InfoLevel           = "info"
+	WarnLevel           = "warn"
+	ErrorLevel          = "error"
+	PanicLevel          = "panic"
+)
+
+func (l LogLevel) String() string {
+	return string(l)
+}
+
 type ArgonLogger struct {
 	context string
 }
