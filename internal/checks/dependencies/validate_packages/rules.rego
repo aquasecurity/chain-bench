@@ -19,7 +19,7 @@ are_pipelines_dependencies_scanned_for_licenses {
 
 CbPolicy[msg] {
 	utilsLib.is_pipelines_data_missing
-	msg = {"ids": ["3.2.2", "3.2.3"], "status": constsLib.status.Unknown}
+	msg = {"ids": ["3.2.2", "3.2.3"], "status": constsLib.status.Unknown, "details": constsLib.details.pipeline_data_is_missing}
 }
 
 # In case there are no pipelines

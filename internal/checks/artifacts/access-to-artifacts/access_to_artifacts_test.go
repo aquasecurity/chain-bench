@@ -13,6 +13,16 @@ import (
 func TestAccessToArtifactsChecker(t *testing.T) {
 	tests := []testutils.CheckTest{
 		{
+			Name: "should return unknown when registry was not fetched",
+			Data: &checkmodels.CheckData{
+				AssetsMetadata: builders.NewAssetsDataBuilder().WithNoRegistryData().Build(),
+			},
+			Expected: []*checkmodels.CheckRunResult{
+				checkmodels.ToCheckRunResult("4.2.3", checksMetadata.Checks["4.2.3"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Unknown, Details: consts.Details_registry_data_is_missing}),
+				checkmodels.ToCheckRunResult("4.2.5", checksMetadata.Checks["4.2.5"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Unknown, Details: consts.Details_registry_data_is_missing}),
+			},
+		},
+		{
 			Name: "should return unknown with explanation when there are no org settings permissions",
 			Data: &checkmodels.CheckData{
 				AssetsMetadata: builders.NewAssetsDataBuilder().
@@ -34,6 +44,17 @@ func TestAccessToArtifactsChecker(t *testing.T) {
 		},
 		{
 			Name: "Should fail when the user have package registry with 2mfa disabled",
+			Data: &checkmodels.CheckData{
+				AssetsMetadata: builders.NewAssetsDataBuilder().
+					WithPackageRegistry(builders.NewRegistryBuilder().WithTwoFactorAuthenticationEnabled(false).Build()).
+					Build(),
+			},
+			Expected: []*checkmodels.CheckRunResult{
+				checkmodels.ToCheckRunResult("4.2.3", checksMetadata.Checks["4.2.3"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Failed}),
+			},
+		},
+		{
+			Name: "Should fail when the user have package registry with 1 public package under private repo",
 			Data: &checkmodels.CheckData{
 				AssetsMetadata: builders.NewAssetsDataBuilder().
 					WithPackageRegistry(builders.NewRegistryBuilder().WithTwoFactorAuthenticationEnabled(false).Build()).

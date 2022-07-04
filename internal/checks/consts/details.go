@@ -19,4 +19,7 @@ var (
 	Details_pipeline_repositoryNotScannedForSecrets            = "Repository is not scanned for secrets"
 	Details_pipeline_noPipelinesFound                          = "No pipelines were found"
 	Details_pipeline_noBuildJob                                = "No build job was found in pipelines"
+	Details_registry_data_is_missing                           = "Registry is not fetched"
+	Details_pipeline_are_missing                               = "Pipelines are not fetched"
+	Details_repository_is_missing                              = "Repository is not fetched"
 )

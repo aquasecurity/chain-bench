@@ -18,8 +18,8 @@ func TestBuildChecker(t *testing.T) {
 				AssetsMetadata: builders.NewAssetsDataBuilder().WithNoPipelinesData().Build(),
 			},
 			Expected: []*checkmodels.CheckRunResult{
-				checkmodels.ToCheckRunResult("3.2.2", checksMetadata.Checks["3.2.2"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Unknown}),
-				checkmodels.ToCheckRunResult("3.2.3", checksMetadata.Checks["3.2.3"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Unknown}),
+				checkmodels.ToCheckRunResult("3.2.2", checksMetadata.Checks["3.2.2"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Unknown, Details: consts.Details_pipeline_are_missing}),
+				checkmodels.ToCheckRunResult("3.2.3", checksMetadata.Checks["3.2.3"], checksMetadata.Url, &checkmodels.CheckResult{Status: checkmodels.Unknown, Details: consts.Details_pipeline_are_missing}),
 			},
 		},
 		{
