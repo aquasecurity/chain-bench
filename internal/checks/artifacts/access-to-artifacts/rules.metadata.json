@@ -1,6 +1,6 @@
 {
     "id": "4.2",
-    "name": "Package Registries",
+    "name": "Access to Artifacts",
     "url": "https://avd.aquasec.com/compliance/softwaresupplychain/cis-1.0/cis-1.0-artifacts/4.2",
     "checks": {
         "4.2.3": {
