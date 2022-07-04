@@ -55,7 +55,7 @@ func PrintOutputToFile(data []checkmodels.CheckRunResult, outputFilePath string)
 		reportMetadata,
 		reportRes,
 	}
-	file, _ := json.MarshalIndent(report, "", "")
+	file, _ := json.MarshalIndent(report, "", "  ")
 	err := ioutil.WriteFile(outputFilePath, file, 0644)
 	if err != nil {
 		PrintError("Failed to write to output file, make sure your path is valid")
