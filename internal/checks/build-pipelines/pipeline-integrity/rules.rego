@@ -64,7 +64,7 @@ are_there_pipelines_without_sbom[pipelinesWithoutSBOM] {
 # In case pipelines weren't fetched
 CbPolicy[msg] {
 	utilsLib.is_pipelines_data_missing
-	msg = {"ids": ruleIds, "status": constsLib.status.Unknown}
+	msg = {"ids": ruleIds, "status": constsLib.status.Unknown, "details": constsLib.details.pipeline_data_is_missing}
 }
 
 # In case there are no pipelines

@@ -46,7 +46,7 @@ is_build_job_missing {
 # In case pipelines weren't fetched
 CbPolicy[msg] {
 	utilsLib.is_pipelines_data_missing
-	msg = {"ids": pipelineRuleIds, "status": constsLib.status.Unknown}
+	msg = {"ids": pipelineRuleIds, "status": constsLib.status.Unknown, "details": constsLib.details.pipeline_data_is_missing}
 }
 
 # In case there are no pipelines

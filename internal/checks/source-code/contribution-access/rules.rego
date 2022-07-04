@@ -2,6 +2,7 @@ package main
 
 import data.common.consts as constsLib
 import data.common.permissions as permissionslib
+import data.generic.utils as utilsLib
 import future.keywords.in
 
 # for repository without branch protection setting
@@ -54,18 +55,33 @@ is_repository_has_inactive_users[inactiveCount] {
 	inactiveCount > 0
 }
 
+CbPolicy[msg] {
+	utilsLib.is_repository_data_missing
+	msg := {"ids": ["1.3.1", "1.3.7"], "status": constsLib.status.Unknown, "details": constsLib.details.repository_data_is_missing}
+}
+
+#Looking for organization missing data
+CbPolicy[msg] {
+	utilsLib.is_organization_data_missing
+	msg := {"ids": ["1.3.3", "1.3.5", "1.3.7", "1.3.8", "1.3.9"], "status": constsLib.status.Unknown, "details": constsLib.details.organization_not_fetched}
+}
+
 #Looking for organization missing permissions
 CbPolicy[msg] {
+	not utilsLib.is_organization_data_missing
 	permissionslib.is_missing_org_settings_permission
-	msg := {"ids": ["1.3.5", "1.3.7", "1.3.8"], "status": constsLib.status.Unknown}
+	msg := {"ids": ["1.3.3", "1.3.5", "1.3.7", "1.3.8"], "status": constsLib.status.Unknown}
 }
 
 CbPolicy[msg] {
+	not utilsLib.is_organization_data_missing
+	not permissionslib.is_missing_org_settings_permission
 	not is_organization_admin
 	msg := {"ids": ["1.3.3"], "status": constsLib.status.Unknown}
 }
 
 CbPolicy[msg] {
+	not utilsLib.is_repository_data_missing
 	is_repo_has_no_commits
 	msg := {"ids": ["1.3.1"], "status": constsLib.status.Unknown}
 }
@@ -86,6 +102,7 @@ CbPolicy[msg] {
 
 #Looking for organization 2mfa enforcements that is disabled
 CbPolicy[msg] {
+	not utilsLib.is_organization_data_missing
 	not permissionslib.is_missing_org_settings_permission
 	is_2mfa_enforcement_disabled
 	msg := {"ids": ["1.3.5"], "status": constsLib.status.Failed}
@@ -93,6 +110,7 @@ CbPolicy[msg] {
 
 #Looking for repository with no 2 admins
 CbPolicy[msg] {
+	not utilsLib.is_repository_data_missing
 	not permissionslib.is_missing_org_settings_permission
 	is_repository_dont_have_2_admins
 	msg := {"ids": ["1.3.7"], "status": constsLib.status.Failed}
@@ -100,6 +118,7 @@ CbPolicy[msg] {
 
 #Looking for organization with non strict base permission
 CbPolicy[msg] {
+	not utilsLib.is_organization_data_missing
 	not permissionslib.is_missing_org_settings_permission
 	not permissionslib.is_org_default_permission_strict
 	msg := {"ids": ["1.3.8"], "status": constsLib.status.Failed}
