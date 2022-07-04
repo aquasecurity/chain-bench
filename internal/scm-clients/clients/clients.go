@@ -7,6 +7,7 @@ import (
 	"net/url"
 
 	"github.com/aquasecurity/chain-bench/internal/logger"
+	"github.com/aquasecurity/chain-bench/internal/models"
 	"github.com/aquasecurity/chain-bench/internal/models/checkmodels"
 	"github.com/aquasecurity/chain-bench/internal/scm-clients/adapter"
 	"github.com/aquasecurity/chain-bench/internal/scm-clients/github"
@@ -29,9 +30,6 @@ func FetchClientData(accessToken string, repoUrl string) (*checkmodels.AssetsDat
 		return nil, err
 	}
 	authorizedUser, _ := adapter.GetAuthorizedUser()
-	org, _ := adapter.GetOrganization(orgName)
-	logger.FetchingFinished("Organization Settings", emoji.OfficeBuilding)
-	registry, _ := adapter.GetRegistry(org)
 
 	repo, _ := adapter.GetRepository(orgName, repoName)
 	logger.FetchingFinished("Repository Settings", emoji.OilDrum)
@@ -40,15 +38,24 @@ func FetchClientData(accessToken string, repoUrl string) (*checkmodels.AssetsDat
 	protection, _ := adapter.GetBranchProtection(orgName, repoName, defaultBranch)
 	logger.FetchingFinished("Branch Protection Settings", emoji.Seedling)
 
-	orgMembers, err := adapter.ListOrganizationMembers(orgName)
-
-	if err == nil {
-		org.Members = orgMembers
-		logger.FetchingFinished("Members", emoji.Emoji(emoji.WomanAndManHoldingHands.Tone()))
-	}
-
 	pipelines, _ := adapter.GetPipelines(orgName, repoName, defaultBranch)
 	logger.FetchingFinished("Pipelines", emoji.Wrench)
+
+	var org *models.Organization
+	var registry *models.PackageRegistry
+
+	if *repo.Owner.Type == "Organization" {
+		org, _ = adapter.GetOrganization(orgName)
+		logger.FetchingFinished("Organization Settings", emoji.OfficeBuilding)
+
+		registry, _ = adapter.GetRegistry(org)
+
+		orgMembers, err := adapter.ListOrganizationMembers(orgName)
+		if err == nil {
+			org.Members = orgMembers
+			logger.FetchingFinished("Members", emoji.Emoji(emoji.WomanAndManHoldingHands.Tone()))
+		}
+	}
 
 	return &checkmodels.AssetsData{
 		AuthorizedUser:    authorizedUser,
