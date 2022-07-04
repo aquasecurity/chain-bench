@@ -19,7 +19,7 @@ const (
 )
 
 // InitLogger initiates the global logger
-func InitLogger(logLevel string, logFormat string, filePath string, noColor bool) error {
+func InitLogger(logLevel LogLevel, logFormat string, filePath string, noColor bool) error {
 	logFile := io.Discard
 	consoleOutput := os.Stdout
 
@@ -80,19 +80,17 @@ func FetchingFinished(msg string, icon emoji.Emoji) {
 }
 
 func Error(err error, msg string) error {
+	logger.Error().Msgf(msg)
 	if err != nil {
-		logger.Error().Str("error", err.Error()).Msg(msg)
-	} else {
-		logger.Error().Msgf(msg)
+		logger.Debug().Str("error", err.Error()).Msg(msg)
 	}
 	return err
 }
 
 func Errorf(err error, msg string, v ...interface{}) error {
+	logger.Error().Msgf(msg, v...)
 	if err != nil {
-		logger.Error().Str("error", err.Error()).Msgf(msg, v...)
-	} else {
-		logger.Error().Msgf(msg, v...)
+		logger.Debug().Str("error", err.Error()).Msgf(msg, v...)
 	}
 	return err
 }
@@ -102,6 +100,14 @@ func Warn(msg string) {
 }
 func Warnf(msg string, v ...interface{}) {
 	logger.Warn().Msgf(msg, v...)
+}
+
+func WarnE(err error, msg string) error {
+	logger.Warn().Msg(msg)
+	if err != nil {
+		logger.Debug().Str("error", err.Error()).Msgf(msg)
+	}
+	return err
 }
 
 func Panic(msg string) {

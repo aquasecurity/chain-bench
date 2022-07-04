@@ -27,9 +27,10 @@ func Execute(version string) error {
 
 func NewChainBenchCommand(version string) *cobra.Command {
 	return &cobra.Command{
-		Use:     "chain-bench",
-		Short:   "Run CIS Benchmarks checks against your software supply chain",
-		Version: version,
+		Use:          "chain-bench",
+		Short:        "Run CIS Benchmarks checks against your software supply chain",
+		Version:      version,
+		SilenceUsage: true,
 		PersistentPreRunE: func(cmd *cobra.Command, args []string) error {
 			var err error
 
@@ -48,7 +49,6 @@ func NewChainBenchCommand(version string) *cobra.Command {
 
 func initLogger() error {
 	logConfig := chainbenchConfig.LogConfiguration
-
 	if err := logger.InitLogger(logConfig.LogLevel, logConfig.LogFormat, logConfig.LogFilePath, logConfig.NoColor); err != nil {
 		return fmt.Errorf("failed to init logger - %s", err.Error())
 	}
@@ -61,7 +61,7 @@ func initialize(rootCmd *cobra.Command) {
 
 	rootCmd.PersistentFlags().BoolVarP(&isQuiet,
 		isQuietFlagName, isQuietShortFlag, false,
-		"silence logs and report findings, cannot be used without using the -o flag")
+		"silence logs, prints only error messages")
 	rootCmd.PersistentFlags().StringVarP(&outputFilePath,
 		outputFilePathFlagName, outputFilePathShortFlag, "",
 		"the path to a file that will contain the results of the scanning")
@@ -71,13 +71,10 @@ func initialize(rootCmd *cobra.Command) {
 	rootCmd.PersistentFlags().StringVarP(&logFilePath,
 		logFilePathFlagName, logFilePathShortFlag, "",
 		"set to print logs into a file")
-	rootCmd.PersistentFlags().StringVar(&logLevel, logLevelFlagName, "",
-		"sets the minimum log level (debug, info, warning, error, panic)")
 	rootCmd.PersistentFlags().StringVar(&logFormat, logFormatFlagName, "",
 		fmt.Sprintf("sets the format of the logs (%s, %s)", logger.NormalFormat, logger.JsonFormat))
-	rootCmd.PersistentFlags().BoolVarP(&verbose, verboseFlagName, verboseShortFlag, false,
-		"set to print logs to console")
+	rootCmd.PersistentFlags().CountVarP(&verbosity, verbosityFlagName, verbosityShortFlag,
+		"set the verbosity level (-v: debug, -vv: trace), default: info")
 	rootCmd.PersistentFlags().BoolVar(&noColor, noColorFlagName, false,
 		"disables output color")
-
 }
