@@ -17,23 +17,23 @@ var (
 )
 
 type reportResult struct {
-	ID          string
-	Name        string
-	Descrition  string
-	Remediation string
-	Result      string
-	Reason      string
-	Url         string
+	ID          string `json:"id,omitempty"`
+	Name        string `json:"name,omitempty"`
+	Description string `json:"description,omitempty"`
+	Remediation string `json:"remediation,omitempty"`
+	Result      string `json:"result,omitempty"`
+	Reason      string `json:"reason,omitempty"`
+	Url         string `json:"url,omitempty"`
 }
 
 type reportMetadata struct {
-	Date       string
-	Statistics Statistics
+	Date       string     `json:"date"`
+	Statistics Statistics `json:"statistics"`
 }
 
 type reportResults struct {
-	Metadata reportMetadata
-	Results  []reportResult
+	Metadata reportMetadata `json:"metadata"`
+	Results  []reportResult `json:"results"`
 }
 
 // println prints a string to the current configured output
@@ -70,7 +70,7 @@ func getPrintFormat(results []checkmodels.CheckRunResult) ([]reportResult, Stati
 		resultsToDisplay = append(resultsToDisplay, reportResult{
 			Name:        r.Metadata.Title,
 			ID:          r.ID,
-			Descrition:  r.Metadata.Description,
+			Description: r.Metadata.Description,
 			Remediation: r.Metadata.Remediation,
 			Result:      string(r.Result.Status),
 			Reason:      r.Result.Details,

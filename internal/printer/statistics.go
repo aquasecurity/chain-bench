@@ -7,10 +7,10 @@ import (
 )
 
 type Statistics struct {
-	Passed  int
-	Failed  int
-	Unknown int
-	Total   int
+	Passed  int `json:"passed,omitempty"`
+	Failed  int `json:"failed,omitempty"`
+	Unknown int `json:"unknown,omitempty"`
+	Total   int `json:"total,omitempty"`
 }
 
 // NewStatistics initializes a new Statistics struct.
