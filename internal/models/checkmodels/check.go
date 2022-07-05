@@ -1,6 +1,8 @@
 package checkmodels
 
 import (
+	"strings"
+
 	"github.com/aquasecurity/chain-bench/internal/config"
 	"github.com/aquasecurity/chain-bench/internal/models"
 	pipelineModels "github.com/argonsecurity/pipeline-parser/pkg/models"
@@ -92,7 +94,7 @@ type RegoCustomModule struct {
 	Content string
 }
 
-func ToCheckRunResult(id string, metadata CheckMetadata, url string, result *CheckResult) *CheckRunResult {
+func ToCheckRunResult(id string, metadata CheckMetadata, sectionUrl string, result *CheckResult) *CheckRunResult {
 	return &CheckRunResult{
 		ID: id,
 		Metadata: CheckMetadata{
@@ -101,8 +103,14 @@ func ToCheckRunResult(id string, metadata CheckMetadata, url string, result *Che
 			Entity:      metadata.Entity,
 			Description: metadata.Description,
 			Remediation: metadata.Remediation,
-			Url:         url,
+			Url:         getPermalink(sectionUrl, id, metadata.Title),
 			ScannerType: metadata.ScannerType,
 		},
 		Result: result}
+}
+
+func getPermalink(sectionUrl string, id string, name string) string {
+	idParsed := "#" + strings.ToLower(strings.ReplaceAll(id, ".", ""))
+	nameParsed := strings.ReplaceAll(strings.ReplaceAll(name, " ", "-"), "'", "")
+	return sectionUrl + "/" + idParsed + "-" + strings.ToLower(nameParsed)
 }
