@@ -8,9 +8,14 @@
 </p>
 
 <p align="center">
+
+[📖 Documentation][docs]
+
 Chain-bench is an open-source tool for auditing your software supply chain stack for security compliance based on a new 
   <a href="docs/CIS-Software-Supply-Chain-Security-Guide-v1.0.pdf">CIS Software Supply Chain benchmark</a>.
 The auditing focuses on the entire SDLC process, where it can reveal risks from code time into deploy time. To win the race against hackers and protect your sensitive data and customer trust, you need to ensure your code is compliant with your organization’s policies.
+
+Read more in the [Chain-bench Documentation][docs]
 </p>
 
 [![Go Reference](https://pkg.go.dev/badge/github.com/aquasecurity/chain-bench.svg?style=flat-square)](https://pkg.go.dev/github.com/aquasecurity/chain-bench)
@@ -51,11 +56,19 @@ The auditing focuses on the entire SDLC process, where it can reveal risks from 
 
 # Quick start
 
-There is a primarily way to run chain-bench as a stand alone cli, that requires the personal access token of your account and the repository url in order to access your SCM.
+The primary way to run chain-bench is as a standalone cli. It requires an access token for your account and the repository url in order to access your SCM.
+
+## Installation
+
+Get Chain-bench via your favorite installation method. See [installation] section in the documentation for details. For example:
+
+- `nix-env --install -A nixpkgs.chain-bench`
+- `docker run aquasec/chain-bench`
+- Download binary from https://github.com/aquasecurity/chain-bench/releases/latest/
 
 ## Usage
 
-```
+```bash
 chain-bench scan --repository-url <REPOSITORY_URL> --access-token <TOKEN> -o <OUTPUT_PATH>
 ```
 
@@ -144,3 +157,10 @@ We welcome PRs and issue reports.
 
 Going forward we plan to release updates to chain-bench to increase the benchmark coverage with more checks and support more platforms.
 chain-bench is an Aqua Security open source project part of Trivy Family.
+
+[docs]: https://github.com/aquasecurity/chain-bench/blob/main/docs/
+[installation]: https://github.com/aquasecurity/chain-bench/blob/main/docs/getting-started/installation.md
+<!-- TODO: swap to GH pages
+[docs]: https://aquasecurity.github.io/chain-bench
+[installation]: https://aquasecurity.github.io/chain-bench/latest/docs/getting-started/installation/
+-->
