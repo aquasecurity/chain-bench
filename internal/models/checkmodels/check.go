@@ -109,8 +109,8 @@ func ToCheckRunResult(id string, metadata CheckMetadata, sectionUrl string, resu
 		Result: result}
 }
 
-func getPermalink(sectionUrl string, id string, name string) string {
-	idParsed := "#" + strings.ToLower(strings.ReplaceAll(id, ".", ""))
-	nameParsed := strings.ReplaceAll(strings.ReplaceAll(name, " ", "-"), "'", "")
-	return sectionUrl + "/" + idParsed + "-" + strings.ToLower(nameParsed)
+func getPermalink(sectionUrl, id, name string) string {
+	parsedId := fmt.Sprintf("#%s", strings.ToLower(strings.ReplaceAll(id, ".", "")))
+	parsedName := strings.ToLower(strings.ReplaceAll(strings.ReplaceAll(name, " ", "-"), "'", ""))
+	return fmt.Sprintf("%s/%s-%s", sectionUrl, parsedId, parsedName)
 }
