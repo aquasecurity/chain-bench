@@ -5,11 +5,6 @@ import data.common.permissions as permissionslib
 import data.generic.utils as utilsLib
 import future.keywords.in
 
-# for repository without branch protection setting
-is_no_branch_protection {
-	input.BranchProtections == null
-}
-
 is_2mfa_enforcement_disabled {
 	input.Organization.TwoFactorRequirementEnabled == false
 }

@@ -12,6 +12,12 @@ is_missing_repo_settings_permission {
 	input.Repository.AllowRebaseMerge == null
 }
 
+is_repo_admin {
+	some i in input.Repository.Collaborators
+	i.id == input.AuthorizedUser.id
+	i.permissions.admin == true
+}
+
 is_missing_hooks_permission {
 	missingOrgPerm := to_number(input.Organization.Hooks == null)
 	missingRepoPerm := to_number(input.Repository.Hooks == null)
