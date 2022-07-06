@@ -1,6 +1,7 @@
 package checkmodels
 
 import (
+	"fmt"
 	"strings"
 
 	"github.com/aquasecurity/chain-bench/internal/config"
