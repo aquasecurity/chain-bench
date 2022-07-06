@@ -7,6 +7,7 @@ details := details {
 		"organization_packages_missing_minimal_permissions": "Organization Packages is missing minimal permissions",
 		"organization_premissive_default_repository_permissions": "Organization default permissions are too permissive",
 		"repository_missing_minimal_permissions": "Repository is missing minimal permissions",
+		"repository_missing_minimal_permissions_for_branch_protection": "Repository is missing admin permissions for branch protection settings",
 		"repository_data_is_missing": "Repository is not fetched",
 		"hooks_missing_minimal_permissions": "Organization & Repository Hooks is missing minimal permissions",
 		"linear_history_merge_commit_enabled": "MergeCommit is enabled for repository",
