@@ -24,14 +24,16 @@ type RegoRuleResultTest []struct {
 
 func TestParseRegoResult(t *testing.T) {
 	metadata := checkmodels.CheckMetadata{
-		Title:       "Some Name",
+		Title:       "Ensure any change to code receives approval of two strongly authenticated users",
 		Type:        "SCM",
 		Entity:      "Organization",
 		Description: "SOME DESCRIPTION",
 		ScannerType: checkmodels.Rego,
+		Url:         "https://avd.aquasec.com/compliance/softwaresupplychain/cis-1.0/cis-1.0-sourcecode/1.1/#1113-ensure-any-change-to-code-receives-approval-of-two-strongly-authenticated-users",
 	}
 	metadataMap := checkmodels.CheckMetadataMap{
 		Checks: map[string]checkmodels.CheckMetadata{"1.1.13": metadata},
+		Url:    "https://avd.aquasec.com/compliance/softwaresupplychain/cis-1.0/cis-1.0-sourcecode/1.1",
 	}
 	res := []*RegoResult{{IDs: []string{"1.1.13"}, Status: checkmodels.Passed, Details: "Details"}}
 
