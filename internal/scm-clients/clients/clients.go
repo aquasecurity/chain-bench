@@ -1,6 +1,7 @@
 package clients
 
 import (
+	"errors"
 	"fmt"
 	"strings"
 
@@ -69,14 +70,17 @@ func FetchClientData(accessToken string, repoUrl string) (*checkmodels.AssetsDat
 
 func getRepoInfo(repoUrl string) (scm string, org string, repo string, err error) {
 	u, err := url.Parse(repoUrl)
-	if err != nil {
+	if err != nil || u.Scheme == "" {
 		logger.Errorf(err, "error in parsing repoUrl %s", repoUrl)
+		if err == nil {
+			err = errors.New("error in parsing the host")
+		}
 		return "", "", "", err
 	}
 
 	path := strings.Split(u.EscapedPath(), "/")
 	if len(path) < 3 {
-		return "", "", "", fmt.Errorf("missing org and repo in the repository url: %s", repoUrl)
+		return "", "", "", fmt.Errorf("missing org/repo in the repository url: %s", repoUrl)
 	}
 	return u.Host, path[1], path[2], nil
 }
