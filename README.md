@@ -43,6 +43,7 @@ Read more in the [Chain-bench Documentation][docs]
 - [Quick start](#quick-start)
   - [Usage](#usage)
     - [Using docker](#using-docker)
+    - [Using GitHub Actions](#using-github-actions)
 - [Requirements](#requirements)
 - [Supported Providers](#supported-providers)
 - [Please Note](#please-note)
@@ -77,6 +78,10 @@ chain-bench scan --repository-url <REPOSITORY_URL> --access-token <TOKEN> -o <OU
 ```bash
 docker run aquasec/chain-bench scan --repository-url <REPOSITORY_URL> --access-token <TOKEN>
 ```
+
+### Using GitHub Actions
+
+See the repository at https://github.com/aquasecurity/chain-bench-action
 
 <details>
 <summary>Example output</summary>
