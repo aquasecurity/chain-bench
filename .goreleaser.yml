@@ -31,6 +31,14 @@ archives:
       - README.md
       - LICENSE
 
+brews:
+  - 
+    tap:
+      owner: itaywol
+      name: homebrew-chain-bench
+    homepage: "https://github.com/itaywol/chain-bench"
+    description: "Chain-bench is an open-source tool for auditing your software supply chain stack for security compliance based on a new CIS Software Supply Chain benchmark"
+
 dockers:
   - image_templates:
       - "{{ .Env.DOCKERHUB_PATH }}/chain-bench:{{ .Version }}-amd64"
@@ -91,12 +99,6 @@ docker_manifests:
   - name_template: '{{ .Env.GHCR_PATH }}/chain-bench:latest'
     image_templates: *ghcr_image_templates
 
-brews:
-    tap:
-      owner: itaywol
-      name: homebrew-chain-bench
-    homepage: "https://github.com/itaywol/chain-bench"
-    description: "Chain-bench is an open-source tool for auditing your software supply chain stack for security compliance based on a new CIS Software Supply Chain benchmark"
 
 
 checksum:
