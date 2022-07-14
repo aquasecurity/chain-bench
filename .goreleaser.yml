@@ -34,9 +34,9 @@ archives:
 brews:
   - 
     tap:
-      owner: itaywol
+      owner: aquasecurity
       name: homebrew-chain-bench
-    homepage: "https://github.com/itaywol/chain-bench"
+    homepage: "https://github.com/aquasecurity/chain-bench"
     description: "Chain-bench is an open-source tool for auditing your software supply chain stack for security compliance based on a new CIS Software Supply Chain benchmark"
 
 dockers:
