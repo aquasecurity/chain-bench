@@ -54,6 +54,6 @@ jobs:
           args: release --rm-dist
           workdir: ${{ env.git_repo_name }}
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.ORG_REPO_TOKEN }}
           GHCR_PATH: ghcr.io/aquasecurity
           DOCKERHUB_PATH: docker.io/aquasec
