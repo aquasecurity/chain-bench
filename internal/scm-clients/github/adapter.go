@@ -39,12 +39,20 @@ func (ca *ClientAdapterImpl) GetAuthorizedUser() (*models.User, error) {
 	return toUser(res), nil
 }
 
+func GetBranchName(defaultBranch, branchName string) string {
+	if branchName != "" {
+		return branchName
+	}
+
+	return defaultBranch
+}
+
 // GetRepository implements clients.ClientAdapter
-func (ca *ClientAdapterImpl) GetRepository(owner string, repo string, branch string) (*models.Repository, string, error) {
+func (ca *ClientAdapterImpl) GetRepository(owner string, repo string, branch string) (*models.Repository, error) {
 	rep, _, err := ca.client.GetRepository(owner, repo)
 	if err != nil {
 		logger.Error(err, "error in fetching repository data")
-		return nil, "", err
+		return nil, err
 	}
 
 	commits, _, err := ca.client.ListCommits(owner, repo, &github.CommitsListOptions{Since: time.Now().AddDate(0, -3, 0)})
@@ -57,14 +65,7 @@ func (ca *ClientAdapterImpl) GetRepository(owner string, repo string, branch str
 		logger.WarnE(err, "failed to fetch branches data")
 	}
 
-	var branchToScan string
-	if branch != "" {
-		branchToScan = branch
-	} else {
-		branchToScan = utils.GetValue(rep.DefaultBranch)
-	}
-
-	isRepoContainsSecurityMD := ca.isRepositoryContainsSecurityMdFile(owner, repo, branchToScan)
+	isRepoContainsSecurityMD := ca.isRepositoryContainsSecurityMdFile(owner, repo, GetBranchName(utils.GetValue(rep.DefaultBranch), branch))
 
 	collaborators, _, err := ca.client.ListRepositoryCollaborators(owner, repo)
 	if err != nil {
@@ -76,7 +77,7 @@ func (ca *ClientAdapterImpl) GetRepository(owner string, repo string, branch str
 		logger.WarnE(err, "failed to fetch hooks data")
 	}
 
-	return toRepository(rep, branches, toUsers(collaborators), toHooks(hooks), toCommits(commits), isRepoContainsSecurityMD), branchToScan, nil
+	return toRepository(rep, branches, toUsers(collaborators), toHooks(hooks), toCommits(commits), isRepoContainsSecurityMD), nil
 }
 
 //listRepositoryBranches implements clients.ClientAdapter

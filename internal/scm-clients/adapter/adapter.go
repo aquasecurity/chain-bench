@@ -9,7 +9,7 @@ import (
 
 type ClientAdapter interface {
 	Init(client *http.Client) error
-	GetRepository(owner, repo, branchName string) (*models.Repository, string, error)
+	GetRepository(owner, repo, branchName string) (*models.Repository, error)
 	ListRepositoryBranches(owner, repo string) ([]*models.Branch, error)
 	GetCommit(organization string, repositoryName string, sha string) (*models.RepositoryCommit, error)
 	GetBranchProtection(owner, repo, branch string) (*models.Protection, error)
