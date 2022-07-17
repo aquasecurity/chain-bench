@@ -48,7 +48,7 @@ var (
 	accessTokenFlagName  = "access-token"
 	accessTokenShortFlag = "t"
 
-	// repositoryUrl the path to the repository to scan
+	// branch the branch name to scan
 	branch          string
 	branchFlagName  = "branch"
 	branchShortFlag = "b"

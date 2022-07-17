@@ -32,16 +32,8 @@ func FetchClientData(accessToken string, repoUrl string, branch string) (*checkm
 	}
 	authorizedUser, _ := adapter.GetAuthorizedUser()
 
-	repo, _ := adapter.GetRepository(orgName, repoName)
+	repo, branchName, _ := adapter.GetRepository(orgName, repoName, branch)
 	logger.FetchingFinished("Repository Settings", emoji.OilDrum)
-
-	var branchName string
-
-	if branch != "" {
-		branchName = branch
-	} else {
-		branchName = utils.GetValue(utils.GetValue(repo).DefaultBranch)
-	}
 
 	protection, _ := adapter.GetBranchProtection(orgName, repoName, branchName)
 	logger.FetchingFinished("Branch Protection Settings", emoji.Seedling)
