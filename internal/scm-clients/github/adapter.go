@@ -39,14 +39,6 @@ func (ca *ClientAdapterImpl) GetAuthorizedUser() (*models.User, error) {
 	return toUser(res), nil
 }
 
-func GetBranchName(defaultBranch, branchName string) string {
-	if branchName != "" {
-		return branchName
-	}
-
-	return defaultBranch
-}
-
 // GetRepository implements clients.ClientAdapter
 func (ca *ClientAdapterImpl) GetRepository(owner string, repo string, branch string) (*models.Repository, error) {
 	rep, _, err := ca.client.GetRepository(owner, repo)
@@ -65,7 +57,7 @@ func (ca *ClientAdapterImpl) GetRepository(owner string, repo string, branch str
 		logger.WarnE(err, "failed to fetch branches data")
 	}
 
-	isRepoContainsSecurityMD := ca.isRepositoryContainsSecurityMdFile(owner, repo, GetBranchName(utils.GetValue(rep.DefaultBranch), branch))
+	isRepoContainsSecurityMD := ca.isRepositoryContainsSecurityMdFile(owner, repo, utils.GetBranchName(utils.GetValue(rep.DefaultBranch), branch))
 
 	collaborators, _, err := ca.client.ListRepositoryCollaborators(owner, repo)
 	if err != nil {

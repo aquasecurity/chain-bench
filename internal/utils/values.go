@@ -12,3 +12,11 @@ func GetValue[T any](p *T) T {
 func GetPtr[T any](value T) *T {
 	return &value
 }
+
+func GetBranchName(defaultBranch, branchName string) string {
+	if branchName != "" {
+		return branchName
+	}
+
+	return defaultBranch
+}
