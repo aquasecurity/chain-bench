@@ -47,4 +47,9 @@ var (
 	accessToken          string
 	accessTokenFlagName  = "access-token"
 	accessTokenShortFlag = "t"
+
+	// branch the branch name to scan
+	branch          string
+	branchFlagName  = "branch"
+	branchShortFlag = "b"
 )

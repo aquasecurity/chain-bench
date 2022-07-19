@@ -40,7 +40,7 @@ func (ca *ClientAdapterImpl) GetAuthorizedUser() (*models.User, error) {
 }
 
 // GetRepository implements clients.ClientAdapter
-func (ca *ClientAdapterImpl) GetRepository(owner string, repo string) (*models.Repository, error) {
+func (ca *ClientAdapterImpl) GetRepository(owner string, repo string, branch string) (*models.Repository, error) {
 	rep, _, err := ca.client.GetRepository(owner, repo)
 	if err != nil {
 		logger.Error(err, "error in fetching repository data")
@@ -57,7 +57,7 @@ func (ca *ClientAdapterImpl) GetRepository(owner string, repo string) (*models.R
 		logger.WarnE(err, "failed to fetch branches data")
 	}
 
-	isRepoContainsSecurityMD := ca.isRepositoryContainsSecurityMdFile(owner, repo, utils.GetValue(rep.DefaultBranch))
+	isRepoContainsSecurityMD := ca.isRepositoryContainsSecurityMdFile(owner, repo, utils.GetBranchName(utils.GetValue(rep.DefaultBranch), branch))
 
 	collaborators, _, err := ca.client.ListRepositoryCollaborators(owner, repo)
 	if err != nil {
@@ -98,11 +98,11 @@ func (ca *ClientAdapterImpl) ListRepositoryBranches(owner string, repo string) (
 }
 
 // isRepositoryContainsSecurityMdFile implements clients.ClientAdapter
-func (ca *ClientAdapterImpl) isRepositoryContainsSecurityMdFile(owner, repo, defaultBranch string) bool {
+func (ca *ClientAdapterImpl) isRepositoryContainsSecurityMdFile(owner, repo, branch string) bool {
 	optionalSecurityMDNames := []string{"SECURITY.md", "security.md", "Security.md"}
 
 	for _, optionalName := range optionalSecurityMDNames {
-		securityMdFile, _, _, _ := ca.client.GetContent(owner, repo, optionalName, defaultBranch)
+		securityMdFile, _, _, _ := ca.client.GetContent(owner, repo, optionalName, branch)
 		if securityMdFile != nil {
 			return true
 		}

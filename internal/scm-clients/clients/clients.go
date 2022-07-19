@@ -20,7 +20,7 @@ const (
 	GithubEndpoint = "github.com"
 )
 
-func FetchClientData(accessToken string, repoUrl string) (*checkmodels.AssetsData, error) {
+func FetchClientData(accessToken string, repoUrl string, branch string) (*checkmodels.AssetsData, error) {
 	scmName, orgName, repoName, err := getRepoInfo(repoUrl)
 	if err != nil {
 		return nil, err
@@ -32,14 +32,15 @@ func FetchClientData(accessToken string, repoUrl string) (*checkmodels.AssetsDat
 	}
 	authorizedUser, _ := adapter.GetAuthorizedUser()
 
-	repo, _ := adapter.GetRepository(orgName, repoName)
+	repo, _ := adapter.GetRepository(orgName, repoName, branch)
 	logger.FetchingFinished("Repository Settings", emoji.OilDrum)
 
-	defaultBranch := utils.GetValue(utils.GetValue(repo).DefaultBranch)
-	protection, _ := adapter.GetBranchProtection(orgName, repoName, defaultBranch)
+	branchName := utils.GetBranchName(utils.GetValue(repo.DefaultBranch), branch)
+
+	protection, _ := adapter.GetBranchProtection(orgName, repoName, branchName)
 	logger.FetchingFinished("Branch Protection Settings", emoji.Seedling)
 
-	pipelines, _ := adapter.GetPipelines(orgName, repoName, defaultBranch)
+	pipelines, _ := adapter.GetPipelines(orgName, repoName, branchName)
 	logger.FetchingFinished("Pipelines", emoji.Wrench)
 
 	var org *models.Organization
