@@ -9,7 +9,8 @@
             "entity": "PackageRegistry",
             "description": "Enforce Multi Factor Authentication for user access to the package registry.",
             "remediation": "For each package registry in use, enforce Multi-Factor Authentication as the only way to authenticate.",
-            "scannerType": "Rego"
+            "scannerType": "Rego",
+            "slsa_level": [4]
         },
         "4.2.5": {
             "title": "Ensure anonymous access to artifacts is revoked",
@@ -17,7 +18,8 @@
             "entity": "PackageRegistry",
             "description": "Disable anonymous access to artifacts.",
             "remediation": "Disable the anonymous access option on every artifact or package manager in use.",
-            "scannerType": "Rego"
+            "scannerType": "Rego",
+            "slsa_level": [4]
         }
     }
 }

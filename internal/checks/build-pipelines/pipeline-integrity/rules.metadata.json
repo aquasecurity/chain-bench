@@ -9,7 +9,8 @@
       "entity": "Pipeline",
       "description": "External dependencies might be public packages needed in the pipeline or even the public image used for the build worker. Lock these external dependencies in every build pipeline.",
       "remediation": "For every external dependency in use in pipelines, lock it.",
-      "scannerType": "Rego"
+      "scannerType": "Rego",
+      "slsa_level": [4]
     },
     "2.4.6": {
       "title": "Ensure pipeline steps produce an SBOM",
@@ -17,7 +18,8 @@
       "entity": "Pipeline",
       "description": "SBOM (Software Bill Of Materials) is a file that specifies each component of software or a build process. Generate an SBOM after each run of a pipeline.",
       "remediation": "For each pipeline, configure it to produce an SBOM on every run.",
-      "scannerType": "Rego"
+      "scannerType": "Rego",
+      "slsa_level": [1,2,3,4]
     }
   }
 }
