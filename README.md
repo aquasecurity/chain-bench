@@ -33,7 +33,7 @@ Read more in the [Chain-bench Documentation][docs]
 [go-report-card]: https://goreportcard.com/badge/github.com/aquasecurity/chain-bench?style=flat-square
 
 <figure style="text-align: center">
-  <img src="docs/imgs/demo.gif" width="800" alt="demo">
+  <img src="docs/imgs/demo.gif" alt="demo">
 </figure>
 
 # Contents
