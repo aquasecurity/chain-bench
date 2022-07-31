@@ -63,6 +63,7 @@ The primary way to run chain-bench is as a standalone cli. It requires an access
 
 Get Chain-bench via your favorite installation method. See [installation] section in the documentation for details. For example:
 
+- `brew install chain-bench`
 - `nix-env --install -A nixpkgs.chain-bench`
 - `docker run aquasec/chain-bench`
 - Download binary from https://github.com/aquasecurity/chain-bench/releases/latest/
