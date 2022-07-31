@@ -9,7 +9,8 @@
       "entity": "Repository",
       "description": "SECURITY.md file is a security policy file, which gives people instructions when they are reporting security vulnerabilities in a project. When someone creates an issue in that project, a link to the SECURITY.md file will be shown.",
       "remediation": "For each repository in use, create a SECURITY.md file and save it in the documents or root directory of the repository.",
-      "scannerType": "Rego"
+      "scannerType": "Rego",
+      "slsa_level": [] 
     },
     "1.2.2": {
       "title": "Ensure repository creation is limited to specific members",
@@ -17,7 +18,8 @@
       "entity": "Organization",
       "description": "Limit the ability to create repositories to trusted users and teams.",
       "remediation": "Restrict repository creation to trusted users and teams only.",
-      "scannerType": "Rego"
+      "scannerType": "Rego",
+      "slsa_level": []
     },
     "1.2.3": {
       "title": "Ensure repository deletion is limited to specific members",
@@ -25,7 +27,8 @@
       "entity": "Organization",
       "description": "Ensure only a limited number of trusted members can delete repositories.",
       "remediation": "Enforce repository deletion by a few trusted and responsible users only.",
-      "scannerType": "Rego"
+      "scannerType": "Rego",
+      "slsa_level": [3, 4]
     },
     "1.2.4": {
       "title": "Ensure issue deletion is limited to specific members",
@@ -33,7 +36,8 @@
       "entity": "Organization",
       "description": "Ensure only trusted an responsible members can delete issues.",
       "remediation": "Restrict issue deletion to a few trusted and responsible users only.",
-      "scannerType": "Rego"
+      "scannerType": "Rego",
+      "slsa_level": [3, 4]
     }
   }
 }

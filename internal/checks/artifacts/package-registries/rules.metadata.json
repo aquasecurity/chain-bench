@@ -9,7 +9,8 @@
       "entity": "PackageRegistry",
       "description": "Use secured webhooks of the package registry.",
       "remediation": "For each webhook in use, change it to secured (over HTTPS).",
-      "scannerType": "Rego"
+      "scannerType": "Rego",
+      "slsa_level": [4] 
     }
   }
 }
