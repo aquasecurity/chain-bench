@@ -6,6 +6,7 @@ require (
 	github.com/alexeyco/simpletable v1.0.0
 	github.com/argonsecurity/pipeline-parser v0.1.12
 	github.com/google/go-github/v41 v41.0.0
+	github.com/google/uuid v1.2.0
 	github.com/imdario/mergo v0.3.12
 	github.com/migueleliasweb/go-github-mock v0.0.8
 	github.com/rs/zerolog v1.26.1

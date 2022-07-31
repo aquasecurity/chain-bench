@@ -30,7 +30,7 @@ func NewScanCommand() *cobra.Command {
 			checks := checks.GetChecks(assetsData)
 			results, errors := checker.RunChecks(assetsData, chainbenchConfig, checks)
 
-			printer.PrintFindings(results, outputFilePath, isQuiet)
+			printer.PrintFindings(results, outputFilePath, isQuiet, repositoryUrl)
 			printer.PrintErrors(errors)
 			elapsed := time.Since(start)
 			logger.Infof("Scan completed: %s", elapsed.Round(time.Millisecond))

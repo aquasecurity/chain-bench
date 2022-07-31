@@ -23,10 +23,10 @@ func init() {
 	table.SetStyle(simpletable.StyleCompactLite)
 }
 
-func PrintFindings(results []checkmodels.CheckRunResult, outputFilePath string, isQuiet bool) {
+func PrintFindings(results []checkmodels.CheckRunResult, outputFilePath string, isQuiet bool, repositoryUrl string) {
 	sortResuls(results)
 	if outputFilePath != "" {
-		PrintOutputToFile(results, outputFilePath)
+		PrintOutputToFile(results, outputFilePath, repositoryUrl)
 	}
 	if !isQuiet {
 		s := NewStatistics()
