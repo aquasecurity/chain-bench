@@ -9,7 +9,8 @@
       "entity": "Dependencies",
       "description": "Pin dependencies to a specific version. Avoid using the \"latest\" tag or broad version.",
       "remediation": "For every dependency in use, pin to a specific version.",
-      "scannerType": "Rego"
+      "scannerType": "Rego",
+      "slsa_level": [4]
     }
   }
 }
