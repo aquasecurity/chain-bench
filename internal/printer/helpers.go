@@ -10,6 +10,7 @@ import (
 	"time"
 
 	"github.com/aquasecurity/chain-bench/internal/models/checkmodels"
+	"github.com/google/uuid"
 )
 
 var (
@@ -28,7 +29,9 @@ type reportResult struct {
 
 type reportMetadata struct {
 	Date       string     `json:"date"`
+	ScanID     uuid.UUID  `json:"scan_id"`
 	Statistics Statistics `json:"statistics"`
+	Url        string     `json:"url,omitempty"`
 }
 
 type reportResults struct {
@@ -41,12 +44,14 @@ func println(msg string) {
 	fmt.Fprintln(output, msg)
 }
 
-func PrintOutputToFile(data []checkmodels.CheckRunResult, outputFilePath string) {
+func PrintOutputToFile(data []checkmodels.CheckRunResult, outputFilePath string, repositoryUrl string) {
 	reportRes, statistics := getPrintFormat(data)
 
 	// Populate the report metadata.
 	reportMetadata := reportMetadata{
 		Date:       time.Now().Format(time.RFC3339),
+		ScanID:     uuid.New(),
+		Url:        repositoryUrl,
 		Statistics: statistics,
 	}
 
