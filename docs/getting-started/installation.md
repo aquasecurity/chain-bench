@@ -65,6 +65,6 @@ docker pull aquasec/chain-bench:latest
 
 Example:
 
-    ``` bash
-    docker run --rm aquasec/chain-bench:latest scan --repository-url <REPOSITORY_URL> --access-token <TOKEN>
-    ```
+  ```bash
+  docker run --rm aquasec/chain-bench:latest scan --repository-url <REPOSITORY_URL> --access-token <TOKEN>
+  ```
