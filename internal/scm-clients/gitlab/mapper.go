@@ -140,7 +140,7 @@ func toBranchProtection(proj *gitlab.Project, protection *gitlab.ProtectedBranch
 			AllowForcePushes:               protection.AllowForcePush,
 			RequiredConversationResolution: proj.OnlyAllowMergeIfAllDiscussionsAreResolved,
 			RequiredSignedCommit:           isMatchDefault && pushRules.RejectUnsignedCommits,
-			PreventSecrets:                 isMatchDefault && pushRules.PreventSecrets,
+			//PreventSecrets:                 isMatchDefault && pushRules.PreventSecrets,
 		}
 	}
 	return p
