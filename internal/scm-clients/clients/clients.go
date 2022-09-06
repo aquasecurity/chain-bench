@@ -12,12 +12,14 @@ import (
 	"github.com/aquasecurity/chain-bench/internal/models/checkmodels"
 	"github.com/aquasecurity/chain-bench/internal/scm-clients/adapter"
 	"github.com/aquasecurity/chain-bench/internal/scm-clients/github"
+	"github.com/aquasecurity/chain-bench/internal/scm-clients/gitlab"
 	"github.com/aquasecurity/chain-bench/internal/utils"
 	"github.com/enescakir/emoji"
 )
 
 const (
 	GithubEndpoint = "github.com"
+	GitlabEndpoint = "gitlab.com"
 )
 
 func FetchClientData(accessToken string, repoUrl string, branch string) (*checkmodels.AssetsData, error) {
@@ -37,26 +39,26 @@ func FetchClientData(accessToken string, repoUrl string, branch string) (*checkm
 
 	branchName := utils.GetBranchName(utils.GetValue(repo.DefaultBranch), branch)
 
-	protection, _ := adapter.GetBranchProtection(orgName, repoName, branchName)
 	logger.FetchingFinished("Branch Protection Settings", emoji.Seedling)
+	protection, _ := adapter.GetBranchProtection(orgName, repo, branchName)
 
-	pipelines, _ := adapter.GetPipelines(orgName, repoName, branchName)
-	logger.FetchingFinished("Pipelines", emoji.Wrench)
+	// pipelines, _ := adapter.GetPipelines(orgName, repoName, branchName)
+	// logger.FetchingFinished("Pipelines", emoji.Wrench)
 
 	var org *models.Organization
-	var registry *models.PackageRegistry
+	//var registry *models.PackageRegistry
 
 	if *repo.Owner.Type == "Organization" {
 		org, _ = adapter.GetOrganization(orgName)
 		logger.FetchingFinished("Organization Settings", emoji.OfficeBuilding)
 
-		registry, _ = adapter.GetRegistry(org)
+		//	registry, _ = adapter.GetRegistry(org)
 
-		orgMembers, err := adapter.ListOrganizationMembers(orgName)
-		if err == nil {
-			org.Members = orgMembers
-			logger.FetchingFinished("Members", emoji.Emoji(emoji.WomanAndManHoldingHands.Tone()))
-		}
+		//	orgMembers, err := adapter.ListOrganizationMembers(orgName)
+		// if err == nil {
+		// 	org.Members = orgMembers
+		// 	logger.FetchingFinished("Members", emoji.Emoji(emoji.WomanAndManHoldingHands.Tone()))
+		// }
 	}
 
 	return &checkmodels.AssetsData{
@@ -64,8 +66,8 @@ func FetchClientData(accessToken string, repoUrl string, branch string) (*checkm
 		Organization:      org,
 		Repository:        repo,
 		BranchProtections: protection,
-		Pipelines:         pipelines,
-		Registry:          registry,
+		// Pipelines:         pipelines,
+		// Registry:          registry,
 	}, nil
 }
 
@@ -93,8 +95,11 @@ func getClientAdapter(scmName string, accessToken string) (adapter.ClientAdapter
 
 	switch scmName {
 	case GithubEndpoint:
-		err = github.Adapter.Init(httpClient)
+		err = github.Adapter.Init(httpClient, accessToken)
 		adapter = &github.Adapter
+	case GitlabEndpoint:
+		err = gitlab.Adapter.Init(httpClient, accessToken)
+		adapter = &gitlab.Adapter
 	default:
 		adapter = nil
 	}
