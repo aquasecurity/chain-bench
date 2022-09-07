@@ -32,7 +32,7 @@ Read more in the [Chain-bench Documentation][docs]
 [release-img]: https://img.shields.io/github/release/aquasecurity/chain-bench.svg?logo=github&style=flat-square
 [release]: https://github.com/aquasecurity/chain-bench/releases
 [docker-pull-img]: https://cloud.docker.com/repository/docker/aquasec/chain-bench
-[docker-pull]: https://img.shields.io/docker/pulls/mitsutaka/cloudflared.svg
+[docker-pull]: https://img.shields.io/docker/pulls/aquasec/chain-bench.svg
 [go-report-card]: https://goreportcard.com/badge/github.com/aquasecurity/chain-bench?style=flat-square
 
 <figure style="text-align: center">
