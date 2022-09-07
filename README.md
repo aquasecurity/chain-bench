@@ -21,6 +21,7 @@ Read more in the [Chain-bench Documentation][docs]
 [![Go Reference](https://pkg.go.dev/badge/github.com/aquasecurity/chain-bench.svg?style=flat-square)](https://pkg.go.dev/github.com/aquasecurity/chain-bench)
 [![GitHub Release][release-img]][release]
 [![Downloads][download]][release]
+[![Docker Pulls][docker-pull-img]][docker-pull]
 [![Build Status](https://github.com/aquasecurity/chain-bench/workflows/Build/badge.svg?branch=main&style=flat-square)](https://github.com/aquasecurity/chain-bench/actions)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg?style=flat-square)](https://github.com/aquasecurity/chain-bench/blob/main/LICENSE)
 [![go-report-card][go-report-card]](https://goreportcard.com/report/github.com/aquasecurity/chain-bench)
@@ -30,6 +31,8 @@ Read more in the [Chain-bench Documentation][docs]
 [download]: https://img.shields.io/github/downloads/aquasecurity/chain-bench/total?logo=github&style=flat-square
 [release-img]: https://img.shields.io/github/release/aquasecurity/chain-bench.svg?logo=github&style=flat-square
 [release]: https://github.com/aquasecurity/chain-bench/releases
+[docker-pull-img]: https://cloud.docker.com/repository/docker/aquasec/chain-bench
+[docker-pull]: https://img.shields.io/docker/pulls/mitsutaka/cloudflared.svg
 [go-report-card]: https://goreportcard.com/badge/github.com/aquasecurity/chain-bench?style=flat-square
 
 <figure style="text-align: center">
