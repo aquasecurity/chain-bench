@@ -126,6 +126,10 @@ func toBranchProtection(proj *gitlab.Project, protection *gitlab.ProtectedBranch
 	var p *models.Protection = nil
 	branchRegex := regexp.MustCompile(pushRules.BranchNameRegex)
 	isMatchDefault := branchRegex.Match([]byte(proj.DefaultBranch))
+	approvingReviewCount := 0
+	if len(appRules) > 0 {
+		approvingReviewCount = appRules[0].ApprovalsRequired
+	}
 	if protection != nil {
 		p = &models.Protection{
 			EnforceAdmins:        &models.AdminEnforcement{Enabled: false},
@@ -135,7 +139,7 @@ func toBranchProtection(proj *gitlab.Project, protection *gitlab.ProtectedBranch
 			RequiredPullRequestReviews: &models.PullRequestReviewsEnforcement{
 				DismissStaleReviews:          appConfig.ResetApprovalsOnPush,
 				RequireCodeOwnerReviews:      protection.CodeOwnerApprovalRequired,
-				RequiredApprovingReviewCount: utils.GetValue(appRules[0]).ApprovalsRequired},
+				RequiredApprovingReviewCount: approvingReviewCount},
 			//Restrictions: toBranchRestrictions(appConfig.Approvers, appConfig.ApproverGroups), //todo
 			AllowForcePushes:               protection.AllowForcePush,
 			RequiredConversationResolution: proj.OnlyAllowMergeIfAllDiscussionsAreResolved,

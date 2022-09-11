@@ -7,8 +7,11 @@ import (
 	"io"
 	"io/ioutil"
 	"os"
+	"strings"
+	"text/template"
 	"time"
 
+	"github.com/aquasecurity/chain-bench/internal/logger"
 	"github.com/aquasecurity/chain-bench/internal/models/checkmodels"
 	"github.com/google/uuid"
 )
@@ -44,8 +47,8 @@ func println(msg string) {
 	fmt.Fprintln(output, msg)
 }
 
-func PrintOutputToFile(data []checkmodels.CheckRunResult, outputFilePath string, repositoryUrl string) {
-	reportRes, statistics := getPrintFormat(data)
+func PrintOutputToFile(data []checkmodels.CheckRunResult, outputFilePath string, repositoryUrl string, outputTemplate string) {
+	reportRes, statistics := getPrintData(data)
 
 	// Populate the report metadata.
 	reportMetadata := reportMetadata{
@@ -60,14 +63,32 @@ func PrintOutputToFile(data []checkmodels.CheckRunResult, outputFilePath string,
 		reportMetadata,
 		reportRes,
 	}
-	file, _ := json.MarshalIndent(report, "", "  ")
-	err := ioutil.WriteFile(outputFilePath, file, 0644)
-	if err != nil {
-		PrintError("Failed to write to output file, make sure your path is valid")
+
+	if strings.HasPrefix(outputTemplate, "@") {
+		buf, err := os.ReadFile(strings.TrimPrefix(outputTemplate, "@"))
+		if err != nil {
+			logger.Errorf(err, "error retrieving template from path:", outputTemplate)
+		}
+		outputTemplate = string(buf)
+		t, _ := template.New("output template").Parse(outputTemplate)
+		outputFile, err := os.OpenFile(outputFilePath, os.O_RDWR|os.O_CREATE, 0644)
+		if err != nil {
+			PrintError("Failed to create an output file, make sure your path is valid")
+		}
+		err = t.Execute(outputFile, reportRes)
+		if err != nil {
+			PrintError("Failed to create the template, check the template is valid")
+		}
+	} else {
+		file, _ := json.MarshalIndent(report, "", "  ")
+		err := ioutil.WriteFile(outputFilePath, file, 0644)
+		if err != nil {
+			PrintError("Failed to write to output file, make sure your path is valid")
+		}
 	}
 }
 
-func getPrintFormat(results []checkmodels.CheckRunResult) ([]reportResult, Statistics) {
+func getPrintData(results []checkmodels.CheckRunResult) ([]reportResult, Statistics) {
 	resultsToDisplay := []reportResult{}
 	statistics := NewStatistics()
 

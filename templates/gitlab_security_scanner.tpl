@@ -1,0 +1,46 @@
+{
+  "version": "14.0.6",
+  "vulnerabilities": [
+  {{- $t_first := true }}
+  {{- range . }}
+    {{- if $t_first -}}
+      {{- $t_first = false -}}
+    {{ else -}}
+      ,
+    {{- end }}
+    {
+      "id": "{{ .ID }}",
+      "category": "container_scanning",
+      "message": {{ .Name | printf "%q" }},
+      "description": {{ .Description | printf "%q" }},
+      "cve": "{{ .ID }}",
+      "severity": "Critical",
+      "confidence": "Unknown",
+      "solution": {{ .Remediation | printf "%q" }},
+      "scanner": {
+        "id": "chain-bench",
+        "name": "chain-bench"
+      },
+      "location": {
+        "dependency": {
+          "package": {
+            "name": "{{ .ID }}"
+          },
+          "version": "0.1.3"
+        },
+        "operating_system": "Unknown",
+        "image": "{{ "myImage" }}"
+      },
+      "identifiers": [
+        {
+          "type": "cve",
+          "name": "{{ .ID }}",
+          "value": "{{ .ID }}",
+          "url": "{{ .Url }}"
+        }
+      ]
+    }
+  {{- end }}
+  ],
+  "remediations": []
+}

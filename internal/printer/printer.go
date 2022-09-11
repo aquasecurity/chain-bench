@@ -1,6 +1,7 @@
 package printer
 
 import (
+	_ "embed"
 	"fmt"
 	"sort"
 
@@ -23,10 +24,10 @@ func init() {
 	table.SetStyle(simpletable.StyleCompactLite)
 }
 
-func PrintFindings(results []checkmodels.CheckRunResult, outputFilePath string, isQuiet bool, repositoryUrl string) {
+func PrintFindings(results []checkmodels.CheckRunResult, outputFilePath string, isQuiet bool, repositoryUrl string, outputTemplateFilePath string) {
 	sortResuls(results)
 	if outputFilePath != "" {
-		PrintOutputToFile(results, outputFilePath, repositoryUrl)
+		PrintOutputToFile(results, outputFilePath, repositoryUrl, outputTemplateFilePath)
 	}
 	if !isQuiet {
 		s := NewStatistics()
