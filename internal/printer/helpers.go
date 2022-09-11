@@ -67,7 +67,7 @@ func PrintOutputToFile(data []checkmodels.CheckRunResult, outputFilePath string,
 	if strings.HasPrefix(outputTemplate, "@") {
 		buf, err := os.ReadFile(strings.TrimPrefix(outputTemplate, "@"))
 		if err != nil {
-			logger.Errorf(err, "error retrieving template from path:", outputTemplate)
+			logger.Errorf(err, "error retrieving template from path: %s", outputTemplate)
 		}
 		outputTemplate = string(buf)
 		t, _ := template.New("output template").Parse(outputTemplate)
