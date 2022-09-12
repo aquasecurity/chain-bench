@@ -25,6 +25,7 @@ type reportResult struct {
 	Name        string `json:"name,omitempty"`
 	Description string `json:"description,omitempty"`
 	Remediation string `json:"remediation,omitempty"`
+	Severity    string `json:"severity,omitempty"`
 	Result      string `json:"result,omitempty"`
 	Reason      string `json:"reason,omitempty"`
 	Url         string `json:"url,omitempty"`
@@ -98,6 +99,7 @@ func getPrintData(results []checkmodels.CheckRunResult) ([]reportResult, Statist
 			ID:          r.ID,
 			Description: r.Metadata.Description,
 			Remediation: r.Metadata.Remediation,
+			Severity:    r.Metadata.Severity,
 			Result:      string(r.Result.Status),
 			Reason:      r.Result.Details,
 			Url:         r.Metadata.Url})
