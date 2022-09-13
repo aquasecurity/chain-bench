@@ -30,7 +30,7 @@ func toUser(user *gitlab.User) *models.User {
 			//PublicGists:       user.gi,
 			//Followers:         user.f,
 			//Following:         user.Following,
-			CreatedAt: &utils.Timestamp{Time: *user.CreatedAt},
+			CreatedAt: &utils.Timestamp{Time: utils.GetValue(user.CreatedAt)},
 			//UpdatedAt:   (*utils.Timestamp)(user.at),
 			// SuspendedAt: (*utils.Timestamp)(user.SuspendedAt),
 			//Type:              user.o,
@@ -76,9 +76,9 @@ func toRepository(repo *gitlab.Project, branches []*models.Branch, collaborators
 			Name:                 &repo.Name,
 			Description:          &repo.Description,
 			DefaultBranch:        &repo.DefaultBranch,
-			CreatedAt:            &utils.Timestamp{Time: *repo.CreatedAt},
-			PushedAt:             &utils.Timestamp{Time: *repo.LastActivityAt},
-			UpdatedAt:            &utils.Timestamp{Time: *repo.LastActivityAt},
+			CreatedAt:            &utils.Timestamp{Time: utils.GetValue(repo.CreatedAt)},
+			PushedAt:             &utils.Timestamp{Time: utils.GetValue(repo.LastActivityAt)},
+			UpdatedAt:            &utils.Timestamp{Time: utils.GetValue(repo.LastActivityAt)},
 			OpenIssuesCount:      &repo.OpenIssuesCount,
 			StargazersCount:      &repo.StarCount,
 			AllowSquashMerge:     utils.GetPtr(repo.SquashOption == gitlab.SquashOptionAlways || repo.SquashOption == gitlab.SquashOptionDefaultOn),
@@ -132,10 +132,10 @@ func toBranchProtection(proj *gitlab.Project, protection *gitlab.ProtectedBranch
 	}
 	if protection != nil {
 		p = &models.Protection{
-			EnforceAdmins:        &models.AdminEnforcement{Enabled: false},
-			RequiredStatusChecks: &models.RequiredStatusChecks{
-				//Strict: proj,
-			},
+			EnforceAdmins: &models.AdminEnforcement{Enabled: false},
+			// RequiredStatusChecks: &models.RequiredStatusChecks{
+			// 	//Strict: proj,
+			// },
 			RequiredPullRequestReviews: &models.PullRequestReviewsEnforcement{
 				DismissStaleReviews:          appConfig.ResetApprovalsOnPush,
 				RequireCodeOwnerReviews:      protection.CodeOwnerApprovalRequired,
@@ -172,7 +172,7 @@ func toOrganization(group *gitlab.Group, hooks []*models.Hook) *models.Organizat
 			Name:                        &group.Name,
 			Description:                 &group.Description,
 			CreatedAt:                   group.CreatedAt,
-			Type:                        utils.GetPtr("organization"),
+			Type:                        utils.GetPtr("Organization"),
 			DefaultRepoPermission:       utils.GetPtr("inherit"),
 			MembersCanCreateRepos:       utils.GetPtr(group.ProjectCreationLevel != gitlab.NoOneProjectCreation),
 			TwoFactorRequirementEnabled: &group.RequireTwoFactorAuth,
