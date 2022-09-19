@@ -44,9 +44,11 @@ Read more in the [Chain-bench Documentation][docs]
 - [Contents](#contents)
 - [Introduction](#introduction)
 - [Quick start](#quick-start)
+  - [Installation](#installation)
   - [Usage](#usage)
     - [Using docker](#using-docker)
     - [Using GitHub Actions](#using-github-actions)
+    - [Using Gitlab CI (experimental)](#using-gitlab-ci-experimental)
 - [Requirements](#requirements)
 - [Supported Providers](#supported-providers)
 - [Please Note](#please-note)
@@ -140,8 +142,26 @@ See the repository at https://github.com/aquasecurity/chain-bench-action
  Total Passed Rules: 19 out of 36
 2022-06-13 15:22:31 INF Scan completed: 13.108s
 ```
-
 </details>
+
+
+### Using Gitlab CI (experimental)
+
+You can integrated chain-bench results into [Gitlab Vulnrability Report](https://docs.gitlab.com/ee/user/application_security/vulnerability_report/) by adding a new step within your CI defintion:
+```
+chain-bench-scanning:
+  stage: test
+  image:
+    name: docker.io/aquasec/chain-bench
+    entrypoint: [""]
+  script:
+    - chain-bench scan --repository-url $CI_PROJECT_URL --access-token $CHAIN_BENCH_TOKEN -o results.json --template @/home/chain-bench/templates/gitlab_security_scanner.tpl
+    - cat results.json
+  artifacts:
+    reports:
+      container_scanning: results.json
+```
+
 
 # Requirements
 

@@ -1,5 +1,21 @@
 {
-  "version": "14.0.6",
+  "version": "14.1.4",
+  "scan":{
+    "scanner":{
+        "id":"chain-bench",
+        "name":"Supply chain Scanner",
+        "vendor": {
+            "name":"chain-bench"
+        },
+        "version":"1.0"
+      },
+    "start_time":"2022-04-07T12:26:58",
+    "end_time":"2022-04-26T12:26:00",
+    "status":"success",
+    "messages": [
+      ],
+    "type":"container_scanning"
+  },
   "vulnerabilities": [
   {{- $t_first := true }}
   {{- range . }}
@@ -20,7 +36,10 @@
         "solution": {{ .Remediation | printf "%q" }},
         "scanner": {
           "id": "chain-bench",
-          "name": "chain-bench"
+          "name": "chain-bench",
+          "vendor": {
+           "name":"chain-bench"
+          }
         },
         "location": {
           "dependency": {
