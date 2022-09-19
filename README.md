@@ -161,6 +161,7 @@ chain-bench-scanning:
     reports:
       container_scanning: results.json
 ```
+* You have to create new [token](https://docs.gitlab.com/ee/user/project/settings/project_access_tokens.html) with `Maintainer` role that has `read_api` & `read_repository` permission and use it as environment variables (eg.$CHAIN_BENCH_TOKEN)
 
 
 # Requirements
