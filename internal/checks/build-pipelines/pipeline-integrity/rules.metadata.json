@@ -5,6 +5,7 @@
   "checks": {
     "2.4.2": {
       "title": "Ensure all external dependencies used in the build process are locked",
+      "severity": "Critical",
       "type": "BUILD",
       "entity": "Pipeline",
       "description": "External dependencies might be public packages needed in the pipeline or even the public image used for the build worker. Lock these external dependencies in every build pipeline.",
@@ -14,6 +15,7 @@
     },
     "2.4.6": {
       "title": "Ensure pipeline steps produce an SBOM",
+      "severity": "High",
       "type": "BUILD",
       "entity": "Pipeline",
       "description": "SBOM (Software Bill Of Materials) is a file that specifies each component of software or a build process. Generate an SBOM after each run of a pipeline.",
