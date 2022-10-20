@@ -5,6 +5,7 @@
   "checks": {
     "2.3.1": {
       "title": "Ensure all build steps are defined as code",
+      "severity": "High",
       "type": "BUILD",
       "entity": "Pipeline",
       "description": "Use Pipeline as Code for build pipelines and their defined steps.",
@@ -14,6 +15,7 @@
     },
     "2.3.5": {
       "title": "Ensure access to the build process's triggering is minimized",
+      "severity": "Medium",
       "type": "BUILD",
       "entity": "Pipeline",
       "description": "Restrict access to the pipelines' triggers.",
@@ -23,6 +25,7 @@
     },
     "2.3.7": {
       "title": "Ensure pipelines are automatically scanned for vulnerabilities",
+      "severity": "Critical",
       "type": "BUILD",
       "entity": "Pipeline",
       "description": "Scan pipelines for vulnerabilities. It is recommended to do that automatically.",
@@ -32,6 +35,7 @@
     },
     "2.3.8": {
       "title": "Ensure scanners are in place to identify and prevent sensitive data in pipeline files",
+      "severity": "Critical",
       "type": "BUILD",
       "entity": "Pipeline",
       "description": "Detect and prevent sensitive data, such as confidential ID numbers, passwords, etc. in pipelines.",

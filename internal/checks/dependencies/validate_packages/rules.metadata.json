@@ -5,6 +5,7 @@
   "checks": {
     "3.2.2": {
       "title": "Ensure packages are automatically scanned for known vulnerabilities",
+      "severity": "Critical",
       "type": "DEPENDENCIES",
       "entity": "Dependencies",
       "description": "Automatically scan every package for vulnerabilities.",
@@ -14,6 +15,7 @@
     },
     "3.2.3": {
       "title": "Ensure packages are automatically scanned for license implications",
+      "severity": "High",
       "type": "DEPENDENCIES",
       "entity": "Dependencies",
       "description": "A software license is a document that provides legal conditions and guidelines for the use and distribution of software, usually defined by the author. It is recommended to scan for any legal implications automatically.",

@@ -5,6 +5,7 @@
   "checks": {
     "3.1.7": {
       "title": "Ensure dependencies are pinned to a specific, verified version",
+      "severity": "Critical",
       "type": "DEPENDENCIES",
       "entity": "Dependencies",
       "description": "Pin dependencies to a specific version. Avoid using the \"latest\" tag or broad version.",
