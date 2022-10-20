@@ -13,8 +13,8 @@
       "scannerType": "Rego",
       "slsa_level": [
         4
-      ],
-      "severity": "Medium"
+      ]
+      
     },
     "1.1.4": {
       "title": "Ensure previous approvals are dismissed when updates are introduced to a code change proposal",
@@ -24,8 +24,8 @@
       "description": "Ensure updates to a proposed code change require re-approval of reviewers",
       "remediation": "For each code repository in use, enforce an organization-wide policy to dismiss given approvals to code change suggestions if those suggestions were updated.",
       "scannerType": "Rego",
-      "slsa_level": [],
-      "severity": "High"
+      "slsa_level": []
+      
     },
     "1.1.5": {
       "title": "Ensure that there are restrictions on who can dismiss code change reviews",
@@ -47,8 +47,8 @@
       "scannerType": "Rego",
       "slsa_level": [
         4
-      ],
-      "severity": "Medium"
+      ]
+      
     },
     "1.1.8": {
       "title": "Ensure inactive branches are reviewed and removed periodically",
@@ -70,8 +70,8 @@
       "scannerType": "Rego",
       "slsa_level": [
         4
-      ],
-      "severity": "Medium"
+      ]
+      
     },
     "1.1.10": {
       "title": "Ensure open git branches are up to date before they can be merged into codebase",
@@ -81,19 +81,17 @@
       "description": "Organizations should make sure each suggested code change is in full sync with the existing state of its origin code repository, before allowing to merge it in.",
       "remediation": "For each code repository in use, enforce a policy to only allow merging open branches if they are current with the latest change from their origin repository.",
       "scannerType": "Rego",
-      "slsa_level": [],
-      "severity": "Medium"
+      "slsa_level": []
     },
     "1.1.11": {
       "title": "Ensure all open comments are resolved before allowing to merge code changes",
-      "severity": "Medium",
+      "severity": "Low",
       "type": "SCM",
       "entity": "Branch",
       "description": "Organizations should enforce a \"no open comments\" policy before allowing to merge code changes.",
       "remediation": "For each code repository in use, require open comments to be resolved before the relevant code change can be merged.",
       "scannerType": "Rego",
-      "slsa_level": [],
-      "severity": "Low"
+      "slsa_level": []
     },
     "1.1.12": {
       "title": "Ensure verifying signed commits of new changes before merging",
@@ -105,8 +103,7 @@
       "scannerType": "Rego",
       "slsa_level": [
         4
-      ],
-      "severity": "High"
+      ]
     },
     "1.1.13": {
       "title": "Ensure linear history is required",
@@ -119,12 +116,11 @@
       "slsa_level": [
         3,
         4
-      ],
-      "severity": "Medium"
+      ]
     },
     "1.1.14": {
       "title": "Ensure branch protection rules are enforced on administrators",
-      "severity": "Critical/High",
+      "severity": "High",
       "type": "SCM",
       "entity": "Repository",
       "description": "Ensure administrators are subject to branch protection rules.",
@@ -136,7 +132,7 @@
     },
     "1.1.15": {
       "title": "Ensure pushing of new code is restricted to specific individuals or teams",
-      "severity": "High",
+      "severity": "Critical",
       "type": "SCM",
       "entity": "Repository",
       "description": "Enforce that only trusted users can push to protected branches.",
@@ -144,8 +140,7 @@
       "scannerType": "Rego",
       "slsa_level": [
         4
-      ],
-      "severity": "Critical"
+      ]
     },
     "1.1.16": {
       "title": "Ensure force pushes code to branches is denied",
@@ -157,8 +152,7 @@
       "scannerType": "Rego",
       "slsa_level": [
         4
-      ],
-      "severity": "Critical"
+      ]
     },
     "1.1.17": {
       "title": "Ensure branch deletions are denied",

@@ -13,8 +13,7 @@
       "scannerType": "Rego",
       "slsa_level": [
         4
-      ],
-      "severity": "High"
+      ]
     },
     "1.3.3": {
       "title": "Ensure minimum admins are set for the organization",
@@ -39,8 +38,7 @@
       "slsa_level": [
         3,
         4
-      ],
-      "severity": "Critical"
+      ]
     },
     "1.3.7": {
       "title": "Ensure 2 admins are set for each repository",
@@ -64,8 +62,7 @@
       "scannerType": "Rego",
       "slsa_level": [
         4
-      ],
-      "severity": "Medium"
+      ]
     },
     "1.3.9": {
       "title": "Ensure an organization's identity is confirmed with a Verified badge",
