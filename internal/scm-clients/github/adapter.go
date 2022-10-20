@@ -23,8 +23,8 @@ type ClientAdapterImpl struct {
 }
 
 // Init implements clients.ClientAdapter
-func (*ClientAdapterImpl) Init(client *http.Client) error {
-	ghClient, err := InitClient(client)
+func (*ClientAdapterImpl) Init(client *http.Client, token string) error {
+	ghClient, err := InitClient(client, token)
 	Adapter = ClientAdapterImpl{client: ghClient}
 	return err
 }
@@ -122,14 +122,14 @@ func (ca *ClientAdapterImpl) GetCommit(owner string, repo string, sha string) (*
 }
 
 // GetBranchProtection implements clients.ClientAdapter
-func (ca *ClientAdapterImpl) GetBranchProtection(owner string, repo string, branch string) (*models.Protection, error) {
-	prot, _, err := ca.client.GetBranchProtection(owner, repo, branch)
+func (ca *ClientAdapterImpl) GetBranchProtection(owner string, repo *models.Repository, branch string) (*models.Protection, error) {
+	prot, _, err := ca.client.GetBranchProtection(owner, *repo.Name, branch)
 	if err != nil {
 		logger.Error(err, "error in fetching branch protection")
 		return nil, err
 	}
 
-	sc, _, err := ca.client.GetSignaturesOfProtectedBranch(owner, repo, branch)
+	sc, _, err := ca.client.GetSignaturesOfProtectedBranch(owner, *repo.Name, branch)
 	if err != nil {
 		logger.WarnE(err, "failed to fetch commit signature protection")
 	}

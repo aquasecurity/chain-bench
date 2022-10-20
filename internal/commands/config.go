@@ -13,9 +13,10 @@ func generateCliConfig() *config.Configuration {
 			LogFormat:   logFormat,
 			NoColor:     noColor,
 		},
-		OutputFilePath: outputFilePath,
-		RepositoryUrl:  repositoryUrl,
-		AccessToken:    accessToken,
+		OutputFilePath:         outputFilePath,
+		RepositoryUrl:          repositoryUrl,
+		OutputTemplateFilePath: outputTemplateFilePath,
+		AccessToken:            accessToken,
 	}
 }
 

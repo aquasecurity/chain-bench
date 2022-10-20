@@ -12,6 +12,10 @@ var (
 	outputFilePathFlagName  = "output-file"
 	outputFilePathShortFlag = "o"
 
+	// outputFilePath if provided, output will be appended to a file
+	outputTemplateFilePath         string
+	outputTemplateFilePathFlagName = "template"
+
 	// logFilePath if provided, logs will be appended to a file
 	logFilePath          string
 	logFilePathFlagName  = "log-file"

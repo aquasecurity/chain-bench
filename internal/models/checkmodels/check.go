@@ -66,6 +66,7 @@ type CheckMetadata struct {
 	Description string
 	Remediation string
 	Url         string
+	Severity    string
 	ScannerType
 }
 
@@ -104,6 +105,7 @@ func ToCheckRunResult(id string, metadata CheckMetadata, sectionUrl string, resu
 			Entity:      metadata.Entity,
 			Description: metadata.Description,
 			Remediation: metadata.Remediation,
+			Severity:    metadata.Severity,
 			Url:         getPermalink(sectionUrl, id, metadata.Title),
 			ScannerType: metadata.ScannerType,
 		},
