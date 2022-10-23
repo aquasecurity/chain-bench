@@ -5,6 +5,7 @@
   "checks": {
     "1.3.1": {
       "title": "Ensure inactive users are reviewed and removed periodically",
+      "severity": "High",
       "type": "SCM",
       "entity": "Repository",
       "description": "Track inactive user accounts and periodically remove them.",
@@ -12,11 +13,11 @@
       "scannerType": "Rego",
       "slsa_level": [
         4
-      ],
-      "severity": "High"
+      ]
     },
     "1.3.3": {
       "title": "Ensure minimum admins are set for the organization",
+      "severity": "High",
       "type": "SCM",
       "entity": "Organization",
       "description": "Ensure the organization has a minimum number of admins.",
@@ -28,6 +29,7 @@
     },
     "1.3.5": {
       "title": "Ensure the organization is requiring members to use MFA",
+      "severity": "Critical",
       "type": "SCM",
       "entity": "Organization",
       "description": "Require members of the organization to use Multi-Factor Authentication, in addition to using a standard user name and password, when authenticating to the source code management platform.",
@@ -36,11 +38,11 @@
       "slsa_level": [
         3,
         4
-      ],
-      "severity": "Critical"
+      ]
     },
     "1.3.7": {
       "title": "Ensure 2 admins are set for each repository",
+      "severity": "High",
       "type": "SCM",
       "entity": "Repository",
       "description": "Ensure every repository has 2 users with admin permissions to it.",
@@ -52,6 +54,7 @@
     },
     "1.3.8": {
       "title": "Ensure strict base permissions are set for repositories",
+      "severity": "High",
       "type": "SCM",
       "entity": "Organization",
       "description": "Base permissions define the permission level granted to all the organization members automatically. Define strict base access permissions for all of the repositories in the organization, which should apply to new ones as well.",
@@ -59,11 +62,11 @@
       "scannerType": "Rego",
       "slsa_level": [
         4
-      ],
-      "severity": "Medium"
+      ]
     },
     "1.3.9": {
       "title": "Ensure an organization's identity is confirmed with a Verified badge",
+      "severity": "High",
       "type": "SCM",
       "entity": "Organization",
       "description": "Verify the domains that the organization owns",

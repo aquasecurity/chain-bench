@@ -5,6 +5,7 @@
     "checks": {
         "4.2.3": {
             "title": "Ensure user's access to the package registry utilizes MFA",
+            "severity": "Critical",
             "type": "ARTIFACT",
             "entity": "PackageRegistry",
             "description": "Enforce Multi Factor Authentication for user access to the package registry.",
@@ -14,6 +15,7 @@
         },
         "4.2.5": {
             "title": "Ensure anonymous access to artifacts is revoked",
+            "severity": "Critical",
             "type": "ARTIFACT",
             "entity": "PackageRegistry",
             "description": "Disable anonymous access to artifacts.",
