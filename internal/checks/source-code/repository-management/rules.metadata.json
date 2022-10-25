@@ -5,6 +5,7 @@
   "checks": {
     "1.2.1": {
       "title": "Ensure all public repositories contain a SECURITY.md file",
+      "severity": "Low",
       "type": "SCM",
       "entity": "Repository",
       "description": "SECURITY.md file is a security policy file, which gives people instructions when they are reporting security vulnerabilities in a project. When someone creates an issue in that project, a link to the SECURITY.md file will be shown.",
@@ -14,6 +15,7 @@
     },
     "1.2.2": {
       "title": "Ensure repository creation is limited to specific members",
+      "severity": "Medium",
       "type": "SCM",
       "entity": "Organization",
       "description": "Limit the ability to create repositories to trusted users and teams.",
@@ -23,6 +25,7 @@
     },
     "1.2.3": {
       "title": "Ensure repository deletion is limited to specific members",
+      "severity": "Medium",
       "type": "SCM",
       "entity": "Organization",
       "description": "Ensure only a limited number of trusted members can delete repositories.",
@@ -32,6 +35,7 @@
     },
     "1.2.4": {
       "title": "Ensure issue deletion is limited to specific members",
+      "severity": "High",
       "type": "SCM",
       "entity": "Organization",
       "description": "Ensure only trusted an responsible members can delete issues.",

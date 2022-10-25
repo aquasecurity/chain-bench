@@ -42,7 +42,7 @@ type GithubClientImpl struct {
 
 var _ GithubClient = (*GithubClientImpl)(nil) // Verify that *GithubClientImpl implements GithubClient.
 
-func InitClient(client *http.Client) (GithubClient, error) {
+func InitClient(client *http.Client, token string) (GithubClient, error) {
 	gc := github.NewClient(client)
 	Client = &GithubClientImpl{ctx: context.TODO(), client: gc}
 	return Client, nil

@@ -5,6 +5,7 @@
   "checks": {
     "4.3.4": {
       "title": "Ensure webhooks of the package registry are secured",
+      "severity": "Critical",
       "type": "ARTIFACT",
       "entity": "PackageRegistry",
       "description": "Use secured webhooks of the package registry.",

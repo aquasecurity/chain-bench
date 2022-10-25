@@ -65,6 +65,9 @@ func initialize(rootCmd *cobra.Command) {
 	rootCmd.PersistentFlags().StringVarP(&outputFilePath,
 		outputFilePathFlagName, outputFilePathShortFlag, "",
 		"the path to a file that will contain the results of the scanning")
+	rootCmd.PersistentFlags().StringVar(&outputTemplateFilePath,
+		outputTemplateFilePathFlagName, "",
+		"the path to an output template format file")
 	rootCmd.PersistentFlags().StringVarP(&configFilePath,
 		configFilePathFlagName, configFilePathShortFlag, "",
 		"the path to a local configuration file")

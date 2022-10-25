@@ -14,6 +14,7 @@ type Protection struct {
 	AllowDeletions                 bool
 	RequiredConversationResolution bool
 	RequiredSignedCommit           bool
+	//PreventSecrets                 bool
 }
 
 // PullRequestReviewsEnforcement represents the pull request reviews enforcement of a protected branch.

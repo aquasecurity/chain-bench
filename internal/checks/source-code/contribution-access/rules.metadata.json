@@ -5,57 +5,74 @@
   "checks": {
     "1.3.1": {
       "title": "Ensure inactive users are reviewed and removed periodically",
+      "severity": "High",
       "type": "SCM",
       "entity": "Repository",
       "description": "Track inactive user accounts and periodically remove them.",
       "remediation": "For each repository in use, review inactive user accounts (members that left the organization, etc.) and remove them.",
       "scannerType": "Rego",
-      "slsa_level": [4]
+      "slsa_level": [
+        4
+      ]
     },
     "1.3.3": {
       "title": "Ensure minimum admins are set for the organization",
+      "severity": "High",
       "type": "SCM",
       "entity": "Organization",
       "description": "Ensure the organization has a minimum number of admins.",
       "remediation": "Set the minimum number of administrators in your organization.",
       "scannerType": "Rego",
-      "slsa_level": [4] 
+      "slsa_level": [
+        4
+      ]
     },
     "1.3.5": {
       "title": "Ensure the organization is requiring members to use MFA",
+      "severity": "Critical",
       "type": "SCM",
       "entity": "Organization",
       "description": "Require members of the organization to use Multi-Factor Authentication, in addition to using a standard user name and password, when authenticating to the source code management platform.",
       "remediation": "Use the built-in setting to set the enforcement of Multi-Factor Authentication for each member of the organization.",
       "scannerType": "Rego",
-      "slsa_level": [3, 4]
+      "slsa_level": [
+        3,
+        4
+      ]
     },
     "1.3.7": {
       "title": "Ensure 2 admins are set for each repository",
+      "severity": "High",
       "type": "SCM",
       "entity": "Repository",
       "description": "Ensure every repository has 2 users with admin permissions to it.",
       "remediation": "For every repository in use, set two administrators.",
       "scannerType": "Rego",
-      "slsa_level": [4]
+      "slsa_level": [
+        4
+      ]
     },
     "1.3.8": {
       "title": "Ensure strict base permissions are set for repositories",
+      "severity": "High",
       "type": "SCM",
       "entity": "Organization",
       "description": "Base permissions define the permission level granted to all the organization members automatically. Define strict base access permissions for all of the repositories in the organization, which should apply to new ones as well.",
       "remediation": "Set strict base permissions for the organization repositories — either \"None\" or \"Read.\"",
       "scannerType": "Rego",
-      "slsa_level": [4] 
+      "slsa_level": [
+        4
+      ]
     },
     "1.3.9": {
       "title": "Ensure an organization's identity is confirmed with a Verified badge",
+      "severity": "High",
       "type": "SCM",
       "entity": "Organization",
       "description": "Verify the domains that the organization owns",
       "remediation": "Verify the organization's domains and secure a \"Verified\" badge next to its name.",
       "scannerType": "Rego",
-      "slsa_level": [] 
+      "slsa_level": []
     }
   }
 }

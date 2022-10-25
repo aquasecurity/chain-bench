@@ -23,8 +23,8 @@ type ClientAdapterImpl struct {
 }
 
 // Init implements clients.ClientAdapter
-func (*ClientAdapterImpl) Init(client *http.Client) error {
-	ghClient, err := InitClient(client)
+func (*ClientAdapterImpl) Init(client *http.Client, token string) error {
+	ghClient, err := InitClient(client, token)
 	Adapter = ClientAdapterImpl{client: ghClient}
 	return err
 }
@@ -72,7 +72,7 @@ func (ca *ClientAdapterImpl) GetRepository(owner string, repo string, branch str
 	return toRepository(rep, branches, toUsers(collaborators), toHooks(hooks), toCommits(commits), isRepoContainsSecurityMD), nil
 }
 
-//listRepositoryBranches implements clients.ClientAdapter
+// listRepositoryBranches implements clients.ClientAdapter
 func (ca *ClientAdapterImpl) ListRepositoryBranches(owner string, repo string) ([]*models.Branch, error) {
 	branches, _, err := ca.client.ListRepositoryBranches(owner, repo)
 	if err != nil {
@@ -122,14 +122,14 @@ func (ca *ClientAdapterImpl) GetCommit(owner string, repo string, sha string) (*
 }
 
 // GetBranchProtection implements clients.ClientAdapter
-func (ca *ClientAdapterImpl) GetBranchProtection(owner string, repo string, branch string) (*models.Protection, error) {
-	prot, _, err := ca.client.GetBranchProtection(owner, repo, branch)
+func (ca *ClientAdapterImpl) GetBranchProtection(owner string, repo *models.Repository, branch string) (*models.Protection, error) {
+	prot, _, err := ca.client.GetBranchProtection(owner, *repo.Name, branch)
 	if err != nil {
 		logger.Error(err, "error in fetching branch protection")
 		return nil, err
 	}
 
-	sc, _, err := ca.client.GetSignaturesOfProtectedBranch(owner, repo, branch)
+	sc, _, err := ca.client.GetSignaturesOfProtectedBranch(owner, *repo.Name, branch)
 	if err != nil {
 		logger.WarnE(err, "failed to fetch commit signature protection")
 	}
@@ -242,6 +242,10 @@ func (ca *ClientAdapterImpl) GetFileContent(owner string, repo string, filepath 
 		return nil, err
 	}
 	return decodedText, nil
+}
+
+func (ca *ClientAdapterImpl) ListSupportedChecksIDs() ([]string, error) {
+	return nil, nil //all checks are supported
 }
 
 var _ adapter.ClientAdapter = (*ClientAdapterImpl)(nil) // Verify that *ClientAdapterImpl implements ClientAdapter.
