@@ -48,7 +48,7 @@ Read more in the [Chain-bench Documentation][docs]
   - [Usage](#usage)
     - [Using docker](#using-docker)
     - [Using GitHub Actions](#using-github-actions)
-    - [Using Gitlab CI (experimental)](#using-gitlab-ci-experimental)
+    - [Using Gitlab CI (beta)](#using-gitlab-ci-beta)
 - [Requirements](#requirements)
 - [Supported Providers](#supported-providers)
 - [Please Note](#please-note)
@@ -145,7 +145,7 @@ See the repository at https://github.com/aquasecurity/chain-bench-action
 </details>
 
 
-### Using Gitlab CI (experimental)
+### Using Gitlab CI (beta)
 
 You can integrated chain-bench results into [Gitlab Vulnrability Report](https://docs.gitlab.com/ee/user/application_security/vulnerability_report/) by adding a new step within your CI defintion:
 ```
@@ -156,7 +156,6 @@ chain-bench-scanning:
     entrypoint: [""]
   script:
     - chain-bench scan --repository-url $CI_PROJECT_URL --access-token $CHAIN_BENCH_TOKEN -o results.json --template @/home/chain-bench/templates/gitlab_security_scanner.tpl
-    - cat results.json
   artifacts:
     reports:
       container_scanning: results.json
