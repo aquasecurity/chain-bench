@@ -140,4 +140,8 @@ func (ca *ClientAdapterImpl) GetPipelines(owner string, repo string, branch stri
 	return nil, nil
 }
 
+func (ca *ClientAdapterImpl) ListSupportedChecksIDs() ([]string, error) {
+	return []string{"1.1.3", "1.1.4", "1.1.6", "1.1.11", "1.1.12", "1.1.13", "1.1.16", "1.3.5", "1.3.8"}, nil
+}
+
 var _ adapter.ClientAdapter = (*ClientAdapterImpl)(nil) // Verify that *ClientAdapterImpl implements ClientAdapter.

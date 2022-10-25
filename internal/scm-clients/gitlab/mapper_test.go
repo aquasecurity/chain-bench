@@ -106,6 +106,7 @@ func TestToUsers(t *testing.T) {
 	login := "liorvais"
 	var excepted = models.User{Login: &login,
 		ID:        utils.GetPtr(int64(213)),
+		Type:      utils.GetPtr("User"),
 		CreatedAt: &utils.Timestamp{},
 		HTMLURL:   utils.GetPtr(""),
 		AvatarURL: utils.GetPtr(""),

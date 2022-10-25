@@ -22,15 +22,15 @@ const (
 	GitlabEndpoint = "gitlab.com"
 )
 
-func FetchClientData(accessToken string, repoUrl string, branch string) (*checkmodels.AssetsData, error) {
+func FetchClientData(accessToken string, repoUrl string, branch string) (*checkmodels.AssetsData, []string, error) {
 	scmName, orgName, repoName, err := getRepoInfo(repoUrl)
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 
 	adapter, err := getClientAdapter(scmName, accessToken)
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 	authorizedUser, _ := adapter.GetAuthorizedUser()
 
@@ -61,6 +61,8 @@ func FetchClientData(accessToken string, repoUrl string, branch string) (*checkm
 		}
 	}
 
+	checksIds, err := adapter.ListSupportedChecksIDs()
+
 	return &checkmodels.AssetsData{
 		AuthorizedUser:    authorizedUser,
 		Organization:      org,
@@ -68,7 +70,7 @@ func FetchClientData(accessToken string, repoUrl string, branch string) (*checkm
 		BranchProtections: protection,
 		Pipelines:         pipelines,
 		Registry:          registry,
-	}, nil
+	}, checksIds, nil
 }
 
 func getRepoInfo(repoUrl string) (scm string, org string, repo string, err error) {

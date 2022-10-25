@@ -72,7 +72,7 @@ func (ca *ClientAdapterImpl) GetRepository(owner string, repo string, branch str
 	return toRepository(rep, branches, toUsers(collaborators), toHooks(hooks), toCommits(commits), isRepoContainsSecurityMD), nil
 }
 
-//listRepositoryBranches implements clients.ClientAdapter
+// listRepositoryBranches implements clients.ClientAdapter
 func (ca *ClientAdapterImpl) ListRepositoryBranches(owner string, repo string) ([]*models.Branch, error) {
 	branches, _, err := ca.client.ListRepositoryBranches(owner, repo)
 	if err != nil {
@@ -242,6 +242,10 @@ func (ca *ClientAdapterImpl) GetFileContent(owner string, repo string, filepath 
 		return nil, err
 	}
 	return decodedText, nil
+}
+
+func (ca *ClientAdapterImpl) ListSupportedChecksIDs() ([]string, error) {
+	return nil, nil //all checks are supported
 }
 
 var _ adapter.ClientAdapter = (*ClientAdapterImpl)(nil) // Verify that *ClientAdapterImpl implements ClientAdapter.

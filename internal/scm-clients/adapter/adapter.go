@@ -9,6 +9,7 @@ import (
 
 type ClientAdapter interface {
 	Init(client *http.Client, token string) error
+	ListSupportedChecksIDs() ([]string, error)
 	GetRepository(owner, repo, branchName string) (*models.Repository, error)
 	ListRepositoryBranches(owner, repo string) ([]*models.Branch, error)
 	GetBranchProtection(owner string, repo *models.Repository, branch string) (*models.Protection, error)
