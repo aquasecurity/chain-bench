@@ -13,45 +13,18 @@ func toUser(user *gitlab.User) *models.User {
 
 	if user != nil {
 		u = &models.User{
-			Login: &user.Username,
-			ID:    utils.GetPtr(int64(user.ID)),
-			//NodeID:            user.n,
+			Login:     &user.Username,
+			ID:        utils.GetPtr(int64(user.ID)),
 			AvatarURL: &user.AvatarURL,
 			HTMLURL:   &user.WebsiteURL,
-			//GravatarID:        user.GravatarID,
-			Name: &user.Name,
-			//Company:           user.Company,
-			//Blog:              user.b,
-			Location: &user.Location,
-			Email:    &user.Email,
-			//Hireable:          user.hi,
-			Bio: &user.Bio,
-			//PublicRepos:       user.pro,
-			//PublicGists:       user.gi,
-			//Followers:         user.f,
-			//Following:         user.Following,
+			Name:      &user.Name,
+			Location:  &user.Location,
+			Email:     &user.Email,
+			Bio:       &user.Bio,
 			CreatedAt: &utils.Timestamp{Time: utils.GetValue(user.CreatedAt)},
-			//UpdatedAt:   (*utils.Timestamp)(user.at),
-			// SuspendedAt: (*utils.Timestamp)(user.SuspendedAt),
-			//Type:              user.o,
+			Type:      utils.GetPtr("User"),
 			SiteAdmin: &user.IsAdmin,
-			//TotalPrivateRepos: user.pro,
-			//OwnedPrivateRepos: user.ow,
-			//PrivateGists:      user.PrivateGists,
-			//DiskUsage:     user.DiskUsage,
-			//Collaborators: user.col,
-			//Plan:              toPlan(user.Plan),
-			URL: &user.WebURL,
-			// EventsURL:         user.EventsURL,
-			// FollowingURL:      user.FollowersURL,
-			// FollowersURL:      user.FollowersURL,
-			// GistsURL:          user.GistsURL,
-			//OrganizationsURL:  user.org,
-			//ReceivedEventsURL: user.ReceivedEventsURL,
-			//ReposURL:          user.re,
-			// StarredURL:        user.StarredURL,
-			// SubscriptionsURL:  user.SubscriptionsURL,
-			//Permissions:       &user.acc,
+			URL:       &user.WebURL,
 		}
 	}
 	return u
@@ -115,7 +88,7 @@ func toBranch(branch *gitlab.Branch) *models.Branch {
 	if branch != nil {
 		b = &models.Branch{
 			Name: &branch.Name,
-			//Commit:    toCommit(branch.Commit),
+			//TODO: Commit:    toCommit(branch.Commit),
 			Protected: &branch.Protected,
 		}
 	}
@@ -133,18 +106,15 @@ func toBranchProtection(proj *gitlab.Project, protection *gitlab.ProtectedBranch
 	if protection != nil {
 		p = &models.Protection{
 			EnforceAdmins: &models.AdminEnforcement{Enabled: false},
-			// RequiredStatusChecks: &models.RequiredStatusChecks{
-			// 	//Strict: proj,
-			// },
 			RequiredPullRequestReviews: &models.PullRequestReviewsEnforcement{
 				DismissStaleReviews:          appConfig.ResetApprovalsOnPush,
 				RequireCodeOwnerReviews:      protection.CodeOwnerApprovalRequired,
 				RequiredApprovingReviewCount: approvingReviewCount},
-			//Restrictions: toBranchRestrictions(appConfig.Approvers, appConfig.ApproverGroups), //todo
+			//TODO: Restrictions: toBranchRestrictions(appConfig.Approvers, appConfig.ApproverGroups),
 			AllowForcePushes:               protection.AllowForcePush,
 			RequiredConversationResolution: proj.OnlyAllowMergeIfAllDiscussionsAreResolved,
 			RequiredSignedCommit:           isMatchDefault && pushRules.RejectUnsignedCommits,
-			//PreventSecrets:                 isMatchDefault && pushRules.PreventSecrets,
+			//TODO: PreventSecrets:                 isMatchDefault && pushRules.PreventSecrets,
 		}
 	}
 	return p
