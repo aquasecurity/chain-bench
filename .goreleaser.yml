@@ -30,6 +30,7 @@ archives:
     files:
       - README.md
       - LICENSE
+      - templates/*.tpl
 
 brews:
   - 
