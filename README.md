@@ -155,7 +155,7 @@ chain-bench-scanning:
     name: docker.io/aquasec/chain-bench
     entrypoint: [""]
   script:
-    - chain-bench scan --repository-url $CI_PROJECT_URL --access-token $CHAIN_BENCH_TOKEN -o results.json --template @/home/chain-bench/templates/gitlab_security_scanner.tpl
+    - chain-bench scan --repository-url $CI_PROJECT_URL --access-token $CHAIN_BENCH_TOKEN -o results.json --template @/templates/gitlab_security_scanner.tpl
   artifacts:
     reports:
       container_scanning: results.json
