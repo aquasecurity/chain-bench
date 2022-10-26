@@ -63,6 +63,8 @@ dockers:
       - "--label=org.opencontainers.image.url=https://github.com/aquasecurity/chain-bench"
       - "--label=org.opencontainers.image.documentation=https://github.com/aquasecurity/chain-bench"
       - "--platform=linux/amd64"
+    extra_files:
+    - templates/
   - image_templates:
       - "{{ .Env.DOCKERHUB_PATH }}/chain-bench:{{ .Version }}-arm64"
       - "{{ .Env.DOCKERHUB_PATH }}/chain-bench:latest-arm64"
@@ -85,6 +87,8 @@ dockers:
       - "--label=org.opencontainers.image.url=https://github.com/aquasecurity/chain-bench"
       - "--label=org.opencontainers.image.documentation=https://github.com/aquasecurity/chain-bench"
       - "--platform=linux/arm64"
+    extra_files:
+    - templates/
 
 docker_manifests:
   - name_template: '{{ .Env.DOCKERHUB_PATH }}/chain-bench:{{ .Version }}'
