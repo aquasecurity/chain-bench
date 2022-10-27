@@ -89,9 +89,9 @@ func getRepoInfo(repoFullUrl string) (string, string, string, error) {
 	}
 	repo := path[len(path) - 1]
 	namespace := strings.Split(u.Path, repo)[0]
-	namespaceTrimed := namespace[1:(len(namespace) - 1)]
+	trimedNamespace := namespace[1:(len(namespace) - 1)]
 
-	return u.Host, namespaceTrimed, repo, nil
+	return u.Host, trimedNamespace, repo, nil
 }
 
 func getClientAdapter(scmName string, accessToken string) (adapter.ClientAdapter, error) {
