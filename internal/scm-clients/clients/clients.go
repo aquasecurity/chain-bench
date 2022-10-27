@@ -73,10 +73,10 @@ func FetchClientData(accessToken string, repoUrl string, branch string) (*checkm
 	}, checksIds, nil
 }
 
-func getRepoInfo(repoUrl string) (scm string, org string, repo string, err error) {
-	u, err := url.Parse(repoUrl)
+func getRepoInfo(repoFullUrl string) (string, string, string, error) {
+	u, err := url.Parse(repoFullUrl)
 	if err != nil || u.Scheme == "" {
-		logger.Errorf(err, "error in parsing repoUrl %s", repoUrl)
+		logger.Errorf(err, "error in parsing repoUrl %s", repoFullUrl)
 		if err == nil {
 			err = errors.New("error in parsing the host")
 		}
@@ -85,9 +85,13 @@ func getRepoInfo(repoUrl string) (scm string, org string, repo string, err error
 
 	path := strings.Split(u.EscapedPath(), "/")
 	if len(path) < 3 {
-		return "", "", "", fmt.Errorf("missing org/repo in the repository url: %s", repoUrl)
+		return "", "", "", fmt.Errorf("missing org/repo in the repository url: %s", repoFullUrl)
 	}
-	return u.Host, path[1], path[2], nil
+	repo := path[len(path) - 1]
+	namespace := strings.Split(u.Path, repo)[0]
+	namespaceTrimed := namespace[1:(len(namespace) - 1)]
+
+	return u.Host, namespaceTrimed, repo, nil
 }
 
 func getClientAdapter(scmName string, accessToken string) (adapter.ClientAdapter, error) {
