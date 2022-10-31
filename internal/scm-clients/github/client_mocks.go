@@ -12,7 +12,7 @@ func MockGetRepo(repo *github.Repository) *GithubClient {
 			*repo,
 		),
 	)
-	gc, _ := InitClient(mockedHTTPClient,"")
+	gc, _ := InitClient(mockedHTTPClient, "", "github.com")
 	return &gc
 }
 
@@ -23,7 +23,7 @@ func MockGetBranchProtections(protection *github.Protection) *GithubClient {
 			*protection,
 		),
 	)
-	gc, _ := InitClient(mockedHTTPClient, "")
+	gc, _ := InitClient(mockedHTTPClient, "", "github.com")
 	return &gc
 }
 
@@ -34,7 +34,7 @@ func MockGetSignaturesOfProtectedBranch(signedCommits *github.SignaturesProtecte
 			*signedCommits,
 		),
 	)
-	gc, _ := InitClient(mockedHTTPClient, "")
+	gc, _ := InitClient(mockedHTTPClient, "", "github.com")
 	return &gc
 }
 
@@ -45,7 +45,7 @@ func MockGetOrganization(org *github.Organization) *GithubClient {
 			*org,
 		),
 	)
-	gc, _ := InitClient(mockedHTTPClient, "")
+	gc, _ := InitClient(mockedHTTPClient, "", "github.com")
 	return &gc
 }
 
@@ -56,7 +56,7 @@ func MockGetOrganizationMembers(users []*github.User) *GithubClient {
 			users,
 		),
 	)
-	gc, _ := InitClient(mockedHTTPClient, "")
+	gc, _ := InitClient(mockedHTTPClient, "", "github.com")
 	return &gc
 }
 
@@ -67,7 +67,7 @@ func MockGetWorkflows(workflows *github.Workflows) *GithubClient {
 			workflows,
 		),
 	)
-	gc, _ := InitClient(mockedHTTPClient, "")
+	gc, _ := InitClient(mockedHTTPClient, "", "github.com")
 	return &gc
 }
 
@@ -78,7 +78,7 @@ func MockGetContent(content *github.RepositoryContent) *GithubClient {
 			content,
 		),
 	)
-	gc, _ := InitClient(mockedHTTPClient, "")
+	gc, _ := InitClient(mockedHTTPClient, "", "github.com")
 	return &gc
 }
 
@@ -89,7 +89,7 @@ func MockGetOrganizationWebhooks(hooks []*github.Hook) *GithubClient {
 			hooks,
 		),
 	)
-	gc, _ := InitClient(mockedHTTPClient, "")
+	gc, _ := InitClient(mockedHTTPClient, "", "github.com")
 	return &gc
 }
 
@@ -100,7 +100,7 @@ func MockGetRepositoryWebhooks(hooks []*github.Hook) *GithubClient {
 			hooks,
 		),
 	)
-	gc, _ := InitClient(mockedHTTPClient, "")
+	gc, _ := InitClient(mockedHTTPClient, "", "github.com")
 	return &gc
 }
 
@@ -111,7 +111,7 @@ func MockListCommits(commits []*github.RepositoryCommit) *GithubClient {
 			commits,
 		),
 	)
-	gc, _ := InitClient(mockedHTTPClient, "")
+	gc, _ := InitClient(mockedHTTPClient, "", "github.com")
 	return &gc
 }
 
@@ -122,6 +122,6 @@ func MockListOrganizationPackages(packages []*github.Package) *GithubClient {
 			packages,
 		),
 	)
-	gc, _ := InitClient(mockedHTTPClient, "")
+	gc, _ := InitClient(mockedHTTPClient, "", "github.com")
 	return &gc
 }

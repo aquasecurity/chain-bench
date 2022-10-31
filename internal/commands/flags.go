@@ -47,10 +47,15 @@ var (
 	repositoryUrlFlagName  = "repository-url"
 	repositoryUrlShortFlag = "r"
 
-	// repositoryUrl the path to the repository to scan
+	// accessToken the access token to use for the repository
 	accessToken          string
 	accessTokenFlagName  = "access-token"
 	accessTokenShortFlag = "t"
+
+	// scm hosting the repository
+	scm          string
+	scmFlagName  = "scm"
+	scmShortFlag = "s"
 
 	// branch the branch name to scan
 	branch          string

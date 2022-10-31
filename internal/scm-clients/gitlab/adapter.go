@@ -19,8 +19,8 @@ type ClientAdapterImpl struct {
 	client GitlabClient
 }
 
-func (*ClientAdapterImpl) Init(client *http.Client, token string) error {
-	glClient, err := InitClient(client, token)
+func (*ClientAdapterImpl) Init(client *http.Client, token string, host string) error {
+	glClient, err := InitClient(client, token, host)
 	Adapter = ClientAdapterImpl{client: glClient}
 	return err
 }

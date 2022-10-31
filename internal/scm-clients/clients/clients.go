@@ -18,17 +18,17 @@ import (
 )
 
 const (
-	GithubEndpoint = "github.com"
-	GitlabEndpoint = "gitlab.com"
+	GithubEndpoint = "github"
+	GitlabEndpoint = "gitlab"
 )
 
-func FetchClientData(accessToken string, repoUrl string, branch string) (*checkmodels.AssetsData, []string, error) {
-	scmName, orgName, repoName, err := getRepoInfo(repoUrl)
+func FetchClientData(accessToken string, repoUrl string, scm string, branch string) (*checkmodels.AssetsData, []string, error) {
+	host, orgName, repoName, err := getRepoInfo(repoUrl)
 	if err != nil {
 		return nil, nil, err
 	}
 
-	adapter, err := getClientAdapter(scmName, accessToken)
+	adapter, err := getClientAdapter(scm, accessToken, host)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -87,31 +87,31 @@ func getRepoInfo(repoFullUrl string) (string, string, string, error) {
 	if len(path) < 3 {
 		return "", "", "", fmt.Errorf("missing org/repo in the repository url: %s", repoFullUrl)
 	}
-	repo := path[len(path) - 1]
+	repo := path[len(path)-1]
 	namespace := strings.Split(u.Path, repo)[0]
 	trimedNamespace := namespace[1:(len(namespace) - 1)]
 
 	return u.Host, trimedNamespace, repo, nil
 }
 
-func getClientAdapter(scmName string, accessToken string) (adapter.ClientAdapter, error) {
+func getClientAdapter(scmName string, accessToken string, host string) (adapter.ClientAdapter, error) {
 	var err error
 	var adapter adapter.ClientAdapter
 	httpClient := utils.GetHttpClient(accessToken)
 
 	switch scmName {
 	case GithubEndpoint:
-		err = github.Adapter.Init(httpClient, accessToken)
+		err = github.Adapter.Init(httpClient, accessToken, host)
 		adapter = &github.Adapter
 	case GitlabEndpoint:
-		err = gitlab.Adapter.Init(httpClient, accessToken)
+		err = gitlab.Adapter.Init(httpClient, accessToken, host)
 		adapter = &gitlab.Adapter
 	default:
 		adapter = nil
 	}
 
 	if err != nil {
-		logger.Error(err, "error with github init client")
+		logger.Error(err, "error with SCM init client")
 		return &github.ClientAdapterImpl{}, nil
 	}
 	return adapter, err
