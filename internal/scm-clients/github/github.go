@@ -2,6 +2,7 @@ package github
 
 import (
 	"context"
+	"fmt"
 	"net/http"
 
 	"github.com/aquasecurity/chain-bench/internal/utils"
@@ -43,7 +44,13 @@ type GithubClientImpl struct {
 var _ GithubClient = (*GithubClientImpl)(nil) // Verify that *GithubClientImpl implements GithubClient.
 
 func InitClient(client *http.Client, token string, host string) (GithubClient, error) {
-	gc := github.NewClient(client)
+	var gc *github.Client
+	if host == "github.com" {
+		gc = github.NewClient(client)
+	} else {
+		gc, _ = github.NewEnterpriseClient(fmt.Sprintf("https://%s/api/v3/", host), fmt.Sprintf("https://%s/api/uploads/", host), client)
+	}
+
 	Client = &GithubClientImpl{ctx: context.TODO(), client: gc}
 	return Client, nil
 }
