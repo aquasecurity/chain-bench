@@ -18,17 +18,27 @@ import (
 )
 
 const (
-	GithubEndpoint = "github"
-	GitlabEndpoint = "gitlab"
+	GithubEndpoint = "github.com"
+	GitlabEndpoint = "gitlab.com"
+
+	GithubPlatform = "github"
+	GitlabPlatform = "gitlab"
 )
 
-func FetchClientData(accessToken string, repoUrl string, scm string, branch string) (*checkmodels.AssetsData, []string, error) {
+func FetchClientData(accessToken string, repoUrl string, scmPlatform string, branch string) (*checkmodels.AssetsData, []string, error) {
 	host, orgName, repoName, err := getRepoInfo(repoUrl)
 	if err != nil {
 		return nil, nil, err
 	}
 
-	adapter, err := getClientAdapter(scm, accessToken, host)
+	switch host {
+	case GithubEndpoint:
+		scmPlatform = GithubPlatform
+	case GitlabPlatform:
+		scmPlatform = GitlabPlatform
+	}
+
+	adapter, err := getClientAdapter(scmPlatform, accessToken, host)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -94,16 +104,16 @@ func getRepoInfo(repoFullUrl string) (string, string, string, error) {
 	return u.Host, trimedNamespace, repo, nil
 }
 
-func getClientAdapter(scmName string, accessToken string, host string) (adapter.ClientAdapter, error) {
+func getClientAdapter(scmPlatform string, accessToken string, host string) (adapter.ClientAdapter, error) {
 	var err error
 	var adapter adapter.ClientAdapter
 	httpClient := utils.GetHttpClient(accessToken)
 
-	switch scmName {
-	case GithubEndpoint:
+	switch scmPlatform {
+	case GithubPlatform:
 		err = github.Adapter.Init(httpClient, accessToken, host)
 		adapter = &github.Adapter
-	case GitlabEndpoint:
+	case GitlabPlatform:
 		err = gitlab.Adapter.Init(httpClient, accessToken, host)
 		adapter = &gitlab.Adapter
 	default:

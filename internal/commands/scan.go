@@ -19,7 +19,8 @@ func NewScanCommand() *cobra.Command {
 		RunE: func(cmd *cobra.Command, args []string) error {
 			start := time.Now()
 			logger.Infof("%v	Fetch Starting", emoji.TriangularFlag)
-			assetsData, supportedChecks, err := clients.FetchClientData(accessToken, repositoryUrl, scm, branch)
+
+			assetsData, supportedChecks, err := clients.FetchClientData(accessToken, repositoryUrl, scmPlatform, branch)
 			if err != nil {
 				logger.Error(err, "Failed to fetch client data")
 				return err
@@ -46,13 +47,13 @@ func NewScanCommand() *cobra.Command {
 		accessTokenFlagName, accessTokenShortFlag, "",
 		"the access token to use for the repository")
 
-	scanCommand.PersistentFlags().StringVarP(&scm,
-		scmFlagName, scmShortFlag, "github",
-		"the SCM to use for the repository")
+	scanCommand.PersistentFlags().StringVarP(&scmPlatform,
+		scmPlatformFlagName, scmPlatformShortFlag, "",
+		"the SCM platform for self-hosted/dedicated environments (options: 'github', 'gitlab')")
 
 	scanCommand.PersistentFlags().StringVarP(&branch,
 		branchFlagName, branchShortFlag, "",
-		"the branch to scan branch protection for")
+		"the branch to scan for branch protection")
 
 	return scanCommand
 }

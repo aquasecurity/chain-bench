@@ -52,10 +52,10 @@ var (
 	accessTokenFlagName  = "access-token"
 	accessTokenShortFlag = "t"
 
-	// scm hosting the repository
-	scm          string
-	scmFlagName  = "scm"
-	scmShortFlag = "s"
+	// SCM platform for self-hosted/dedicated environments
+	scmPlatform          string
+	scmPlatformFlagName  = "scm-platform"
+	scmPlatformShortFlag = "s"
 
 	// branch the branch name to scan
 	branch          string

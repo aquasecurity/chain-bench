@@ -79,6 +79,14 @@ Get Chain-bench via your favorite installation method. See [installation] sectio
 chain-bench scan --repository-url <REPOSITORY_URL> --access-token <TOKEN> -o <OUTPUT_PATH>
 ```
 
+### Using Self-hosted or Dedicated SCM Platforms (with custom domains)
+
+```bash
+chain-bench scan --repository-url <REPOSITORY_URL> --scm-platform <SCM_PLATFORM> --access-token <TOKEN> -o <OUTPUT_PATH>
+```
+
+Supported options for `scm-platform` are `"github"` and `"gitlab"` (beta)
+
 ### Using docker
 
 ```bash
@@ -155,7 +163,7 @@ chain-bench-scanning:
     name: docker.io/aquasec/chain-bench
     entrypoint: [""]
   script:
-    - chain-bench scan --repository-url $CI_PROJECT_URL --access-token $CHAIN_BENCH_TOKEN --scm gitlab -o results.json --template @/templates/gitlab_security_scanner.tpl
+    - chain-bench scan --repository-url $CI_PROJECT_URL --access-token $CHAIN_BENCH_TOKEN --scm-platform gitlab -o results.json --template @/templates/gitlab_security_scanner.tpl
   artifacts:
     reports:
       container_scanning: results.json
