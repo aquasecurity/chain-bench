@@ -31,7 +31,12 @@ type GitlabClientImpl struct {
 var _ GitlabClient = (*GitlabClientImpl)(nil) // Verify that *GitlabClientImpl implements gitlabClient.
 
 func InitClient(client *http.Client, token string, host string) (GitlabClient, error) {
-	gc, _ := gitlab.NewClient(token, gitlab.WithHTTPClient(client), gitlab.WithBaseURL(fmt.Sprintf("https://%s/api/v4", host)))
+	var gc *gitlab.Client
+	if host == "gitlab.com" {
+		gc, _ = gitlab.NewClient(token, gitlab.WithHTTPClient(client))
+	} else {
+		gc, _ = gitlab.NewClient(token, gitlab.WithHTTPClient(client), gitlab.WithBaseURL(fmt.Sprintf("https://%s/api/v4", host)))
+	}
 	Client = &GitlabClientImpl{ctx: context.TODO(), client: gc}
 	return Client, nil
 }
