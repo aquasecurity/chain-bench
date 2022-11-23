@@ -34,7 +34,7 @@ func FetchClientData(accessToken string, repoUrl string, scmPlatform string, bra
 	switch host {
 	case GithubEndpoint:
 		scmPlatform = GithubPlatform
-	case GitlabPlatform:
+	case GitlabEndpoint:
 		scmPlatform = GitlabPlatform
 	}
 
