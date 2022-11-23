@@ -20,7 +20,7 @@ func NewScanCommand() *cobra.Command {
 			start := time.Now()
 			logger.Infof("%v	Fetch Starting", emoji.TriangularFlag)
 			assetsData, supportedChecks, err := clients.FetchClientData(accessToken, repositoryUrl, branch)
-			if err != nil {
+			if assetsData.AuthorizedUser == nil || err != nil {
 				logger.Error(err, "Failed to fetch client data")
 				return err
 			} else {
