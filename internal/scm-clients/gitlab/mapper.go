@@ -46,7 +46,7 @@ func toRepository(repo *gitlab.Project, branches []*models.Branch, collaborators
 		r = &models.Repository{
 			ID:                   utils.GetPtr(int64(repo.ID)),
 			Owner:                &models.User{Type: utils.GetPtr("Organization")},
-			Name:                 &repo.Name,
+			Name:                 &repo.Path,
 			Description:          &repo.Description,
 			DefaultBranch:        &repo.DefaultBranch,
 			CreatedAt:            &utils.Timestamp{Time: utils.GetValue(repo.CreatedAt)},

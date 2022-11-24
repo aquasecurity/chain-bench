@@ -2,6 +2,7 @@ package github
 
 import (
 	"context"
+	"fmt"
 	"net/http"
 
 	"github.com/aquasecurity/chain-bench/internal/utils"
@@ -42,8 +43,14 @@ type GithubClientImpl struct {
 
 var _ GithubClient = (*GithubClientImpl)(nil) // Verify that *GithubClientImpl implements GithubClient.
 
-func InitClient(client *http.Client, token string) (GithubClient, error) {
-	gc := github.NewClient(client)
+func InitClient(client *http.Client, token string, host string) (GithubClient, error) {
+	var gc *github.Client
+	if host == "github.com" {
+		gc = github.NewClient(client)
+	} else {
+		gc, _ = github.NewEnterpriseClient(fmt.Sprintf("https://%s/api/v3/", host), fmt.Sprintf("https://%s/api/uploads/", host), client)
+	}
+
 	Client = &GithubClientImpl{ctx: context.TODO(), client: gc}
 	return Client, nil
 }
@@ -116,17 +123,17 @@ func (gca *GithubClientImpl) GetContent(owner, repo, filepath, ref string) (file
 	return gca.client.Repositories.GetContents(gca.ctx, owner, repo, filepath, &github.RepositoryContentGetOptions{Ref: ref})
 }
 
-//need admin:repo_hook->read:repo_hook
+// need admin:repo_hook->read:repo_hook
 func (gca *GithubClientImpl) ListRepositoryHooks(owner, repo string) (hooks []*github.Hook, resp *github.Response, err error) {
 	return gca.client.Repositories.ListHooks(gca.ctx, owner, repo, nil)
 }
 
-//need admin:org_hook
+// need admin:org_hook
 func (gca *GithubClientImpl) ListOrganizationHooks(owner string) (hooks []*github.Hook, resp *github.Response, err error) {
 	return gca.client.Organizations.ListHooks(gca.ctx, owner, nil)
 }
 
-//need read:packages
+// need read:packages
 func (gca *GithubClientImpl) ListOrganizationPackages(owner string, packageType string) ([]*github.Package, *github.Response, error) {
 	return gca.client.Organizations.ListPackages(gca.ctx, owner, &github.PackageListOptions{State: utils.GetPtr("active"), PackageType: &packageType})
 }

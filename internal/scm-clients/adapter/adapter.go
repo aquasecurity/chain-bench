@@ -8,7 +8,7 @@ import (
 )
 
 type ClientAdapter interface {
-	Init(client *http.Client, token string) error
+	Init(client *http.Client, token string, host string) error
 	ListSupportedChecksIDs() ([]string, error)
 	GetRepository(owner, repo, branchName string) (*models.Repository, error)
 	ListRepositoryBranches(owner, repo string) ([]*models.Branch, error)

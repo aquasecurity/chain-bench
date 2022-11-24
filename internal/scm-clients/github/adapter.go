@@ -23,8 +23,8 @@ type ClientAdapterImpl struct {
 }
 
 // Init implements clients.ClientAdapter
-func (*ClientAdapterImpl) Init(client *http.Client, token string) error {
-	ghClient, err := InitClient(client, token)
+func (*ClientAdapterImpl) Init(client *http.Client, token string, host string) error {
+	ghClient, err := InitClient(client, token, host)
 	Adapter = ClientAdapterImpl{client: ghClient}
 	return err
 }
