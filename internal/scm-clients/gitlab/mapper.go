@@ -97,8 +97,8 @@ func toBranch(branch *gitlab.Branch) *models.Branch {
 
 func toBranchProtection(proj *gitlab.Project, protection *gitlab.ProtectedBranch, appConfig *gitlab.ProjectApprovals, appRules []*gitlab.ProjectApprovalRule, pushRules *gitlab.ProjectPushRules) *models.Protection {
 	var p *models.Protection = nil
-	branchRegex := regexp.MustCompile(pushRules.BranchNameRegex)
-	isMatchDefault := branchRegex.Match([]byte(proj.DefaultBranch))
+	branchRegex := regexp.MustCompile(utils.GetValue(pushRules).BranchNameRegex)
+	isMatchDefault := branchRegex.Match([]byte(utils.GetValue(proj).DefaultBranch))
 	approvingReviewCount := 0
 	if len(appRules) > 0 {
 		approvingReviewCount = appRules[0].ApprovalsRequired
@@ -107,13 +107,13 @@ func toBranchProtection(proj *gitlab.Project, protection *gitlab.ProtectedBranch
 		p = &models.Protection{
 			EnforceAdmins: &models.AdminEnforcement{Enabled: false},
 			RequiredPullRequestReviews: &models.PullRequestReviewsEnforcement{
-				DismissStaleReviews:          appConfig.ResetApprovalsOnPush,
-				RequireCodeOwnerReviews:      protection.CodeOwnerApprovalRequired,
+				DismissStaleReviews:          utils.GetValue(appConfig).ResetApprovalsOnPush,
+				RequireCodeOwnerReviews:      utils.GetValue(protection).CodeOwnerApprovalRequired,
 				RequiredApprovingReviewCount: approvingReviewCount},
 			//TODO: Restrictions: toBranchRestrictions(appConfig.Approvers, appConfig.ApproverGroups),
-			AllowForcePushes:               protection.AllowForcePush,
-			RequiredConversationResolution: proj.OnlyAllowMergeIfAllDiscussionsAreResolved,
-			RequiredSignedCommit:           isMatchDefault && pushRules.RejectUnsignedCommits,
+			AllowForcePushes:               utils.GetValue(protection).AllowForcePush,
+			RequiredConversationResolution: utils.GetValue(proj).OnlyAllowMergeIfAllDiscussionsAreResolved,
+			RequiredSignedCommit:           isMatchDefault && utils.GetValue(pushRules).RejectUnsignedCommits,
 			//TODO: PreventSecrets:                 isMatchDefault && pushRules.PreventSecrets,
 		}
 	}

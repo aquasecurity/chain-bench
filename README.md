@@ -177,7 +177,7 @@ It is required to provide an access token with permission to these scopes: `repo
 
 # Supported Providers
 
-We currently support Github as the first SCM, with PAT authentication.
+We currently support Github and Gitlab SCMs, with PAT authentication.
 
 # Please Note
 
