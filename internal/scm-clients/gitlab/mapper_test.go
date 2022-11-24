@@ -55,7 +55,7 @@ func TestToRepository(t *testing.T) {
 
 	actual := toRepository(
 		&gitlab.Project{
-			Name:  repoName,
+			Path:  repoName,
 			ID:    433,
 			Owner: &gitlab.User{},
 		},
