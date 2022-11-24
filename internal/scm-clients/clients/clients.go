@@ -14,6 +14,7 @@ import (
 	"github.com/aquasecurity/chain-bench/internal/scm-clients/github"
 	"github.com/aquasecurity/chain-bench/internal/scm-clients/gitlab"
 	"github.com/aquasecurity/chain-bench/internal/utils"
+	pipelineModels "github.com/argonsecurity/pipeline-parser/pkg/models"
 	"github.com/enescakir/emoji"
 )
 
@@ -47,27 +48,31 @@ func FetchClientData(accessToken string, repoUrl string, scmPlatform string, bra
 	repo, _ := adapter.GetRepository(orgName, repoName, branch)
 	logger.FetchingFinished("Repository Settings", emoji.OilDrum)
 
-	branchName := utils.GetBranchName(utils.GetValue(repo.DefaultBranch), branch)
-
-	logger.FetchingFinished("Branch Protection Settings", emoji.Seedling)
-	protection, _ := adapter.GetBranchProtection(orgName, repo, branchName)
-
-	pipelines, _ := adapter.GetPipelines(orgName, repoName, branchName)
-	logger.FetchingFinished("Pipelines", emoji.Wrench)
-
+	var protection *models.Protection
+	var pipelines []*pipelineModels.Pipeline
 	var org *models.Organization
 	var registry *models.PackageRegistry
 
-	if *repo.Owner.Type == "Organization" {
-		org, _ = adapter.GetOrganization(orgName)
-		logger.FetchingFinished("Organization Settings", emoji.OfficeBuilding)
+	if repo != nil {
+		branchName := utils.GetBranchName(utils.GetValue(repo.DefaultBranch), branch)
 
-		registry, _ = adapter.GetRegistry(org)
+		logger.FetchingFinished("Branch Protection Settings", emoji.Seedling)
+		protection, _ = adapter.GetBranchProtection(orgName, repo, branchName)
 
-		orgMembers, err := adapter.ListOrganizationMembers(orgName)
-		if err == nil {
-			org.Members = orgMembers
-			logger.FetchingFinished("Members", emoji.Emoji(emoji.WomanAndManHoldingHands.Tone()))
+		pipelines, _ = adapter.GetPipelines(orgName, repoName, branchName)
+		logger.FetchingFinished("Pipelines", emoji.Wrench)
+
+		if *repo.Owner.Type == "Organization" {
+			org, _ = adapter.GetOrganization(orgName)
+			logger.FetchingFinished("Organization Settings", emoji.OfficeBuilding)
+
+			registry, _ = adapter.GetRegistry(org)
+
+			orgMembers, err := adapter.ListOrganizationMembers(orgName)
+			if err == nil {
+				org.Members = orgMembers
+				logger.FetchingFinished("Members", emoji.Emoji(emoji.WomanAndManHoldingHands.Tone()))
+			}
 		}
 	}
 
@@ -80,7 +85,7 @@ func FetchClientData(accessToken string, repoUrl string, scmPlatform string, bra
 		BranchProtections: protection,
 		Pipelines:         pipelines,
 		Registry:          registry,
-	}, checksIds, nil
+	}, checksIds, err
 }
 
 func getRepoInfo(repoFullUrl string) (string, string, string, error) {

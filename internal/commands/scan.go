@@ -19,9 +19,8 @@ func NewScanCommand() *cobra.Command {
 		RunE: func(cmd *cobra.Command, args []string) error {
 			start := time.Now()
 			logger.Infof("%v	Fetch Starting", emoji.TriangularFlag)
-
 			assetsData, supportedChecks, err := clients.FetchClientData(accessToken, repositoryUrl, scmPlatform, branch)
-			if err != nil {
+			if assetsData.AuthorizedUser == nil || err != nil {
 				logger.Error(err, "Failed to fetch client data")
 				return err
 			} else {
