@@ -9,7 +9,7 @@ env:
 jobs:
   release:
     name: Release
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-latest
     env:
       DOCKER_CLI_EXPERIMENTAL: "enabled"
       DOCKER_BUILDKIT: "1"
