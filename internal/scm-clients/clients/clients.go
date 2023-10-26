@@ -103,8 +103,8 @@ func getRepoInfo(repoFullUrl string) (string, string, string, error) {
 		return "", "", "", fmt.Errorf("missing org/repo in the repository url: %s", repoFullUrl)
 	}
 	repo := path[len(path)-1]
-	namespace := strings.Split(u.Path, repo)[0]
-	trimedNamespace := namespace[1:(len(namespace) - 1)]
+	namespace := strings.Join(path[:len(path)-1], "/")
+	trimedNamespace := strings.TrimLeft(namespace, "/")
 
 	return u.Host, trimedNamespace, repo, nil
 }
