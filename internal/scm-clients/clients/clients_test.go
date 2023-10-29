@@ -54,7 +54,7 @@ func TestGetRepoInfo(t *testing.T) {
 		Name:        "github project under sub org with same name as repo",
 		RepoUrl:     "https://github.com/codekuu/suborg/secondsuborg/secondsuborg",
 		ExpectedErr: nil,
-		Expected:    RepoInfo{BaseUrl: "gitlab.com", Namespace: "codekuu/suborg/secondsuborg", Project: "secondsuborg"},
+		Expected:    RepoInfo{BaseUrl: "github.com", Namespace: "codekuu/suborg/secondsuborg", Project: "secondsuborg"},
 	}}
 
 	for _, test := range tests {
