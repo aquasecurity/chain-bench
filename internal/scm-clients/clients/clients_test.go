@@ -52,7 +52,7 @@ func TestGetRepoInfo(t *testing.T) {
 		Expected:    RepoInfo{BaseUrl: "gitlab.com", Namespace: "rootgroup/subgroup/secondsubgroup", Project: "secondsubgroup"},
 	}, {
 		Name:        "github project under sub org with same name as repo",
-		RepoUrl:     "https://github.com/codekuu/suborg/secondsuborg/secondsuborg",
+		RepoUrl:     "https://gitlab.com/codekuu/suborg/secondsuborg/secondsuborg",
 		ExpectedErr: nil,
 		Expected:    RepoInfo{BaseUrl: "gitlab.com", Namespace: "codekuu/suborg/secondsuborg", Project: "secondsuborg"},
 	}}
