@@ -45,6 +45,16 @@ func TestGetRepoInfo(t *testing.T) {
 		RepoUrl:     "https://gitlab.com/rootgroup/subgroup/secondsubgroup/test",
 		ExpectedErr: nil,
 		Expected:    RepoInfo{BaseUrl: "gitlab.com", Namespace: "rootgroup/subgroup/secondsubgroup", Project: "test"},
+	}, {
+		Name:        "gitlab project under sub group with same name as repo",
+		RepoUrl:     "https://gitlab.com/rootgroup/subgroup/secondsubgroup/secondsubgroup",
+		ExpectedErr: nil,
+		Expected:    RepoInfo{BaseUrl: "gitlab.com", Namespace: "rootgroup/subgroup/secondsubgroup", Project: "secondsubgroup"},
+	}, {
+		Name:        "gitlab project under sub org with same name as repo",
+		RepoUrl:     "https://gitlab.com/codekuu/suborg/secondsuborg/secondsuborg",
+		ExpectedErr: nil,
+		Expected:    RepoInfo{BaseUrl: "gitlab.com", Namespace: "codekuu/suborg/secondsuborg", Project: "secondsuborg"},
 	}}
 
 	for _, test := range tests {
