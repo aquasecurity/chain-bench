@@ -1,4 +1,4 @@
-FROM alpine as build
+FROM alpine:3.16 as build
 
 WORKDIR /home/chain-bench
 
